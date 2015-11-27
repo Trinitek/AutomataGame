@@ -14,6 +14,7 @@ public class FertileTileType extends TileType {
     public void pulse(Tile tile) {
         super.pulse(tile);
 
+        /* Get energy from the sun to grow */
         tile.setEnergy(tile.getEnergy() + 2);
 
         if(this == TileTypes.DIRT && tile.getEnergy() > 500) {

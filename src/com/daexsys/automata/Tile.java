@@ -30,6 +30,7 @@ public class Tile implements Pulsable {
         if(getWorld().getRandom().nextBoolean())
             energy -= tileType.getDefaultDecayRate();
 
+        /* If energy is below or equal to 0, this tile will be destroyed */
         if(energy <= 0)
             destruct();
     }

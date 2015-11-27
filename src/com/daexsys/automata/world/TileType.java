@@ -44,7 +44,6 @@ public class TileType {
     }
 
     public void pulse(Tile tile) {
-
         Optional<List<Tile>> neighborOptional = tile.getNeighbors();
         int number = 0;
         if(neighborOptional.isPresent()) {
