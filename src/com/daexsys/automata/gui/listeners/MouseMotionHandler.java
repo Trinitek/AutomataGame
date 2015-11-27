@@ -21,7 +21,7 @@ public class MouseMotionHandler implements MouseMotionListener {
         y = e.getY();
 
         if(gui.isMouseDown()) {
-            gui.getGame().getPlayerState().placeBlock(x, y, gui);
+            gui.playerPlaceTile(x, y, gui);
         }
     }
 
@@ -31,7 +31,7 @@ public class MouseMotionHandler implements MouseMotionListener {
         y = e.getY();
 
         if(gui.isMouseDown()) {
-            gui.getGame().getPlayerState().placeBlock(x, y, gui);
+            gui.playerPlaceTile(x, y, gui);
         }
     }
 

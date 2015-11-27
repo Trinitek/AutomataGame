@@ -97,4 +97,13 @@ public class GUI {
     public boolean isMouseDown() {
         return mouseHandler.isMouseDown();
     }
+
+    public void playerPlaceTile(int screenX, int screenY, GUI gui) {
+        WorldModel worldModel = gui.getGame().getWorldModel();
+
+        int tx = (screenX - gui.getOffsets().getOffsetX()) / gui.getZoomLevel();
+        int ty = (screenY - gui.getOffsets().getOffsetY()) / gui.getZoomLevel();
+
+        worldModel.setTileTypeAt(tx, ty, gui.getGame().getPlayerState().getInHand());
+    }
 }

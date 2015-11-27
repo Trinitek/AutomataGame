@@ -24,11 +24,6 @@ public class KeyboardHandler implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_P) {
             gui.getGame().setPaused(!gui.getGame().isPaused());
@@ -74,8 +69,10 @@ public class KeyboardHandler implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         keysDown.put(e.getKeyCode(), false);
-
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
 
     public GUI getGui() {
         return gui;

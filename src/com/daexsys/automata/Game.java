@@ -1,6 +1,5 @@
 package com.daexsys.automata;
 
-import com.daexsys.automata.world.AccessOutOfWorldException;
 import com.daexsys.automata.world.TileTypes;
 import com.daexsys.automata.world.WorldModel;
 
