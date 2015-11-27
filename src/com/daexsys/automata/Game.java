@@ -15,12 +15,6 @@ public class Game {
     public Game() {
         worldModel = new WorldModel(100);
 
-//        placeGliderAt(worldModel, 5, 5);
-//        placeGliderAt(worldModel, 10, 5);
-//
-//        placeGliderAt(worldModel, 5, 10);
-//        placeGliderAt(worldModel, 10, 10);
-
         Thread worldPule = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -36,17 +30,6 @@ public class Game {
             }
         });
         worldPule.start();
-//
-//        worldModel.queueChangeAt(5, 4, Tiles.AUTOMATA_SIMPLE);
-//        worldModel.queueChangeAt(5, 6, Tiles.AUTOMATA_SIMPLE);
-
-        Tile tile = null;
-        try {
-            tile = worldModel.getTileAt(30, 30);
-            System.out.println(tile.getTileType().getBlockName());
-        } catch (AccessOutOfWorldException e) {
-            e.printStackTrace();
-        }
     }
 
     public WorldModel getWorldModel() {
@@ -81,6 +64,7 @@ public class Game {
         if(tickDelayRate > 0) {
             this.tickDelayRate = tickDelayRate;
         }
+
         System.out.println(tickDelayRate);
     }
 }

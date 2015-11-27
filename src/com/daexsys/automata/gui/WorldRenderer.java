@@ -8,14 +8,12 @@ import java.awt.image.BufferedImage;
 
 public class WorldRenderer implements Renderable {
 
-    public static final int TILE_SIZE = 40;
-
     private GUI gui;
     private WorldModel worldModel;
 
-    public WorldRenderer(GUI gui, WorldModel worldModel) {
+    public WorldRenderer(GUI gui) {
         this.gui = gui;
-        this.worldModel = worldModel;
+        this.worldModel = gui.getGame().getWorldModel();
     }
 
     public GUI getGui() {
@@ -36,15 +34,16 @@ public class WorldRenderer implements Renderable {
                     BufferedImage imageToRender = tile.getTileType().getImage();
 
                     graphics.drawImage(imageToRender,
-                            x *  getGui().getZoomLevel()  + getOffsets().getOffsetX(),
-                            y *  getGui().getZoomLevel()  + getOffsets().getOffsetY(),
+                            x *  getGui().getZoomLevel() + getOffsets().getOffsetX(),
+                            y *  getGui().getZoomLevel() + getOffsets().getOffsetY(),
                             getGui().getZoomLevel() ,  getGui().getZoomLevel(),
                             null
                     );
 
                     if(getGui().getGame().isPaused()) {
                         graphics.setColor(Color.WHITE);
-                        graphics.drawString(tile.getEnergy() + "", x * getGui().getZoomLevel() + getGui().getOffsets().getOffsetX() + 20, y * getGui().getZoomLevel() + getGui().getOffsets().getOffsetY() + 20);
+                        graphics.drawString(tile.getEnergy() + "", x * getGui().getZoomLevel() + getGui().getOffsets().getOffsetX() + 20
+                                , y * getGui().getZoomLevel() + getGui().getOffsets().getOffsetY() + 20);
                     }
                 } catch (Exception ignore) {}
             }

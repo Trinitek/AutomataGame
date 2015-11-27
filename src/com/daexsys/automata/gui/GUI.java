@@ -48,8 +48,7 @@ public class GUI {
         Thread renderThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                WorldModel worldModel = game.getWorldModel();
-                WorldRenderer worldRenderer = new WorldRenderer(theGUI, worldModel);
+                WorldRenderer worldRenderer = new WorldRenderer(theGUI);
 
                 while(true) {
                     Graphics2D graphics2D = (Graphics2D) jFrame.getBufferStrategy().getDrawGraphics();
