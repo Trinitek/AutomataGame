@@ -22,6 +22,7 @@ public class GUI {
         jFrame.setVisible(true);
 
         jFrame.createBufferStrategy(2);
+        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         Thread renderThread = new Thread(new Runnable() {
             @Override
