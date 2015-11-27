@@ -37,6 +37,9 @@ public class KeyboardHandler implements KeyListener {
             gui.getGame().getPlayerState().setInHand(TileTypes.VIRUS);
         }
 
+        else if(e.getKeyCode() == KeyEvent.VK_3) {
+            gui.getGame().getPlayerState().setInHand(TileTypes.VM_255_BYTE_RAM);
+        }
 
         else if(e.getKeyCode() == KeyEvent.VK_E) {
             gui.getGame().setTickDelayRate(gui.getGame().getTickDelayRate() - 10);

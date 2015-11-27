@@ -5,7 +5,6 @@ import com.daexsys.automata.world.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 public class Tile implements Pulsable {
 
@@ -25,56 +24,11 @@ public class Tile implements Pulsable {
     public void pulse() {
         lazyInit(); // Init byte array if not done already
 
-        /* If grass or dirt gain energy from the sun */
-        if(tileType == TileTypes.GRASS || tileType == TileTypes.DIRT || tileType == TileTypes.TALL_GRASS) {
-            energy += 2;
-        }
-        /* Dirt will eventually grow grass */
-        if(tileType == TileTypes.DIRT && energy > 500) {
-            getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.GRASS);
-        }
+        tileType.pulse(this);
 
-        if(tileType == TileTypes.GRASS && energy > 1000) {
-            getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.TALL_GRASS);
-        }
-
-        /* Randomly lose energy to entropy */
+        /* Randomly lose energy to entropy. */
         if(getWorld().getRandom().nextBoolean())
             energy -= tileType.getDefaultDecayRate();
-
-        Optional<List<Tile>> neighborOptional = getNeighbors();
-        int number = 0;
-        if(neighborOptional.isPresent()) {
-            List<Tile> tiles = neighborOptional.get();
-            for (Tile t : tiles) {
-                if (t.getTileType() == TileTypes.AUTOMATA_SIMPLE) {
-                    number++;
-                }
-            }
-        }
-        if(tileType == TileTypes.AUTOMATA_SIMPLE) {
-            if (number < 2) {
-                getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.DIRT);
-            }
-            else if (number > 3) { getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.DIRT); }
-        } else if (number == 3) {
-            if(tileType != TileTypes.WATER) {
-                getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.AUTOMATA_SIMPLE);
-            }
-        }
-
-        if(tileType == TileTypes.VIRUS && energy > 0) {
-
-            int i = getWorld().getRandom().nextInt(3) - 1;
-            int j = getWorld().getRandom().nextInt(3) - 1;
-
-            try {//
-                if (getWorld().getTileAt(coordinate.x + i, coordinate.y + j).getTileType() != TileTypes.VIRUS && energy > 0) {
-                    getWorld().queueChangeAt(coordinate.x + i, coordinate.y + j, TileTypes.VIRUS, energy / 2);
-                    energy /= 2;
-                }
-            } catch (Exception ignore) {}
-        }
 
         if(energy <= 0)
             destruct();
