@@ -28,4 +28,7 @@ public class TileTypes {
     // TODO: rename
     public static TileType ENERGY_ORE =
             new TileType((byte) 7, "energy ore", ImageUtil.loadImage("images/energy_ore.png"), 5000, 0);
+
+    public static TileType TALL_GRASS =
+            new TileType((byte) 8, "tall grass", ImageUtil.loadImage("images/tall_grass.png"), 100, 1);
 }

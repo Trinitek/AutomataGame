@@ -38,12 +38,14 @@ public class WorldRenderer implements Renderable {
                     graphics.drawImage(imageToRender,
                             x *  getGui().getZoomLevel()  + getOffsets().getOffsetX(),
                             y *  getGui().getZoomLevel()  + getOffsets().getOffsetY(),
-                            getGui().getZoomLevel() ,  getGui().getZoomLevel() ,
+                            getGui().getZoomLevel() ,  getGui().getZoomLevel(),
                             null
                     );
 
-//                    graphics.setColor(Color.WHITE);
-//                    graphics.drawString(tile.getEnergy() + "", x * getGui().getZoomLevel() + offsets.getOffsetX() + 20, y * getGui().getZoomLevel() + offsets.getOffsetY() + 20);
+                    if(getGui().getGame().isPaused()) {
+                        graphics.setColor(Color.WHITE);
+                        graphics.drawString(tile.getEnergy() + "", x * getGui().getZoomLevel() + getGui().getOffsets().getOffsetX() + 20, y * getGui().getZoomLevel() + getGui().getOffsets().getOffsetY() + 20);
+                    }
                 } catch (Exception ignore) {}
             }
         }

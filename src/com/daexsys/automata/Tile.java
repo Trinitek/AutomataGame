@@ -26,12 +26,16 @@ public class Tile implements Pulsable {
         lazyInit(); // Init byte array if not done already
 
         /* If grass or dirt gain energy from the sun */
-        if(tileType == TileTypes.GRASS || tileType == TileTypes.DIRT) {
+        if(tileType == TileTypes.GRASS || tileType == TileTypes.DIRT || tileType == TileTypes.TALL_GRASS) {
             energy += 2;
         }
         /* Dirt will eventually grow grass */
         if(tileType == TileTypes.DIRT && energy > 500) {
             getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.GRASS);
+        }
+
+        if(tileType == TileTypes.GRASS && energy > 1000) {
+            getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.TALL_GRASS);
         }
 
         /* Randomly lose energy to entropy */
