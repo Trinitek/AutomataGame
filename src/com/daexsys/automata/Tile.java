@@ -36,7 +36,7 @@ public class Tile implements Pulsable {
 
         /* Randomly lose energy to entropy */
         if(new Random().nextBoolean())
-            energy--;
+            energy -= tileType.getDefaultDecayRate();
 
         Optional<List<Tile>> neighborOptional = getNeighbors();
         int number = 0;
@@ -50,9 +50,9 @@ public class Tile implements Pulsable {
         }
         if(tileType == TileTypes.AUTOMATA_SIMPLE) {
             if (number < 2) {
-                getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.STONE);
+                getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.DIRT);
             }
-            else if (number > 3) { getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.STONE); }
+            else if (number > 3) { getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.DIRT); }
         } else if (number == 3) {
             if(tileType != TileTypes.WATER) {
                 getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.AUTOMATA_SIMPLE);
@@ -77,9 +77,7 @@ public class Tile implements Pulsable {
     }
 
     public void destruct() {
-//        if(tileType == TileTypes.AUTOMATA_SIMPLE) {
-            getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.DIRT);
-//        }
+        getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.DIRT);
     }
 
     public int getEnergy() {

@@ -13,7 +13,7 @@ public class Game {
     private volatile int tickDelayRate = 250; // 500 default
 
     public Game() {
-        worldModel = new WorldModel(250);
+        worldModel = new WorldModel(100);
 
 //        placeGliderAt(worldModel, 5, 5);
 //        placeGliderAt(worldModel, 10, 5);

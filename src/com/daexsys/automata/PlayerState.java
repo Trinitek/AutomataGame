@@ -7,7 +7,7 @@ import com.daexsys.automata.world.WorldModel;
 
 public class PlayerState {
 
-    private TileType inHand = TileTypes.VIRUS;
+    private TileType inHand = TileTypes.AUTOMATA_SIMPLE;
 
     public TileType getInHand() {
         return inHand;

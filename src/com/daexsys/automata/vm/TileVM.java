@@ -70,7 +70,7 @@ public class TileVM {
     }
 
     public static void main(String[] args) {
-        Tile tile = new Tile(new TileCoordinate(null, 0, 0), new TileType((byte) 0, "", null, 100));
+        Tile tile = new Tile(new TileCoordinate(null, 0, 0), new TileType((byte) 0, "", null, 100, 1));
         TileVM tileVM = new TileVM(tile);
 
         tileVM.processInstruction(VMBytecodes.MOV,

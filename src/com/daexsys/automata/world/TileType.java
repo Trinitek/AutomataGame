@@ -8,13 +8,19 @@ public class TileType {
     private String blockName;
     private BufferedImage image;
 
+    private int defaultDecayRate = 1;
     private int defaultEnergy = 10;
 
-    public TileType(byte id, String blockName, BufferedImage image, int defaultEnergy) {
+    public TileType(byte id, String blockName, BufferedImage image, int defaultEnergy, int defaultDecayRate) {
         this.id = id;
         this.blockName = blockName;
         this.image = image;
         this.defaultEnergy = defaultEnergy;
+        this.defaultDecayRate = defaultDecayRate;
+    }
+
+    public int getDefaultDecayRate() {
+        return defaultDecayRate;
     }
 
     public String getBlockName() {

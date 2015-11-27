@@ -19,13 +19,15 @@ public class WorldModel implements Pulsable {
 
         // TODO: create tiletype api
 
+        /* Fill world with grass */
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 tiles[x][y] = new Tile(new TileCoordinate(this, x, y), TileTypes.GRASS);
             }
         }
 
-        for (int i = 0; i < 15; i++) {
+        /* Add lakes */
+        for (int i = 0; i < size / 20; i++) {
             int lakeX = random.nextInt(size);
             int lakeY = random.nextInt(size);
             int lakeSize = random.nextInt(15) + 3;
@@ -37,6 +39,27 @@ public class WorldModel implements Pulsable {
 
                     if((x * x + y * y) < lakeSize * lakeSize) {
                         setTileTypeAt(j, k, TileTypes.WATER);
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < size / 5; i++) {
+            int lakeX = random.nextInt(size);
+            int lakeY = random.nextInt(size);
+            int lakeSize = random.nextInt(15) + 3;
+
+            for (int j = lakeX - lakeSize; j < lakeX + lakeSize; j++) {
+                for (int k = lakeY - lakeSize; k < lakeY + lakeSize; k++) {
+                    int x = j - lakeX;
+                    int y = k - lakeY;
+
+                    if((x * x + y * y) < lakeSize * lakeSize) {
+                        if(random.nextBoolean()) {
+                            setTileTypeAt(j, k, TileTypes.STONE);
+                        } else {
+                            setTileTypeAt(j, k, TileTypes.ENERGY_ORE);
+                        }
                     }
                 }
             }
