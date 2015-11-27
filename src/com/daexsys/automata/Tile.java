@@ -64,17 +64,11 @@ public class Tile implements Pulsable {
             int i = getWorld().getRandom().nextInt(3) - 1;
             int j = getWorld().getRandom().nextInt(3) - 1;
 
-            try {
+            try {//
                 if (getWorld().getTileAt(coordinate.x + i, coordinate.y + j).getTileType() != TileTypes.VIRUS && energy > 0) {
-                    getWorld().queueChangeAt(coordinate.x + i, coordinate.y + j, TileTypes.VIRUS, energy);
-                    energy--;
+                    getWorld().queueChangeAt(coordinate.x + i, coordinate.y + j, TileTypes.VIRUS, energy / 2);
+                    energy /= 2;
                 }
-
-//
-//                if (getWorld().getTileAt(coordinate.x + i, coordinate.y + j).getTileType() != TileTypes.VIRUS && energy > 0) {
-//                    getWorld().queueChangeAt(coordinate.x + i, coordinate.y + j, TileTypes.VIRUS, energy / 2);
-//                    energy /= 2;
-//                }
             } catch (Exception ignore) {}
         }
 

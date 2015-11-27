@@ -10,7 +10,7 @@ public class Game {
     private WorldModel worldModel;
     private PlayerState playerState = new PlayerState();
 
-    private int tickDelayRate = 250; // 500 default
+    private volatile int tickDelayRate = 250; // 500 default
 
     public Game() {
         worldModel = new WorldModel(250);
@@ -71,5 +71,16 @@ public class Game {
 
     public PlayerState getPlayerState() {
         return playerState;
+    }
+
+    public int getTickDelayRate() {
+        return tickDelayRate;
+    }
+
+    public void setTickDelayRate(int tickDelayRate) {
+        if(tickDelayRate > 0) {
+            this.tickDelayRate = tickDelayRate;
+        }
+        System.out.println(tickDelayRate);
     }
 }

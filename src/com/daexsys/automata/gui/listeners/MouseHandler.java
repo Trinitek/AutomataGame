@@ -23,14 +23,11 @@ public class MouseHandler implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
 
+        if(gui.isMouseDown()) {
+            gui.getGame().getPlayerState().placeBlock(e.getX(), e.getY(), gui);
+        }
+
         mouseDown = true;
-
-        WorldModel worldModel = gui.getGame().getWorldModel();
-
-        int tx = e.getX() / gui.getZoomLevel();
-        int ty = e.getY() / gui.getZoomLevel();
-
-        worldModel.setTileTypeAt(tx, ty, gui.getGame().getPlayerState().getInHand());
 //        System.out.println("mouse down");
 
     }

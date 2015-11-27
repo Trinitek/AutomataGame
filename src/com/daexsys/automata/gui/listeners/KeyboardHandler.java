@@ -1,7 +1,6 @@
 package com.daexsys.automata.gui.listeners;
 
 import com.daexsys.automata.gui.GUI;
-import com.daexsys.automata.world.TileType;
 import com.daexsys.automata.world.TileTypes;
 
 import java.awt.event.KeyEvent;
@@ -42,6 +41,33 @@ public class KeyboardHandler implements KeyListener {
         else if(e.getKeyCode() == KeyEvent.VK_2) {
             gui.getGame().getPlayerState().setInHand(TileTypes.VIRUS);
         }
+
+
+        else if(e.getKeyCode() == KeyEvent.VK_E) {
+            gui.getGame().setTickDelayRate(gui.getGame().getTickDelayRate() - 10);
+        }
+
+        else if(e.getKeyCode() == KeyEvent.VK_Q) {
+            gui.getGame().setTickDelayRate(gui.getGame().getTickDelayRate() + 10);
+        }
+
+
+        if(e.getKeyCode() == KeyEvent.VK_D) {
+            gui.getOffsets().moveRight();
+        }
+
+        if(e.getKeyCode() == KeyEvent.VK_A) {
+            gui.getOffsets().moveLeft();
+        }
+
+        if(e.getKeyCode() == KeyEvent.VK_W) {
+            gui.getOffsets().moveUp();
+        }
+
+        if(e.getKeyCode() == KeyEvent.VK_S) {
+            gui.getOffsets().moveDown();
+        }
+
         keysDown.put(e.getKeyCode(), true);
     }
 

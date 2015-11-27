@@ -12,7 +12,6 @@ public class WorldRenderer implements Renderable {
 
     private GUI gui;
     private WorldModel worldModel;
-    private Offsets offsets = new Offsets();
 
     public WorldRenderer(GUI gui, WorldModel worldModel) {
         this.gui = gui;
@@ -21,6 +20,10 @@ public class WorldRenderer implements Renderable {
 
     public GUI getGui() {
         return gui;
+    }
+
+    public Offsets getOffsets() {
+        return getGui().getOffsets();
     }
 
     @Override
@@ -33,8 +36,8 @@ public class WorldRenderer implements Renderable {
                     BufferedImage imageToRender = tile.getTileType().getImage();
 
                     graphics.drawImage(imageToRender,
-                            x *  getGui().getZoomLevel()  + offsets.getOffsetX(),
-                            y *  getGui().getZoomLevel()  + offsets.getOffsetY(),
+                            x *  getGui().getZoomLevel()  + getOffsets().getOffsetX(),
+                            y *  getGui().getZoomLevel()  + getOffsets().getOffsetY(),
                             getGui().getZoomLevel() ,  getGui().getZoomLevel() ,
                             null
                     );

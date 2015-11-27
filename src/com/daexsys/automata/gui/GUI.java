@@ -18,6 +18,7 @@ public class GUI {
     private MouseMotionHandler mouseMotionHandler = new MouseMotionHandler(this);
     private ScrollManager scrollManager = new ScrollManager(this);
 
+    private Offsets offsets = new Offsets(this);
     private int zoomLevel = 40;
 
     private Game game;
@@ -88,6 +89,10 @@ public class GUI {
 
     public void setZoomLevel(int zoomLevel) {
         this.zoomLevel = zoomLevel;
+    }
+
+    public Offsets getOffsets() {
+        return offsets;
     }
 
     public boolean isMouseDown() {

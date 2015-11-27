@@ -7,7 +7,7 @@ public class TileTypes {
     public static TileType STONE =
             new TileType((byte) 0, "stone", ImageUtil.loadImage("images/stone.png"), 50);
 
-    public static TileType DIGITAL =
+    public static TileType VM_255_BYTE_RAM =
             new TileType((byte) 1, "digital", ImageUtil.loadImage("images/digital.png"), 50);
 
     public static TileType AUTOMATA_SIMPLE =
@@ -23,5 +23,5 @@ public class TileTypes {
             new TileType((byte) 5, "stone", ImageUtil.loadImage("images/water.png"), 500);
 
     public static TileType VIRUS =
-            new TileType((byte) 6, "virus", ImageUtil.loadImage("images/virus.png"), 25); // 2000
+            new TileType((byte) 6, "virus", ImageUtil.loadImage("images/virus.png"), 2000);
 }

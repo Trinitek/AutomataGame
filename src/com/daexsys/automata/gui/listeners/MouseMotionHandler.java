@@ -1,8 +1,6 @@
 package com.daexsys.automata.gui.listeners;
 
 import com.daexsys.automata.gui.GUI;
-import com.daexsys.automata.world.TileTypes;
-import com.daexsys.automata.world.WorldModel;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -23,12 +21,7 @@ public class MouseMotionHandler implements MouseMotionListener {
         y = e.getY();
 
         if(gui.isMouseDown()) {
-            WorldModel worldModel = gui.getGame().getWorldModel();
-
-            int tx = e.getX() / gui.getZoomLevel();
-            int ty = e.getY() / gui.getZoomLevel();
-
-            worldModel.setTileTypeAt(tx, ty, gui.getGame().getPlayerState().getInHand());
+            gui.getGame().getPlayerState().placeBlock(x, y, gui);
         }
     }
 
@@ -38,12 +31,7 @@ public class MouseMotionHandler implements MouseMotionListener {
         y = e.getY();
 
         if(gui.isMouseDown()) {
-            WorldModel worldModel = gui.getGame().getWorldModel();
-
-            int tx = e.getX() / gui.getZoomLevel();
-            int ty = e.getY() / gui.getZoomLevel();
-
-            worldModel.setTileTypeAt(tx, ty, gui.getGame().getPlayerState().getInHand());
+            gui.getGame().getPlayerState().placeBlock(x, y, gui);
         }
     }
 
