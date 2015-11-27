@@ -10,7 +10,7 @@ public class Game {
     private WorldModel worldModel;
     private PlayerState playerState = new PlayerState();
 
-    private int tickDelayRate = 25; // 500 default
+    private int tickDelayRate = 250; // 500 default
 
     public Game() {
         worldModel = new WorldModel(250);

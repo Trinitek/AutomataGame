@@ -18,4 +18,10 @@ public class TileTypes {
 
     public static TileType DIRT =
             new TileType((byte) 4, "stone", ImageUtil.loadImage("images/dirt.png"), 45);
+
+    public static TileType WATER =
+            new TileType((byte) 5, "stone", ImageUtil.loadImage("images/water.png"), 500);
+
+    public static TileType VIRUS =
+            new TileType((byte) 6, "virus", ImageUtil.loadImage("images/virus.png"), 25); // 2000
 }

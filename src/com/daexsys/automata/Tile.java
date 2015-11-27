@@ -49,12 +49,36 @@ public class Tile implements Pulsable {
             }
         }
         if(tileType == TileTypes.AUTOMATA_SIMPLE) {
-            if (number < 2) { getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.STONE); }
+            if (number < 2) {
+                getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.STONE);
+            }
             else if (number > 3) { getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.STONE); }
-        } else if (number == 3)
-            getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.AUTOMATA_SIMPLE);
+        } else if (number == 3) {
+            if(tileType != TileTypes.WATER) {
+                getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.AUTOMATA_SIMPLE);
+            }
+        }
 
-        if(energy == 0)
+        if(tileType == TileTypes.VIRUS && energy > 0) {
+
+            int i = getWorld().getRandom().nextInt(3) - 1;
+            int j = getWorld().getRandom().nextInt(3) - 1;
+
+            try {
+                if (getWorld().getTileAt(coordinate.x + i, coordinate.y + j).getTileType() != TileTypes.VIRUS && energy > 0) {
+                    getWorld().queueChangeAt(coordinate.x + i, coordinate.y + j, TileTypes.VIRUS, energy);
+                    energy--;
+                }
+
+//
+//                if (getWorld().getTileAt(coordinate.x + i, coordinate.y + j).getTileType() != TileTypes.VIRUS && energy > 0) {
+//                    getWorld().queueChangeAt(coordinate.x + i, coordinate.y + j, TileTypes.VIRUS, energy / 2);
+//                    energy /= 2;
+//                }
+            } catch (Exception ignore) {}
+        }
+
+        if(energy <= 0)
             destruct();
     }
 
@@ -119,5 +143,9 @@ public class Tile implements Pulsable {
         } catch (AccessOutOfWorldException ignore) {}
 
         return Optional.empty();
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
     }
 }

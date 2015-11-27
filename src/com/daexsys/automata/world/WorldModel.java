@@ -25,6 +25,23 @@ public class WorldModel implements Pulsable {
             }
         }
 
+        for (int i = 0; i < 15; i++) {
+            int lakeX = random.nextInt(size);
+            int lakeY = random.nextInt(size);
+            int lakeSize = random.nextInt(15) + 3;
+
+            for (int j = lakeX - lakeSize; j < lakeX + lakeSize; j++) {
+                for (int k = lakeY - lakeSize; k < lakeY + lakeSize; k++) {
+                    int x = j - lakeX;
+                    int y = k - lakeY;
+
+                    if((x * x + y * y) < lakeSize * lakeSize) {
+                        setTileTypeAt(j, k, TileTypes.WATER);
+                    }
+                }
+            }
+        }
+
         System.out.println("Initialized world model: " + size * size + " tiles loaded");
     }
 
@@ -40,9 +57,16 @@ public class WorldModel implements Pulsable {
     }
 
     public void queueChangeAt(int x, int y, TileType tileType) {
-        queuedTileChangeStack.push(new QueuedTileChange(x, y, new Tile(new TileCoordinate(this, x, y), tileType)));
+        Tile newTile = new Tile(new TileCoordinate(this, x, y), tileType);
+        queuedTileChangeStack.push(new QueuedTileChange(x, y, newTile));
     }
 
+    public void queueChangeAt(int x, int y, TileType tileType, int newEnergy) {
+        Tile newTile = new Tile(new TileCoordinate(this, x, y), tileType);
+        newTile.setEnergy(newEnergy);
+
+        queuedTileChangeStack.push(new QueuedTileChange(x, y, newTile));
+    }
     public void setTileTypeAt(int x, int y, TileType tileType) {
         if(x > -1 && y > -1 && x < tiles.length && y < tiles.length)
             tiles[x][y] = new Tile(new TileCoordinate(this, x, y), tileType);
@@ -69,7 +93,7 @@ public class WorldModel implements Pulsable {
         while(!queuedTileChangeStack.isEmpty()) {
             QueuedTileChange queuedTileChange = queuedTileChangeStack.pop();
 
-            setTileTypeAt(queuedTileChange.x, queuedTileChange.y, queuedTileChange.t.getTileType());
+            setTileAt(queuedTileChange.t, queuedTileChange.x, queuedTileChange.y);
         }
     }
 }
