@@ -1,6 +1,9 @@
 package com.daexsys.automata.gui;
 
 import com.daexsys.automata.Game;
+import com.daexsys.automata.gui.listeners.KeyboardHandler;
+import com.daexsys.automata.gui.listeners.MouseHandler;
+import com.daexsys.automata.gui.listeners.MouseMotionHandler;
 import com.daexsys.automata.world.WorldModel;
 
 import javax.swing.*;
@@ -8,6 +11,7 @@ import java.awt.*;
 
 public class GUI {
 
+    private MouseHandler mouseHandler = new MouseHandler(this);
     private Game game;
 
     public GUI(Game game) {
@@ -20,6 +24,11 @@ public class GUI {
         jFrame.setSize(800, 600);
         jFrame.setLocationRelativeTo(null);
         jFrame.setVisible(true);
+
+        jFrame.addMouseListener(mouseHandler);
+        jFrame.addMouseMotionListener(new MouseMotionHandler(this));
+
+        jFrame.addKeyListener(new KeyboardHandler(this));
 
         jFrame.createBufferStrategy(2);
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -53,5 +62,9 @@ public class GUI {
 
     public Game getGame() {
         return game;
+    }
+
+    public boolean isMouseDown() {
+        return mouseHandler.isMouseDown();
     }
 }

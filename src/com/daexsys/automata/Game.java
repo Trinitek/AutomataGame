@@ -6,6 +6,7 @@ import com.daexsys.automata.world.WorldModel;
 
 public class Game {
 
+    private boolean isPaused = false;
     private WorldModel worldModel;
 
     public Game() {
@@ -26,7 +27,7 @@ public class Game {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    worldModel.pulse();
+                    if(!isPaused) worldModel.pulse();
 
                 }
             }
@@ -55,5 +56,13 @@ public class Game {
         worldModel.setTileTypeAt(x + 1, y, TileTypes.AUTOMATA_SIMPLE);
         worldModel.setTileTypeAt(x + 1, y - 1, TileTypes.AUTOMATA_SIMPLE);
         worldModel.setTileTypeAt(x, y - 2, TileTypes.AUTOMATA_SIMPLE);
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void setPaused(boolean isPaused) {
+        this.isPaused = isPaused;
     }
 }
