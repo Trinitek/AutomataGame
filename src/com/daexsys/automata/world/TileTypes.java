@@ -11,5 +11,11 @@ public class TileTypes {
             new TileType((byte) 1, "digital", ImageUtil.loadImage("images/digital.png"), 50);
 
     public static TileType AUTOMATA_SIMPLE =
-            new TileType((byte) 2, "automata", ImageUtil.loadImage("images/automata.png"), 50);
+            new TileType((byte) 2, "automata", ImageUtil.loadImage("images/automata.png"), 10);
+
+    public static TileType GRASS =
+            new TileType((byte) 3, "stone", ImageUtil.loadImage("images/grass.png"), 25);
+
+    public static TileType DIRT =
+            new TileType((byte) 4, "stone", ImageUtil.loadImage("images/dirt.png"), 45);
 }

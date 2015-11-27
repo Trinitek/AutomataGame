@@ -21,7 +21,7 @@ public class WorldModel implements Pulsable {
 
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                tiles[x][y] = new Tile(new TileCoordinate(this, x, y), TileTypes.STONE);
+                tiles[x][y] = new Tile(new TileCoordinate(this, x, y), TileTypes.GRASS);
             }
         }
 
@@ -44,7 +44,7 @@ public class WorldModel implements Pulsable {
     }
 
     public void setTileTypeAt(int x, int y, TileType tileType) {
-        if(x > -1 && y > -1)
+        if(x > -1 && y > -1 && x < tiles.length && y < tiles.length)
             tiles[x][y] = new Tile(new TileCoordinate(this, x, y), tileType);
     }
 

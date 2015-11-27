@@ -10,11 +10,17 @@ public class WorldRenderer implements Renderable {
 
     public static final int TILE_SIZE = 40;
 
+    private GUI gui;
     private WorldModel worldModel;
     private Offsets offsets = new Offsets();
 
-    public WorldRenderer(WorldModel worldModel) {
+    public WorldRenderer(GUI gui, WorldModel worldModel) {
+        this.gui = gui;
         this.worldModel = worldModel;
+    }
+
+    public GUI getGui() {
+        return gui;
     }
 
     @Override
@@ -27,11 +33,14 @@ public class WorldRenderer implements Renderable {
                     BufferedImage imageToRender = tile.getTileType().getImage();
 
                     graphics.drawImage(imageToRender,
-                            x * TILE_SIZE + offsets.getOffsetX(),
-                            y * TILE_SIZE + offsets.getOffsetY(),
-                            TILE_SIZE, TILE_SIZE,
+                            x *  getGui().getZoomLevel()  + offsets.getOffsetX(),
+                            y *  getGui().getZoomLevel()  + offsets.getOffsetY(),
+                            getGui().getZoomLevel() ,  getGui().getZoomLevel() ,
                             null
                     );
+
+//                    graphics.setColor(Color.WHITE);
+//                    graphics.drawString(tile.getEnergy() + "", x * getGui().getZoomLevel() + offsets.getOffsetX() + 20, y * getGui().getZoomLevel() + offsets.getOffsetY() + 20);
                 } catch (Exception ignore) {}
             }
         }

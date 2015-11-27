@@ -1,6 +1,5 @@
 package com.daexsys.automata.gui.listeners;
 
-import com.daexsys.automata.Game;
 import com.daexsys.automata.gui.GUI;
 import com.daexsys.automata.world.TileTypes;
 import com.daexsys.automata.world.WorldModel;
@@ -28,8 +27,8 @@ public class MouseHandler implements MouseListener {
 
         WorldModel worldModel = gui.getGame().getWorldModel();
 
-        int tx = e.getX() / 40;
-        int ty = e.getY() / 40;
+        int tx = e.getX() / gui.getZoomLevel();
+        int ty = e.getY() / gui.getZoomLevel();
 
         worldModel.setTileTypeAt(tx, ty, TileTypes.AUTOMATA_SIMPLE);
 //        System.out.println("mouse down");

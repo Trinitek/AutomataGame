@@ -8,7 +8,7 @@ public class TileType {
     private String blockName;
     private BufferedImage image;
 
-    private int defaultEnergy = 50;
+    private int defaultEnergy = 10;
 
     public TileType(byte id, String blockName, BufferedImage image, int defaultEnergy) {
         this.id = id;

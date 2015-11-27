@@ -25,8 +25,8 @@ public class MouseMotionHandler implements MouseMotionListener {
         if(gui.isMouseDown()) {
             WorldModel worldModel = gui.getGame().getWorldModel();
 
-            int tx = e.getX() / 40;
-            int ty = e.getY() / 40;
+            int tx = e.getX() / gui.getZoomLevel();
+            int ty = e.getY() / gui.getZoomLevel();
 
             worldModel.setTileTypeAt(tx, ty, TileTypes.AUTOMATA_SIMPLE);
         }
@@ -40,8 +40,8 @@ public class MouseMotionHandler implements MouseMotionListener {
         if(gui.isMouseDown()) {
             WorldModel worldModel = gui.getGame().getWorldModel();
 
-            int tx = e.getX() / 40;
-            int ty = e.getY() / 40;
+            int tx = e.getX() / gui.getZoomLevel();
+            int ty = e.getY() / gui.getZoomLevel();
 
             worldModel.setTileTypeAt(tx, ty, TileTypes.AUTOMATA_SIMPLE);
         }

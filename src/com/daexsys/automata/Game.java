@@ -10,21 +10,23 @@ public class Game {
     private WorldModel worldModel;
     private PlayerState playerState = new PlayerState();
 
+    private int tickDelayRate = 25; // 500 default
+
     public Game() {
-        worldModel = new WorldModel(50);
+        worldModel = new WorldModel(250);
 
-        placeGliderAt(worldModel, 5, 5);
-        placeGliderAt(worldModel, 10, 5);
-
-        placeGliderAt(worldModel, 5, 10);
-        placeGliderAt(worldModel, 10, 10);
+//        placeGliderAt(worldModel, 5, 5);
+//        placeGliderAt(worldModel, 10, 5);
+//
+//        placeGliderAt(worldModel, 5, 10);
+//        placeGliderAt(worldModel, 10, 10);
 
         Thread worldPule = new Thread(new Runnable() {
             @Override
             public void run() {
                 while(true) {
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(tickDelayRate);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

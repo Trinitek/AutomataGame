@@ -5,6 +5,7 @@ import com.daexsys.automata.world.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class Tile implements Pulsable {
 
@@ -24,6 +25,19 @@ public class Tile implements Pulsable {
     public void pulse() {
         lazyInit(); // Init byte array if not done already
 
+        /* If grass or dirt gain energy from the sun */
+        if(tileType == TileTypes.GRASS || tileType == TileTypes.DIRT) {
+            energy += 2;
+        }
+        /* Dirt will eventually grow grass */
+        if(tileType == TileTypes.DIRT && energy > 500) {
+            getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.GRASS);
+        }
+
+        /* Randomly lose energy to entropy */
+        if(new Random().nextBoolean())
+            energy--;
+
         Optional<List<Tile>> neighborOptional = getNeighbors();
         int number = 0;
         if(neighborOptional.isPresent()) {
@@ -34,12 +48,20 @@ public class Tile implements Pulsable {
                 }
             }
         }
-
         if(tileType == TileTypes.AUTOMATA_SIMPLE) {
             if (number < 2) { getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.STONE); }
             else if (number > 3) { getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.STONE); }
         } else if (number == 3)
             getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.AUTOMATA_SIMPLE);
+
+        if(energy == 0)
+            destruct();
+    }
+
+    public void destruct() {
+//        if(tileType == TileTypes.AUTOMATA_SIMPLE) {
+            getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.DIRT);
+//        }
     }
 
     public int getEnergy() {
