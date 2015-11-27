@@ -35,7 +35,7 @@ public class Tile implements Pulsable {
         }
 
         /* Randomly lose energy to entropy */
-        if(new Random().nextBoolean())
+        if(getWorld().getRandom().nextBoolean())
             energy -= tileType.getDefaultDecayRate();
 
         Optional<List<Tile>> neighborOptional = getNeighbors();
