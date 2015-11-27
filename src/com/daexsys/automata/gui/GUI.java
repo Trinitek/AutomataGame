@@ -12,6 +12,7 @@ import java.awt.*;
 public class GUI {
 
     private MouseHandler mouseHandler = new MouseHandler(this);
+    private MouseMotionHandler mouseMotionHandler = new MouseMotionHandler(this);
     private Game game;
 
     public GUI(Game game) {
@@ -26,7 +27,7 @@ public class GUI {
         jFrame.setVisible(true);
 
         jFrame.addMouseListener(mouseHandler);
-        jFrame.addMouseMotionListener(new MouseMotionHandler(this));
+        jFrame.addMouseMotionListener(mouseMotionHandler);
 
         jFrame.addKeyListener(new KeyboardHandler(this));
 
@@ -46,6 +47,9 @@ public class GUI {
                     graphics2D.fillRect(0, 0, 800, 600);
 
                     worldRenderer.render(graphics2D);
+
+                    graphics2D.drawImage(game.getPlayerState().getInHand().getImage(),
+                            mouseMotionHandler.getX(), mouseMotionHandler.getY(), 20, 20, null);
 
                     jFrame.getBufferStrategy().show();
 

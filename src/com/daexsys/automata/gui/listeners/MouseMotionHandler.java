@@ -10,6 +10,8 @@ import java.awt.event.MouseMotionListener;
 public class MouseMotionHandler implements MouseMotionListener {
 
     private GUI gui;
+    private int x;
+    private int y;
 
     public MouseMotionHandler(GUI gui) {
         this.gui = gui;
@@ -17,6 +19,9 @@ public class MouseMotionHandler implements MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        x = e.getX();
+        y = e.getY();
+
         if(gui.isMouseDown()) {
             WorldModel worldModel = gui.getGame().getWorldModel();
 
@@ -29,6 +34,9 @@ public class MouseMotionHandler implements MouseMotionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        x = e.getX();
+        y = e.getY();
+
         if(gui.isMouseDown()) {
             WorldModel worldModel = gui.getGame().getWorldModel();
 
@@ -37,5 +45,13 @@ public class MouseMotionHandler implements MouseMotionListener {
 
             worldModel.setTileTypeAt(tx, ty, TileTypes.AUTOMATA_SIMPLE);
         }
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

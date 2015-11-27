@@ -23,6 +23,7 @@ public class MouseHandler implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+
         mouseDown = true;
 
         WorldModel worldModel = gui.getGame().getWorldModel();

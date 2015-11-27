@@ -8,6 +8,7 @@ public class Game {
 
     private boolean isPaused = false;
     private WorldModel worldModel;
+    private PlayerState playerState = new PlayerState();
 
     public Game() {
         worldModel = new WorldModel(50);
@@ -64,5 +65,9 @@ public class Game {
 
     public void setPaused(boolean isPaused) {
         this.isPaused = isPaused;
+    }
+
+    public PlayerState getPlayerState() {
+        return playerState;
     }
 }
