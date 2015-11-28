@@ -31,4 +31,7 @@ public class TileTypes {
 
     public static TileType TALL_GRASS =
             new FertileTileType((byte) 8, "tall grass", ImageUtil.loadImage("images/tall_grass.png"), 100, 1);
+
+    public static TileType AIR =
+            new TileType((byte) 9, "stone", ImageUtil.loadImage("images/stone.png"), 50, 0);
 }

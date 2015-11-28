@@ -1,6 +1,7 @@
 package com.daexsys.automata.gui;
 
 import com.daexsys.automata.Tile;
+import com.daexsys.automata.world.TileTypes;
 import com.daexsys.automata.world.WorldModel;
 
 import java.awt.*;
@@ -20,32 +21,33 @@ public class WorldRenderer implements Renderable {
         return gui;
     }
 
-    public Offsets getOffsets() {
-        return getGui().getOffsets();
-    }
-
     @Override
     public void render(Graphics graphics) {
-        for (int x = 0; x < worldModel.getTiles().length; x++) {
-            for (int y = 0; y < worldModel.getTiles()[x].length; y++) {
-                try {
-                    Tile tile = worldModel.getTileAt(x, y);
+        Tile[][] tiles = worldModel.getTiles()[0];
 
-                    BufferedImage imageToRender = tile.getTileType().getImage();
+        for (int x = 0; x < tiles.length; x++) {
+            for (int y = 0; y < tiles[x].length; y++) {
+                for (int i = 0; i < 2; i++) {
+                    try {
+                        Tile tile = worldModel.getTileAt(i, x, y);
 
-                    graphics.drawImage(imageToRender,
-                            x *  getGui().getZoomLevel() + getOffsets().getOffsetX(),
-                            y *  getGui().getZoomLevel() + getOffsets().getOffsetY(),
-                            getGui().getZoomLevel() ,  getGui().getZoomLevel(),
-                            null
-                    );
+                        if(tile.getTileType() != TileTypes.AIR) {
+                            BufferedImage imageToRender = tile.getTileType().getImage();
 
-                    if(getGui().getGame().isPaused()) {
-                        graphics.setColor(Color.WHITE);
-                        graphics.drawString(tile.getEnergy() + "", x * getGui().getZoomLevel() + getGui().getOffsets().getOffsetX() + 20
-                                , y * getGui().getZoomLevel() + getGui().getOffsets().getOffsetY() + 20);
-                    }
-                } catch (Exception ignore) {}
+                            graphics.drawImage(imageToRender,
+                                    x * getGui().getZoomLevel() + getGui().getOffsets().getOffsetX(),
+                                    y * getGui().getZoomLevel() + getGui().getOffsets().getOffsetY(),
+                                    getGui().getZoomLevel(), getGui().getZoomLevel(),
+                                    null
+                            );
+                        }
+
+                        if(i == 1 && gui.getGame().isPaused()) {
+//                            graphics.setColor(Color.WHITE);
+//                            graphics.drawString(tile.getEnergy() + "", x * getGui().getZoomLevel() + getGui()..getOffsetX() + 20, y * getGui() + offsets.getOffsetY() + 20);
+                        }
+                    } catch (Exception ignore) {ignore.printStackTrace();}
+                }
             }
         }
     }

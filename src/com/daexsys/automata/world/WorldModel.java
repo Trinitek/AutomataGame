@@ -10,19 +10,25 @@ import java.util.Stack;
 public class WorldModel implements Pulsable {
 
     private Random random = new Random();
-    private Tile[][] tiles;
+    private Tile[][][] tiles;
 
     private Stack<QueuedTileChange> queuedTileChangeStack = new Stack<QueuedTileChange>();
 
     public WorldModel(final int size) {
-        tiles = new Tile[size][size];
+        tiles = new Tile[2][size][size];
 
         // TODO: create tiletype api
+
+        System.out.println("Creating world of size: " + size);
 
         /* Fill world with grass */
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                tiles[x][y] = new Tile(new TileCoordinate(this, x, y), TileTypes.GRASS);
+                tiles[Layer.GROUND][x][y] =
+                        new Tile(new TileCoordinate(this, x, y), TileTypes.GRASS);
+
+                tiles[Layer.ABOVE_GROUND][x][y] =
+                        new Tile(new TileCoordinate(this, x, y), TileTypes.AIR);
             }
         }
 
@@ -56,27 +62,32 @@ public class WorldModel implements Pulsable {
 
                     if((x * x + y * y) < lakeSize * lakeSize) {
                         if(random.nextBoolean()) {
-                            setTileTypeAt(j, k, TileTypes.STONE);
+                            setTileTypeAt(Layer.ABOVE_GROUND, j, k, TileTypes.STONE);
                         } else {
-                            setTileTypeAt(j, k, TileTypes.ENERGY_ORE);
+                            setTileTypeAt(Layer.ABOVE_GROUND, j, k, TileTypes.ENERGY_ORE);
                         }
                     }
                 }
             }
         }
 
-        System.out.println("Initialized world model: " + size * size + " tiles loaded");
+        System.out.println("Initialized world model: " + tiles[0].length * tiles[0][0].length + " tiles loaded");
     }
 
     public Tile getTileAt(int x, int y) throws AccessOutOfWorldException {
-        if(x < 0 || y < 0 || x > tiles.length - 1|| y > tiles.length - 1) throw new AccessOutOfWorldException();
+        return getTileAt(0, x, y);
+    }
 
-        return tiles[x][y];
+    public Tile getTileAt(int layer, int x, int y) throws AccessOutOfWorldException {
+        if(x < 0 || y < 0 || x > tiles[0].length - 1|| y > tiles[0][0].length - 1)
+            throw new AccessOutOfWorldException();
+
+        return tiles[layer][x][y];
     }
 
     public void setTileAt(Tile type, int x, int y) {
         if(x > -1 && y > -1)
-        tiles[x][y] = type;
+        tiles[Layer.GROUND][x][y] = type;
     }
 
     public void queueChangeAt(int x, int y, TileType tileType) {
@@ -91,11 +102,21 @@ public class WorldModel implements Pulsable {
         queuedTileChangeStack.push(new QueuedTileChange(x, y, newTile));
     }
     public void setTileTypeAt(int x, int y, TileType tileType) {
-        if(x > -1 && y > -1 && x < tiles.length && y < tiles.length)
-            tiles[x][y] = new Tile(new TileCoordinate(this, x, y), tileType);
+        setTileTypeAt(Layer.GROUND, x, y, tileType);
     }
 
-    public Tile[][] getTiles() {
+    public void setTileTypeAt(int layer, int x, int y, TileType tileType) {
+        if(x > -1 && y > -1 && x < tiles[Layer.GROUND].length && y < tiles[0][0].length)
+            if((layer == 0 && !isObstructionAt(x, y)) || layer == 1) {
+                tiles[layer][x][y] = new Tile(new TileCoordinate(this, x, y), tileType);
+            }
+    }
+
+    public boolean isObstructionAt(int x, int y) {
+        return tiles[Layer.ABOVE_GROUND][x][y].getTileType() != TileTypes.AIR;
+    }
+
+    public Tile[][][] getTiles() {
         return tiles;
     }
 
@@ -107,9 +128,9 @@ public class WorldModel implements Pulsable {
     public void pulse() {
 
         // Pulse all tiles (for now, eventually this needs to be handled in a more intelligent way)
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                tiles[i][j].pulse();
+        for (int i = 0; i < tiles[Layer.GROUND].length; i++) {
+            for (int j = 0; j < tiles[Layer.GROUND][i].length; j++) {
+                tiles[Layer.GROUND][i][j].pulse();
             }
         }
 
