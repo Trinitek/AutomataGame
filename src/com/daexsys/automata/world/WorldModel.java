@@ -3,6 +3,8 @@ package com.daexsys.automata.world;
 import com.daexsys.automata.Pulsable;
 import com.daexsys.automata.Tile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
@@ -12,12 +14,12 @@ public class WorldModel implements Pulsable {
     private Random random = new Random();
     private Tile[][][] tiles;
 
+    private List<Chunk> chunkList = new ArrayList<Chunk>();
+
     private Stack<QueuedTileChange> queuedTileChangeStack = new Stack<QueuedTileChange>();
 
     public WorldModel(final int size) {
         tiles = new Tile[2][size][size];
-
-        // TODO: create tiletype api
 
         System.out.println("Creating world of size: " + size);
 
@@ -78,18 +80,6 @@ public class WorldModel implements Pulsable {
         return getTileAt(0, x, y);
     }
 
-    public Tile getTileAt(int layer, int x, int y) throws AccessOutOfWorldException {
-        if(x < 0 || y < 0 || x > tiles[0].length - 1|| y > tiles[0][0].length - 1)
-            throw new AccessOutOfWorldException();
-
-        return tiles[layer][x][y];
-    }
-
-    public void setTileAt(Tile type, int x, int y) {
-        if(x > -1 && y > -1)
-        tiles[Layer.GROUND][x][y] = type;
-    }
-
     public void queueChangeAt(int x, int y, TileType tileType) {
         Tile newTile = new Tile(new TileCoordinate(this, x, y), tileType);
         queuedTileChangeStack.push(new QueuedTileChange(x, y, newTile));
@@ -101,15 +91,29 @@ public class WorldModel implements Pulsable {
 
         queuedTileChangeStack.push(new QueuedTileChange(x, y, newTile));
     }
+
     public void setTileTypeAt(int x, int y, TileType tileType) {
         setTileTypeAt(Layer.GROUND, x, y, tileType);
     }
 
+    /* Need changes */
     public void setTileTypeAt(int layer, int x, int y, TileType tileType) {
         if(x > -1 && y > -1 && x < tiles[Layer.GROUND].length && y < tiles[0][0].length)
             if((layer == 0 && !isObstructionAt(x, y)) || layer == 1) {
                 tiles[layer][x][y] = new Tile(new TileCoordinate(this, x, y), tileType);
             }
+    }
+
+    public Tile getTileAt(int layer, int x, int y) throws AccessOutOfWorldException {
+        if(x < 0 || y < 0 || x > tiles[0].length - 1|| y > tiles[0][0].length - 1)
+            throw new AccessOutOfWorldException();
+
+        return tiles[layer][x][y];
+    }
+
+    public void setTileAt(Tile type, int x, int y) {
+        if(x > -1 && y > -1)
+            tiles[Layer.GROUND][x][y] = type;
     }
 
     public boolean isObstructionAt(int x, int y) {
@@ -124,9 +128,18 @@ public class WorldModel implements Pulsable {
         return random;
     }
 
+    public Chunk getChunk(int x, int y) {
+        for(Chunk c : chunkList) {
+            if(c.getX() == x && c.getY() == y) {
+                return c;
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public void pulse() {
-
         // Pulse all tiles (for now, eventually this needs to be handled in a more intelligent way)
         for (int i = 0; i < tiles[Layer.GROUND].length; i++) {
             for (int j = 0; j < tiles[Layer.GROUND][i].length; j++) {

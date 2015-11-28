@@ -95,6 +95,10 @@ public class TileVM {
         } catch (Exception access) {}
     }
 
+    public Tile getTile() {
+        return tile;
+    }
+
     /**
      * atm:
      *
