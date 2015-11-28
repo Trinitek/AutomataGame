@@ -1,0 +1,62 @@
+
+REGISTERS
+    A
+    B
+    X
+    S
+    F : signed | overflow | zero | greater | less
+    P
+    
+REGISTER CODE
+    r = (binary) ddss
+        s = src reg code
+        d = dest reg code
+    
+    SRC CODES
+        00 = A
+        01 = B
+        10 = X
+        11 = imm
+    
+    DEST CODES
+        00 = A
+        01 = B
+        10 = X
+        11 = [X]
+    
+    For instructions that only require a single register, only one set of register code bits are used.
+    
+INSTRUCTIONS
+    add     0x0r                    add dest, src   ; dest = dest + src         ; add, set flags
+    sub     0x1r                    sub dest, src   ; dest = dest - src         ; subtract, set flags
+    mul     0x2r                    smul dest, src  ; [S]:dest = dest * src     ; signed or unsigned multiply in accordance to signed flag
+    div     0x3r                    div dest, src   ; dest = dest / [s]:src     ; signed or unsigned divide in accordance to signed flag
+    mod     0x4r                    mod dest, src   ; dest = dest % src         ; modulo, result is always positive
+    mov     0x5:dd(dest):dd(src)    mov dest, src   ; dest = src                ; copy register value
+    mov     0x6:00dd                mov dest, imm   ; dest = imm                ; copy immediate value
+    push    0x6:0100                push imm        ; [S] = imm, S++            ; push immediate to stack
+    push    0x6:10dd                push dest       ; [S] = dest, S++           ; push dest to stack
+    pop     0x6:11dd                pop dest        ; S--, dest = [S]           ; pop value from stack
+    in      0x7r                    in dest, src    ; dest = read port src      ; read value at port src into port dest
+    out     0x8r                    out dest, src   ; write port src = dest     ; write dest to port src
+    call    0x9:00dd                call dest       ; push(next(P)), goto dest  ; save program counter and jump to dest
+    call    0x9:0100                call imm        ; push(next(P)), goto imm   ; save program counter and jump to imm
+    ret     0x9:10ss                ret src         ; P = pop, S -= src         ; restore program counter, return, and dec stack by src
+    ret     0x9:1100                ret             ; P = pop                   ; restore program counter and return
+    cmp     0xAr                    cmp dest, src   ; F = new flags             ; unsigned or signed compare dest and src in accordance to signed flag and set the flags register
+    jo      0xB:00ss                jo src          ; if overflow then P = src  ; set program counter to src if overflow is set
+    jz      0xB:01ss                jz src          ; if zero then P = src      ; set program counter to src if zero is set
+    jg      0xB:10ss                jg src          ; if greater then P = src   ; set program counter to src if greater is set
+    jl      0xB:11ss                jl src          ; if less then P = src      ; set program counter to src if less is set
+    inc     0xC:00dd                inc dest        ; dest++                    ; increment
+    dec     0xC:01dd                dec dest        ; dest--                    ; decrement
+    jmp     0xC:10dd                jmp dest        ; P = dest                  ; jump to address specified by dest
+    jmp     0xC:1100                jmp imm         ; P = imm                   ; jump to address specified by imm
+    cls     0xD:0000                cls             ; signed = false            ; clear signed flag
+    sts     0xD:0001                sts             ; signed = true             ; set signed flag
+    pushf   0xD:0010                pushf           ; push(F)                   ; push flags to the stack
+    popf    0xD:0011                popf            ; pop(F)                    ; pop flags from the stack
+    not     0xD:01dd                not dest        ; dest = ~dest              ; bitwise not dest
+    ext     0xD:1000                (ext)           ;                           ; extended instruction prefix
+    and     0xEr                    and dest, src   ; dest = dest & src         ; bitwise and dest and src
+    or      0xFr                    or dest, src    ; dest = dest | src         ; bitwise or dest and src
