@@ -29,7 +29,7 @@ REGISTER CODE
 INSTRUCTIONS
     add     0x0r                    add dest, src   ; dest = dest + src         ; add, set flags
     sub     0x1r                    sub dest, src   ; dest = dest - src         ; subtract, set flags
-    mul     0x2r                    mul dest, src  ; [S]:dest = dest * src     ; signed or unsigned multiply in accordance to signed flag
+    mul     0x2r                    mul dest, src   ; [S]:dest = dest * src     ; signed or unsigned multiply in accordance to signed flag
     div     0x3r                    div dest, src   ; dest = dest / [s]:src     ; signed or unsigned divide in accordance to signed flag
     mod     0x4r                    mod dest, src   ; dest = dest % src         ; modulo, result is always positive
     mov     0x5:dd(dest):dd(src)    mov dest, src   ; dest = src                ; copy register value
