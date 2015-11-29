@@ -204,25 +204,53 @@ public class TileVM implements VM {
             case 0x70:          // in
                 break;
 
-            case 0x80:   // out
+            case 0x80:          // out
                 break;
 
-            case 0x90:   // (special)
+            case 0x90:          // (special)
                 break;
 
-            case 0xA0:   // cmp
+            case 0xA0:          // cmp
+                src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
+                dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
+                switch (dest) {
+                    case A:
+                        temp = getA();
+                        break;
+                    case B:
+                        temp = getB();
+                        break;
+                    case X:
+                        temp = getX();
+                        break;
+                    case MEM:
+                        temp = this.ram[getX()];
+                        break;
+                }
+                if (temp == getTS()) setF((getF() & 0xF8) | 0x04);
+                else if ((getF() & 0x0F) != 0) {    // unsigned comparison
+                    if (temp < getTS())
+                        setF((getF() & 0xF8) | 0x01);
+                    else if (temp > getTS())
+                        setF((getF() & 0xF8) | 0x02);
+                } else {                            // signed comparison
+                    if ((byte) temp < (byte) getTS()) setF((getF() & 0xF8) | 0x01);
+                    else if ((byte) temp > (byte) getTS()) setF((getF() & 0xF8) | 0x02);
+                }
+                if (src == VMArg.IMM) iLength = 2;
+                else iLength = 1;
                 break;
 
-            case 0xB0:   // (special)
+            case 0xB0:          // (special) conditional jumps
                 break;
 
-            case 0xC0:   // (special)
+            case 0xC0:          // (special)
                 break;
 
-            case 0xD0:   // (special)
+            case 0xD0:          // (special)
                 break;
 
-            case 0xE0:   // and dest, src ; 0xEr
+            case 0xE0:          // and dest, src ; 0xEr
                 src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
                 dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
                 switch (dest) {
@@ -310,6 +338,9 @@ public class TileVM implements VM {
                 0x02,                   /* add a, x */
                 (byte) 0xE0 | (0x02 << 2), /* and x, a */
                 (byte) 0xF0 | (0x01 << 2), /* or b, a */
+                (byte) 0xA3, 0x00,      /* cmp a, 0 */
+                (byte) 0xA0,            /* cmp a, a */
+                (byte) 0xA1,            /* cmp a, b */
         };
         arraycopy(program, 0, newRam, 0, program.length);
         tileVM.setRam(newRam);
