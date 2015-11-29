@@ -113,7 +113,6 @@ public class TileVM implements VM {
         int iLength = 1;
         VMArg src, dest;
         int temp = 0;
-        System.out.println(String.format("%02X", ram[ptr] & 0xF0));
         switch (ram[ptr] & 0xF0) {
             case 0x00:          // add dest, src ; 0x0r
                 src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
