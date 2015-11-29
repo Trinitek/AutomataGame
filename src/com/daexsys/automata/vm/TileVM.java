@@ -113,6 +113,7 @@ public class TileVM implements VM {
         int iLength = 1;
         VMArg src, dest;
         int temp = 0;
+        System.out.println(String.format("%02X", ram[ptr] & 0xF0));
         switch (ram[ptr] & 0xF0) {
             case 0x00:          // add dest, src ; 0x0r
                 src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
@@ -204,25 +205,25 @@ public class TileVM implements VM {
             case 0x70:          // in
                 break;
 
-            case (byte) 0x80:   // out
+            case 0x80:   // out
                 break;
 
-            case (byte) 0x90:   // (special)
+            case 0x90:   // (special)
                 break;
 
-            case (byte) 0xA0:   // cmp
+            case 0xA0:   // cmp
                 break;
 
-            case (byte) 0xB0:   // (special)
+            case 0xB0:   // (special)
                 break;
 
-            case (byte) 0xC0:   // (special)
+            case 0xC0:   // (special)
                 break;
 
-            case (byte) 0xD0:   // (special)
+            case 0xD0:   // (special)
                 break;
 
-            case (byte) 0xE0:   // and dest, src ; 0xEr
+            case 0xE0:   // and dest, src ; 0xEr
                 src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
                 dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
                 switch (dest) {
@@ -243,7 +244,7 @@ public class TileVM implements VM {
                 else iLength = 1;
                 break;
 
-            case (byte) 0xF0:   // or dest, src ; 0xFr
+            case 0xF0:   // or dest, src ; 0xFr
                 src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
                 dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
                 switch (dest) {
@@ -308,6 +309,8 @@ public class TileVM implements VM {
                 0x03 | (0x02 << 2), (byte) 0xFE, /* mov x, 0xFE */
                 0x03, 0x03,             /* add a, 0x03 */
                 0x02,                   /* add a, x */
+                (byte) 0xE0 | (0x02 << 2), /* and x, a */
+                (byte) 0xF0 | (0x01 << 2), /* or b, a */
         };
         arraycopy(program, 0, newRam, 0, program.length);
         tileVM.setRam(newRam);
