@@ -113,7 +113,7 @@ public class TileVM implements VM {
         int iLength = 1;
         VMArg src, dest;
         int temp = 0;
-        switch (ram[ptr] & 0xF0) {
+        switch (this.ram[ptr] & 0xF0) {
             case 0x00:          // add dest, src ; 0x0r
                 src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
                 dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
@@ -242,6 +242,40 @@ public class TileVM implements VM {
                 break;
 
             case 0xB0:          // (special) conditional jumps
+                src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
+                temp = 0;
+                switch (this.ram[ptr] & 0x0C) {
+                    case 0x00:  // jo
+                        if ((getF() & 0x08) != 0) {
+                            setP(getTS());
+                            temp = 1;
+                        }
+                        break;
+                    case 0x04:  // jz
+                        if ((getF() & 0x04) != 0) {
+                            setP(getTS());
+                            temp = 1;
+                        }
+                        break;
+                    case 0x08:  // jg
+                        if ((getF() & 0x02) != 0) {
+                            setP(getTS());
+                            temp = 1;
+                        }
+                        break;
+                    case 0x0C:  // jl
+                        if ((getF() & 0x01) != 0) {
+                            setP(getTS());
+                            temp = 1;
+                        }
+                        break;
+                }
+                if (temp == 0) {
+                    if (src == VMArg.IMM) iLength = 2;
+                    else iLength = 1;
+                } else {
+                    iLength = 0;
+                }
                 break;
 
             case 0xC0:          // (special)
@@ -329,18 +363,19 @@ public class TileVM implements VM {
 
         byte[] newRam = new byte[256];
         byte[] program = {
-                0x03, (byte) 0xA0,      /* add a, 0xA0 */
-                0x13, (byte) 0x90,      /* sub a, 0x90 */
-                0x54,                   /* mov b, a */
-                0x53,                   /* mov a, x */
-                0x03 | (0x02 << 2), (byte) 0xFE, /* mov x, 0xFE */
-                0x03, 0x03,             /* add a, 0x03 */
-                0x02,                   /* add a, x */
-                (byte) 0xE0 | (0x02 << 2), /* and x, a */
-                (byte) 0xF0 | (0x01 << 2), /* or b, a */
-                (byte) 0xA3, 0x00,      /* cmp a, 0 */
-                (byte) 0xA0,            /* cmp a, a */
-                (byte) 0xA1,            /* cmp a, b */
+                0x03, (byte) 0xA0,      /* 00 | add a, 0xA0 */
+                0x13, (byte) 0x90,      /* 02 | sub a, 0x90 */
+                0x54,                   /* 04 | mov b, a */
+                0x53,                   /* 05 | mov a, x */
+                0x03 | (0x02 << 2), (byte) 0xFE, /* 06 | mov x, 0xFE */
+                0x03, 0x03,             /* 08 | add a, 0x03 */
+                0x02,                   /* 0A | add a, x */
+                (byte) 0xE0 | (0x02 << 2), /* 0B | and x, a */
+                (byte) 0xF0 | (0x01 << 2), /* 0C | or b, a */
+                (byte) 0xA3, 0x00,      /* 0D | cmp a, 0 */
+                (byte) 0xA0,            /* 0F | cmp a, a */
+                (byte) 0xA1,            /* 10 | cmp a, b */
+                (byte) 0xBF, 0x11       /* 11 | jl 0x11 */
         };
         arraycopy(program, 0, newRam, 0, program.length);
         tileVM.setRam(newRam);
