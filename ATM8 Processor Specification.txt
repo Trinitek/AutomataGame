@@ -34,14 +34,14 @@ INSTRUCTIONS
     mod     0x4r                    mod dest, src   ; dest = dest % src         ; modulo, result is always positive
     mov     0x5:dd(dest):dd(src)    mov dest, src   ; dest = src                ; copy register value
     mov     0x6:00dd                mov dest, imm   ; dest = imm                ; copy immediate value
-    push    0x6:0100                push imm        ; [S] = imm, S++            ; push immediate to stack
-    push    0x6:10dd                push dest       ; [S] = dest, S++           ; push dest to stack
-    pop     0x6:11dd                pop dest        ; S--, dest = [S]           ; pop value from stack
+    push    0x6:0100                push imm        ; [S] = imm, S--            ; push immediate to stack
+    push    0x6:10dd                push dest       ; [S] = dest, S--           ; push dest to stack
+    pop     0x6:11dd                pop dest        ; S++, dest = [S]           ; pop value from stack
     in      0x7r                    in dest, src    ; dest = read port src      ; read value at port src into port dest
     out     0x8r                    out dest, src   ; write port src = dest     ; write dest to port src
     call    0x9:00dd                call dest       ; push(next(P)), goto dest  ; save program counter and jump to dest
     call    0x9:0100                call imm        ; push(next(P)), goto imm   ; save program counter and jump to imm
-    ret     0x9:10ss                ret src         ; P = pop, S -= src         ; restore program counter, return, and dec stack by src
+    ret     0x9:10ss                ret src         ; P = pop, S += src         ; restore program counter, return, and increment stack by src
     ret     0x9:1100                ret             ; P = pop                   ; restore program counter and return
     cmp     0xAr                    cmp dest, src   ; F = new flags             ; unsigned or signed compare dest and src in accordance to signed flag and set the flags register
     jo      0xB:00ss                jo src          ; if overflow then P = src  ; set program counter to src if overflow is set
@@ -57,6 +57,11 @@ INSTRUCTIONS
     pushf   0xD:0010                pushf           ; push(F)                   ; push flags to the stack
     popf    0xD:0011                popf            ; pop(F)                    ; pop flags from the stack
     not     0xD:01dd                not dest        ; dest = ~dest              ; bitwise not dest
-    ext     0xD:1000                (ext)           ;                           ; extended instruction prefix
+    (ext)   0xD:1000                (ext)           ;                           ; extended instruction prefix
+    mov     0xD:1001                mov a, s        ; a = s                     ; copy S to A
+    mov     0xD:1010                mov s, a        ; s = a                     ; copy A to S
     and     0xEr                    and dest, src   ; dest = dest & src         ; bitwise and dest and src
     or      0xFr                    or dest, src    ; dest = dest | src         ; bitwise or dest and src
+
+INSTRUCTIONS WITH SHARED ENCODINGS
+    nop     0x5:0000                nop             ; mov a, a                  ; do nothing
