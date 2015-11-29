@@ -111,13 +111,21 @@ public class WorldModel implements Pulsable {
         return tiles[layer][x][y];
     }
 
+//    public void setAboveGroundTile(int x, int y, TileType tileType) {
+//        setTileTypeAt();
+//    }
+
     public void setTileAt(Tile type, int x, int y) {
         if(x > -1 && y > -1)
             tiles[Layer.GROUND][x][y] = type;
     }
 
     public boolean isObstructionAt(int x, int y) {
-        return tiles[Layer.ABOVE_GROUND][x][y].getTileType() != TileTypes.AIR;
+        if(x >= 0 && y >= 0 && x < tiles[Layer.ABOVE_GROUND][0].length) {
+            return tiles[Layer.ABOVE_GROUND][x][y].getTileType() != TileTypes.AIR;
+        }
+
+        return false;
     }
 
     public Tile[][][] getTiles() {

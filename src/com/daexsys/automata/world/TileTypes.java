@@ -27,11 +27,14 @@ public class TileTypes {
 
     // TODO: rename
     public static final TileType ENERGY_ORE =
-            new TileType((byte) 7, "energy ore", ImageUtil.loadImage("images/energy_ore.png"), 5000, 0);
+            new TileType((byte) 7, "energy ore", ImageUtil.loadImage("images/energy_ore.png"), 100, 0);
 
     public static final TileType TALL_GRASS =
             new FertileTileType((byte) 8, "tall grass", ImageUtil.loadImage("images/tall_grass.png"), 100, 1);
 
     public static final TileType AIR =
             new TileType((byte) 9, "stone", ImageUtil.loadImage("images/stone.png"), 50, 0);
+
+    public static final TileType MINER =
+            new MinerTileType((byte) 10, "berzerker", ImageUtil.loadImage("images/berzerker.png"), 50, 0);
 }

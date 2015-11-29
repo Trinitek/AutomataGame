@@ -41,6 +41,10 @@ public class KeyboardHandler implements KeyListener {
             gui.getGame().getPlayerState().setInHand(TileTypes.VM_255_BYTE_RAM);
         }
 
+        else if(e.getKeyCode() == KeyEvent.VK_4) {
+            gui.getGame().getPlayerState().setInHand(TileTypes.MINER);
+        }
+
         else if(e.getKeyCode() == KeyEvent.VK_E) {
             gui.getGame().setTickDelayRate(gui.getGame().getTickDelayRate() - 10);
         }
@@ -48,7 +52,6 @@ public class KeyboardHandler implements KeyListener {
         else if(e.getKeyCode() == KeyEvent.VK_Q) {
             gui.getGame().setTickDelayRate(gui.getGame().getTickDelayRate() + 10);
         }
-
 
         if(e.getKeyCode() == KeyEvent.VK_D) {
             gui.getOffsets().moveRight();
