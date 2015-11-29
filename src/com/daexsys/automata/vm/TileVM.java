@@ -32,75 +32,75 @@ public class TileVM {
         this.ram = tile.getTileData();
     }
 
-    public int getA() {
+    private int getA() {
         return this.regA & 0xFF;
     }
 
-    public void setA(int x) {
+    private void setA(int x) {
         this.regA = x & 0xFF;
     }
 
-    public int getB() {
+    private int getB() {
         return this.regB & 0xFF;
     }
 
-    public void setB(int x) {
+    private void setB(int x) {
         this.regB = x & 0xFF;
     }
 
-    public int getX() {
+    private int getX() {
         return this.regX & 0xFF;
     }
 
-    public void setX(int x) {
+    private void setX(int x) {
         this.regX = x & 0xFF;
     }
 
-    public int getS() {
+    private int getS() {
         return this.regS & 0xFF;
     }
 
-    public void setS(int x) {
+    private void setS(int x) {
         this.regS = x & 0xFF;
     }
 
-    public int getF() {
+    private int getF() {
         return this.regF & 0xFF;
     }
 
-    public void setF(int x) {
+    private void setF(int x) {
         this.regF = x & 0xFF;
     }
 
-    public int getP() {
+    private int getP() {
         return this.regP & 0xFF;
     }
 
-    public void setP(int x) {
+    private void setP(int x) {
         this.regP = x & 0xFF;
     }
 
-    public int getTS() {
+    private int getTS() {
         return this.regTS & 0xFF;
     }
 
-    public void setTS(int x) {
+    private void setTS(int x) {
         this.regTS = x & 0xFF;
     }
 
-    public int getTD() {
+    private int getTD() {
         return this.regTD & 0xFF;
     }
 
-    public void setTD(int x) {
+    private void setTD(int x) {
         this.regTD = x & 0xFF;
     }
 
-    public byte[] getRam() {
+    private byte[] getRam() {
         return this.ram;
     }
 
-    public void setRam(byte[] newRam) {
+    private void setRam(byte[] newRam) {
         this.ram = newRam;
     }
 
@@ -386,12 +386,12 @@ public class TileVM {
 
     public String regsToString() {
         return
-            String.format("@$%02X | ", (this.regP & 0xFF)) +
-            String.format("A=$%02X  ", (this.regA & 0xFF)) +
-            String.format("B=$%02X  ", (this.regB & 0xFF)) +
-            String.format("X=$%02X  ", (this.regX & 0xFF)) +
-            String.format("S=$%02X  ", (this.regS & 0xFF)) +
-            String.format("F=$%02X", (this.regF & 0xFF));
+            String.format("@$%02X | ", getP()) +
+            String.format("A=$%02X  ", getA()) +
+            String.format("B=$%02X  ", getB()) +
+            String.format("X=$%02X  ", getX()) +
+            String.format("S=$%02X  ", getS()) +
+            String.format("F=$%02X", getF());
     }
 
     public void updateVM() {
