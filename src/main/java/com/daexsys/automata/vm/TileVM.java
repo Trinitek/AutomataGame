@@ -291,7 +291,7 @@ public class TileVM implements VM {
                         setP(this.ram[getP() + 1]);
                         break;
                     case 0x08:  // ret src
-                        int i;
+                        int i = 0;
                         src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
                         switch (src) {
                             case A:
