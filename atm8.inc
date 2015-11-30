@@ -46,6 +46,72 @@ macro sub dest*, src* {
     end if
 }
 
+macro mul dest*, src* {
+    _i = 0x20
+    if dest in <b>
+        _i = _i or 0100b
+    else if dest in <x>
+        _i = _i or 1000b
+    else if dest in <[x]>
+        _i = _i or 1100b
+    end if
+    if src in <b>
+        _i = _i or 01b
+    else if src in <x>
+        _i = _i or 10b
+    else if ~ src in <a>
+        _i = _i or 11b
+    end if
+    db _i
+    if ~ src in <a,b,x>
+        db src
+    end if
+}
+
+macro div dest*, src* {
+    _i = 0x30
+    if dest in <b>
+        _i = _i or 0100b
+    else if dest in <x>
+        _i = _i or 1000b
+    else if dest in <[x]>
+        _i = _i or 1100b
+    end if
+    if src in <b>
+        _i = _i or 01b
+    else if src in <x>
+        _i = _i or 10b
+    else if ~ src in <a>
+        _i = _i or 11b
+    end if
+    db _i
+    if ~ src in <a,b,x>
+        db src
+    end if
+}
+
+macro mod dest*, src* {
+    _i = 0x40
+    if dest in <b>
+        _i = _i or 0100b
+    else if dest in <x>
+        _i = _i or 1000b
+    else if dest in <[x]>
+        _i = _i or 1100b
+    end if
+    if src in <b>
+        _i = _i or 01b
+    else if src in <x>
+        _i = _i or 10b
+    else if ~ src in <a>
+        _i = _i or 11b
+    end if
+    db _i
+    if ~ src in <a,b,x>
+        db src
+    end if
+}
+
 macro mov dest*, src* {
     _i = 0x50
     if dest in <b>

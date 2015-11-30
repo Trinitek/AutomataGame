@@ -201,3 +201,63 @@ jmp [x]
 jmp 0xFF
 
 nop
+
+mul a, a
+mul a, b
+mul a, x
+mul a, 0xFF
+
+mul b, a
+mul b, b
+mul b, x
+mul b, 0xFF
+
+mul x, a
+mul x, b
+mul x, x
+mul x, 0xFF
+
+mul [x], a
+mul [x], b
+mul [x], x
+mul [x], 0xFF
+
+div a, a
+div a, b
+div a, x
+div a, 0xFF
+
+div b, a
+div b, b
+div b, x
+div b, 0xFF
+
+div x, a
+div x, b
+div x, x
+div x, 0xFF
+
+div [x], a
+div [x], b
+div [x], x
+div [x], 0xFF
+
+mod a, a
+mod a, b
+mod a, x
+mod a, 0xFF
+
+mod b, a
+mod b, b
+mod b, x
+mod b, 0xFF
+
+mod x, a
+mod x, b
+mod x, x
+mod x, 0xFF
+
+mod [x], a
+mod [x], b
+mod [x], x
+mod [x], 0xFF
