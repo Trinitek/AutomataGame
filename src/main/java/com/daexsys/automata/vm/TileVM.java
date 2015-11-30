@@ -168,7 +168,7 @@ public class TileVM implements VM {
                 else iLength = 1;
                 break;
 
-            case 0x20:          // TODO mul
+            case 0x20:          // mul
                 src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
                 dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
                 if ((getF() & 0x0F) != 0) {         // unsigned multiply
@@ -177,7 +177,6 @@ public class TileVM implements VM {
                     iTemp = (byte) getTD() * (byte) getTS();
                 }
                 push((iTemp >> 0x0F) & 0xFF);
-                iTemp = iTemp & 0xFF;
                 switch (dest) {
                     case A:
                         setA(iTemp);
@@ -197,6 +196,31 @@ public class TileVM implements VM {
                 break;
 
             case 0x30:          // TODO div
+                src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
+                dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
+                setTS(pop());
+                iTemp = (getTS() << 0x0F) | getTS();
+                if ((getF() & 0x0F) != 0) {         // unsigned divide
+                    iTemp = getTD() / iTemp;
+                } else {                            // signed divide
+                    iTemp = (byte) getTD() / iTemp * (getTS() >= 0x80 ? -1 : 1);
+                }
+                switch (dest) {
+                    case A:
+                        setA(iTemp);
+                        break;
+                    case B:
+                        setB(iTemp);
+                        break;
+                    case X:
+                        setX(iTemp);
+                        break;
+                    case MEM:
+                        this.ram[getX()] = (byte) iTemp;
+                        break;
+                }
+                if (src == VMArg.IMM) iLength = 2;
+                else iLength = 1;
                 break;
 
             case 0x40:          // TODO mod
