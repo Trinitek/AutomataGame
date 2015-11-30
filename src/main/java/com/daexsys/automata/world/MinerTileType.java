@@ -39,7 +39,9 @@ public class MinerTileType extends TileType {
                     tileToWeaken.getWorld().setTileTypeAt(Layer.ABOVE_GROUND, target.x, target.y, TileTypes.AIR);
                     tile.getWorld().setTileTypeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.MINER);
                     Tile newOne = tile.getWorld().getTileAt(Layer.GROUND, tile.getCoordinate().x, tile.getCoordinate().y);
-                    newOne.getTileData()[0] = direction;
+                    try {
+                        newOne.getTileData()[0] = direction;
+                    } catch (Exception ignore) {} // for now
                 }
             } catch (AccessOutOfWorldException e) {
                 e.printStackTrace();

@@ -36,5 +36,5 @@ public class TileTypes {
             new TileType((byte) 9, "stone", ImageUtil.loadImage("images/stone.png"), 50, 0);
 
     public static final TileType MINER =
-            new MinerTileType((byte) 10, "berzerker", ImageUtil.loadImage("images/berzerker.png"), 50, 0);
+            new MinerTileType((byte) 10, "berzerker", ImageUtil.loadImage("images/miner.png"), 50, 0);
 }
