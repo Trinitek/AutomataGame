@@ -129,8 +129,7 @@ macro mov dest*, src* {
         _i = _i or 11b
     end if
     if ~ src in <a,b,x,[x],s>
-        _i = (_i and 0x0F) or 0x60
-        db _i
+        db ((_i and 0x0F) shr 2) or 0x60
         db src
     else if src in <s> & dest in <a>
         db 0xDA
