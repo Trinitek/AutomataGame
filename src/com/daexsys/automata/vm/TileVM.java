@@ -291,7 +291,22 @@ public class TileVM implements VM {
                         setP(this.ram[getP() + 1]);
                         break;
                     case 0x08:  // ret src
-                        int i = this.ram[(getP() + 1) & 0xFF];
+                        int i;
+                        src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
+                        switch (src) {
+                            case A:
+                                i = getA();
+                                break;
+                            case B:
+                                i = getB();
+                                break;
+                            case X:
+                                i = getX();
+                                break;
+                            case IMM:
+                                i = this.ram[(getP() + 1) & 0xFF];
+                                break;
+                        }
                         setP(pop());
                         setS(getS() + i);
                         break;
