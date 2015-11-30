@@ -266,7 +266,7 @@ public class TileVM implements VM {
             case 0x80:          // out
                 break;
 
-            case 0x90:          // (special)
+            case 0x90:          // (special) function calling and returning
                 break;
 
             case 0xA0:          // cmp
@@ -341,6 +341,46 @@ public class TileVM implements VM {
                 break;
 
             case 0xD0:          // (special)
+                if ((this.ram[ptr] & 0x0C) == 0x04) {   // not dest
+                    dest = parseArg(VMArgType.DEST, ram[ptr] & 0x03);
+                    switch (dest) {
+                        case A:
+                            setA(~getA());
+                            break;
+                        case B:
+                            setB(~getB());
+                            break;
+                        case X:
+                            setX(~getX());
+                            break;
+                        case MEM:
+                            this.ram[getX()] = (byte) ~this.ram[getX()];
+                            break;
+                    }
+                    iLength = 2;
+                } else {
+                    switch (this.ram[ptr] & 0x0F) {
+                        case 0x00:  // cls
+                            setF(getF() & (~0x10));
+                            break;
+                        case 0x01:  // sts
+                            setF(getF() | 0x10);
+                            break;
+                        case 0x02:  // push f
+                            push(getF());
+                            break;
+                        case 0x03:  // pop f
+                            setF(pop());
+                            break;
+                        case 0x09:  // mov a, s
+                            setA(getS());
+                            break;
+                        case 0x0A:  // mov s, a
+                            setS(getA());
+                            break;
+                    }
+                    iLength = 1;
+                }
                 break;
 
             case 0xE0:          // and dest, src ; 0xEr
