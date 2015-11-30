@@ -4,6 +4,11 @@ import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.TileCoordinate;
 import com.daexsys.automata.world.tiletypes.TileType;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import static java.lang.System.arraycopy;
 
 /**
@@ -634,26 +639,47 @@ public class TileVM implements VM {
                 new TileType((byte) 0, "", null, 100, 1));
         TileVM tileVM = new TileVM(tile);
 
+        if (args.length == 0) {
+            System.out.println("You must specify an executable filename!");
+            System.exit(1);
+        }
+        File file = new File(args[0]);
+        if (file.length() > 256) {
+            System.out.println("File is too big! Expected 256 bytes max. Actual size is " + file.length());
+            System.exit(1);
+        }
         byte[] newRam = new byte[256];
-        byte[] program = {
-                0x03, (byte) 0xA0,      /* 00 | add a, 0xA0 */
-                0x13, (byte) 0x90,      /* 02 | sub a, 0x90 */
-                0x54,                   /* 04 | mov b, a */
-                0x53,                   /* 05 | mov a, x */
-                0x03 | (0x02 << 2), (byte) 0xFE, /* 06 | mov x, 0xFE */
-                0x03, 0x03,             /* 08 | add a, 0x03 */
-                0x02,                   /* 0A | add a, x */
-                (byte) 0xE0 | (0x02 << 2), /* 0B | and x, a */
-                (byte) 0xF0 | (0x01 << 2), /* 0C | or b, a */
-                (byte) 0xA3, 0x00,      /* 0D | cmp a, 0 */
-                (byte) 0xA0,            /* 0F | cmp a, a */
-                (byte) 0xA1,            /* 10 | cmp a, b */
-                (byte) 0xBF, 0x11       /* 11 | jl 0x11 */
-        };
-        arraycopy(program, 0, newRam, 0, program.length);
+        int pSize = 0;
+        try {
+            FileInputStream in = new FileInputStream(file);
+            pSize = in.read(newRam);
+            in.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.exit(1);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+//        byte[] program = {
+//                0x03, (byte) 0xA0,      /* 00 | add a, 0xA0 */
+//                0x13, (byte) 0x90,      /* 02 | sub a, 0x90 */
+//                0x54,                   /* 04 | mov b, a */
+//                0x53,                   /* 05 | mov a, x */
+//                0x03 | (0x02 << 2), (byte) 0xFE, /* 06 | mov x, 0xFE */
+//                0x03, 0x03,             /* 08 | add a, 0x03 */
+//                0x02,                   /* 0A | add a, x */
+//                (byte) 0xE0 | (0x02 << 2), /* 0B | and x, a */
+//                (byte) 0xF0 | (0x01 << 2), /* 0C | or b, a */
+//                (byte) 0xA3, 0x00,      /* 0D | cmp a, 0 */
+//                (byte) 0xA0,            /* 0F | cmp a, a */
+//                (byte) 0xA1,            /* 10 | cmp a, b */
+//                (byte) 0xBF, 0x11       /* 11 | jl 0x11 */
+//        };
+//        arraycopy(program, 0, newRam, 0, program.length);
         tileVM.setRam(newRam);
         System.out.println(tileVM.regsToString());
-        while (tileVM.getP() < program.length) {
+        while (tileVM.getP() < pSize) {
             tileVM.step();
             System.out.println(tileVM.regsToString());
         }
