@@ -163,3 +163,11 @@ pop b
 pop x
 pop [x]
 pop f
+
+not a
+not b
+not x
+not [x]
+
+cls
+sts

@@ -199,6 +199,14 @@ macro jl src* {
     end if
 }
 
+macro cls {
+    db 0xD0
+}
+
+macro sts {
+    db 0xD1
+}
+
 macro and dest*, src* {
     _i = 0xE0
     if dest in <b>
@@ -240,5 +248,17 @@ macro or dest*, src* {
     db _i
     if ~ src in <a,b,x>
         db src
+    end if
+}
+
+macro not dest* {
+    if dest in <a>
+        db 0xD0 or 0100b
+    else if dest in <b>
+        db 0xD0 or 0101b
+    else if dest in <x>
+        db 0xD0 or 0110b
+    else if dest in <[x]>
+        db 0xD0 or 0111b
     end if
 }
