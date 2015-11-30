@@ -112,30 +112,30 @@ public class TileVM implements VM {
         int ptr = getP();
         int iLength = 1;
         VMArg src, dest;
-        int temp = 0;
+        int iTemp = 0;
         switch (this.ram[ptr] & 0xF0) {
             case 0x00:          // add dest, src ; 0x0r
                 src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
                 dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
                 switch (dest) {
                     case A:
-                        temp = getA() + getTS();
-                        setA(temp);
+                        iTemp = getA() + getTS();
+                        setA(iTemp);
                         break;
                     case B:
-                        temp = getB() + getTS();
-                        setB(temp);
+                        iTemp = getB() + getTS();
+                        setB(iTemp);
                         break;
                     case X:
-                        temp = getX() + getTS();
-                        setX(temp);
+                        iTemp = getX() + getTS();
+                        setX(iTemp);
                         break;
                     case MEM:
-                        temp = this.ram[getX()] + getTS();
-                        this.ram[getX()] = (byte) (temp & 0xFF);
+                        iTemp = this.ram[getX()] + getTS();
+                        this.ram[getX()] = (byte) (iTemp & 0xFF);
                         break;
                 }
-                if (temp > 0xFF || temp < 0)
+                if (iTemp > 0xFF || iTemp < 0)
                     setF(getF() | 0x08);
                 if (src == VMArg.IMM) iLength = 2;
                 else iLength = 1;
@@ -146,35 +146,60 @@ public class TileVM implements VM {
                 dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
                 switch (dest) {
                     case A:
-                        temp = getA() - getTS();
-                        setA(temp);
+                        iTemp = getA() - getTS();
+                        setA(iTemp);
                         break;
                     case B:
-                        temp = getB() - getTS();
-                        setB(temp);
+                        iTemp = getB() - getTS();
+                        setB(iTemp);
                         break;
                     case X:
-                        temp = getX() - getTS();
-                        setX(temp);
+                        iTemp = getX() - getTS();
+                        setX(iTemp);
                         break;
                     case MEM:
-                        temp = this.ram[getX()] - getTS();
-                        this.ram[getX()] = (byte) (temp & 0xFF);
+                        iTemp = this.ram[getX()] - getTS();
+                        this.ram[getX()] = (byte) (iTemp & 0xFF);
                         break;
                 }
-                if (temp > 0xFF || temp < 0)
+                if (iTemp > 0xFF || iTemp < 0)
                     setF(getF() | 0x08);
                 if (src == VMArg.IMM) iLength = 2;
                 else iLength = 1;
                 break;
 
-            case 0x20:          // mul
+            case 0x20:          // TODO mul
+                src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
+                dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
+                if ((getF() & 0x0F) != 0) {         // unsigned multiply
+                    iTemp = getTD() * getTS();
+                } else {                            // signed multiply
+                    iTemp = (byte) getTD() * (byte) getTS();
+                }
+                push((iTemp >> 0x0F) & 0xFF);
+                iTemp = iTemp & 0xFF;
+                switch (dest) {
+                    case A:
+                        setA(iTemp);
+                        break;
+                    case B:
+                        setB(iTemp);
+                        break;
+                    case X:
+                        setX(iTemp);
+                        break;
+                    case MEM:
+                        this.ram[getX()] = (byte) iTemp;
+                        break;
+                }
+                if (src == VMArg.IMM) iLength = 2;
+                else iLength = 1;
                 break;
 
-            case 0x30:          // div
+            case 0x30:          // TODO div
                 break;
 
-            case 0x40:          // mod
+            case 0x40:          // TODO mod
                 break;
 
             case 0x50:          // mov dest, src ; 0x5:dd(dest):dd(src)
@@ -260,10 +285,10 @@ public class TileVM implements VM {
                 }
                 break;
 
-            case 0x70:          // in
+            case 0x70:          // TODO in
                 break;
 
-            case 0x80:          // out
+            case 0x80:          // TODO out
                 break;
 
             case 0x90:          // (special) function calling and returning
@@ -322,27 +347,27 @@ public class TileVM implements VM {
                 dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
                 switch (dest) {
                     case A:
-                        temp = getA();
+                        iTemp = getA();
                         break;
                     case B:
-                        temp = getB();
+                        iTemp = getB();
                         break;
                     case X:
-                        temp = getX();
+                        iTemp = getX();
                         break;
                     case MEM:
-                        temp = this.ram[getX()];
+                        iTemp = this.ram[getX()];
                         break;
                 }
-                if (temp == getTS()) setF((getF() & 0xF8) | 0x04);
+                if (iTemp == getTS()) setF((getF() & 0xF8) | 0x04);
                 else if ((getF() & 0x0F) != 0) {    // unsigned comparison
-                    if (temp < getTS())
+                    if (iTemp < getTS())
                         setF((getF() & 0xF8) | 0x01);
-                    else if (temp > getTS())
+                    else if (iTemp > getTS())
                         setF((getF() & 0xF8) | 0x02);
                 } else {                            // signed comparison
-                    if ((byte) temp < (byte) getTS()) setF((getF() & 0xF8) | 0x01);
-                    else if ((byte) temp > (byte) getTS()) setF((getF() & 0xF8) | 0x02);
+                    if ((byte) iTemp < (byte) getTS()) setF((getF() & 0xF8) | 0x01);
+                    else if ((byte) iTemp > (byte) getTS()) setF((getF() & 0xF8) | 0x02);
                 }
                 if (src == VMArg.IMM) iLength = 2;
                 else iLength = 1;
@@ -350,34 +375,34 @@ public class TileVM implements VM {
 
             case 0xB0:          // (special) conditional jumps
                 src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
-                temp = 0;
+                iTemp = 0;
                 switch (this.ram[ptr] & 0x0C) {
                     case 0x00:  // jo
                         if ((getF() & 0x08) != 0) {
                             setP(getTS());
-                            temp = 1;
+                            iTemp = 1;
                         }
                         break;
                     case 0x04:  // jz
                         if ((getF() & 0x04) != 0) {
                             setP(getTS());
-                            temp = 1;
+                            iTemp = 1;
                         }
                         break;
                     case 0x08:  // jg
                         if ((getF() & 0x02) != 0) {
                             setP(getTS());
-                            temp = 1;
+                            iTemp = 1;
                         }
                         break;
                     case 0x0C:  // jl
                         if ((getF() & 0x01) != 0) {
                             setP(getTS());
-                            temp = 1;
+                            iTemp = 1;
                         }
                         break;
                 }
-                if (temp == 0) {
+                if (iTemp == 0) {
                     if (src == VMArg.IMM) iLength = 2;
                     else iLength = 1;
                 } else {
