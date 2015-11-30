@@ -223,7 +223,26 @@ public class TileVM implements VM {
                 else iLength = 1;
                 break;
 
-            case 0x40:          // TODO mod
+            case 0x40:          // mod
+                src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
+                dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
+                iTemp = (getTD() % getTS()) & 0x7F;
+                switch (dest) {
+                    case A:
+                        setA(iTemp);
+                        break;
+                    case B:
+                        setB(iTemp);
+                        break;
+                    case X:
+                        setX(iTemp);
+                        break;
+                    case MEM:
+                        this.ram[getX()] = (byte) iTemp;
+                        break;
+                }
+                if (src == VMArg.IMM) iLength = 2;
+                else iLength = 1;
                 break;
 
             case 0x50:          // mov dest, src ; 0x5:dd(dest):dd(src)
