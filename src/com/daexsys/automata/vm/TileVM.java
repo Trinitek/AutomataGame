@@ -109,7 +109,7 @@ public class TileVM implements VM {
 
     // Returns the pointer to the next instruction
     public void step() {
-        int ptr = this.regP & 0xFF;
+        int ptr = getP();
         int iLength = 1;
         VMArg src, dest;
         int temp = 0;
@@ -199,6 +199,65 @@ public class TileVM implements VM {
                 break;
 
             case 0x60:          // (special)
+                dest = parseArg(VMArgType.DEST, ram[ptr] & 0x03);
+                setTS(ram[(ptr + 1) & 0xFF]);
+                switch (this.ram[getP()] & 0x0C) {
+                    case 0x00:  // mov dest, imm
+                        switch (dest) {
+                            case A:
+                                setA(getTS());
+                                break;
+                            case B:
+                                setB(getTS());
+                                break;
+                            case X:
+                                setX(getTS());
+                                break;
+                            case MEM:
+                                this.ram[getX()] = (byte) getTS();
+                                break;
+                        }
+                        iLength = 2;
+                        break;
+                    case 0x04:  // push imm
+                        push(getTS());
+                        iLength = 2;
+                        break;
+                    case 0x08:  // push dest
+                        switch (dest) {
+                            case A:
+                                push(getA());
+                                break;
+                            case B:
+                                push(getB());
+                                break;
+                            case X:
+                                push(getX());
+                                break;
+                            case MEM:
+                                push(this.ram[getX()] & 0xFF);
+                                break;
+                        }
+                        iLength = 1;
+                        break;
+                    case 0x0C:  // pop dest
+                        switch (dest) {
+                            case A:
+                                setA(pop());
+                                break;
+                            case B:
+                                setB(pop());
+                                break;
+                            case X:
+                                setX(pop());
+                                break;
+                            case MEM:
+                                this.ram[getX()] = (byte) pop();
+                                break;
+                        }
+                        iLength = 1;
+                        break;
+                }
                 break;
 
             case 0x70:          // in
