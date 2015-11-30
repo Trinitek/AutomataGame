@@ -181,7 +181,7 @@ public class TileVM implements VM {
                 } else {                            // signed multiply
                     iTemp = (byte) getTD() * (byte) getTS();
                 }
-                push((iTemp >> 0x0F) & 0xFF);
+                push((iTemp >> 8) & 0xFF);
                 switch (dest) {
                     case A:
                         setA(iTemp);
@@ -204,7 +204,7 @@ public class TileVM implements VM {
                 src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
                 dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
                 setTS(pop());
-                iTemp = (getTS() << 0x0F) | getTS();
+                iTemp = (getTS() << 8) | getTS();
                 if ((getF() & 0x0F) == 0) {         // unsigned divide
                     iTemp = getTD() / iTemp;
                 } else {                            // signed divide
@@ -678,8 +678,9 @@ public class TileVM implements VM {
 //        };
 //        arraycopy(program, 0, newRam, 0, program.length);
         tileVM.setRam(newRam);
-        System.out.println(tileVM.regsToString());
+        System.out.println("@$## | " + tileVM.regsToString());
         while (tileVM.getP() < pSize) {
+            System.out.print(String.format("@$%02X | ", tileVM.getP()));
             tileVM.step();
             System.out.println(tileVM.regsToString());
         }
@@ -687,12 +688,12 @@ public class TileVM implements VM {
 
     public String regsToString() {
         return
-            String.format("@$%02X | ", getP()) +
             String.format("A=$%02X  ", getA()) +
             String.format("B=$%02X  ", getB()) +
             String.format("X=$%02X  ", getX()) +
             String.format("S=$%02X  ", getS()) +
-            String.format("F=$%02X", getF());
+            String.format("F=$%02X  ", getF()) +
+            String.format("P=$%02X", getP());
     }
 
     public Tile getTile() {
