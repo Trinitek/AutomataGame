@@ -195,7 +195,7 @@ public class TileVM implements VM {
                 else iLength = 1;
                 break;
 
-            case 0x30:          // TODO div
+            case 0x30:          // div
                 src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
                 dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
                 setTS(pop());
