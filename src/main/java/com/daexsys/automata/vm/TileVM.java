@@ -9,7 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static java.lang.System.arraycopy;
+//import static java.lang.System.arraycopy;
 
 /**
  * Virtual machine for a single tile automaton.
@@ -650,13 +650,16 @@ public class TileVM implements VM {
         }
         byte[] newRam = new byte[256];
         int pSize = 0;
+        FileInputStream in = null;
         try {
-            FileInputStream in = new FileInputStream(file);
-            pSize = in.read(newRam);
-            in.close();
+            in = new FileInputStream(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.exit(1);
+        }
+        try {
+            pSize = in.read(newRam);
+            in.close();
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
