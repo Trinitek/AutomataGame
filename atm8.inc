@@ -232,6 +232,46 @@ macro jl src* {
     end if
 }
 
+macro inc dest* {
+    if dest in <a>
+        db 0xC0
+    else if dest in <b>
+        db 0xC0 or 01b
+    else if dest in <x>
+        db 0xC0 or 10b
+    else if dest in <[x]>
+        db 0xC0 or 11b
+    end if
+}
+
+macro dec dest* {
+    if dest in <a>
+        db 0xC4
+    else if dest in <b>
+        db 0xC4 or 01b
+    else if dest in <x>
+        db 0xC4 or 10b
+    else if dest in <[x]>
+        db 0xC4 or 11b
+    end if
+}
+
+macro jmp dest* {
+    if dest in <a>
+        db 0xC8
+    else if dest in <b>
+        db 0xC8 or 01b
+    else if dest in <x>
+        db 0xC8 or 10b
+    else if dest in <[x]>
+        db 0xC8 or 11b
+    end if
+    if ~ dest in <a,b,x,[x]>
+        db 0xCC
+        db dest
+    end if
+}
+
 macro cls {
     db 0xD0
 }

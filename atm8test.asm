@@ -183,3 +183,19 @@ ret b
 ret x
 ret 0xFF
 ret
+
+inc a
+inc b
+inc x
+inc [x]
+
+dec a
+dec b
+dec x
+dec [x]
+
+jmp a
+jmp b
+jmp x
+jmp [x]
+jmp 0xFF
