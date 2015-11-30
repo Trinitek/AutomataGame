@@ -267,6 +267,39 @@ public class TileVM implements VM {
                 break;
 
             case 0x90:          // (special) function calling and returning
+                switch (this.ram[ptr] & 0x0C) {
+                    case 0x00:
+                        push(getP() + 1);
+                        dest = parseArg(VMArgType.DEST, ram[ptr] & 0x03);
+                        switch (dest) {
+                            case A:
+                                setP(getA());
+                                break;
+                            case B:
+                                setP(getB());
+                                break;
+                            case X:
+                                setP(getX());
+                                break;
+                            case MEM:
+                                setP(this.ram[getX()]);
+                                break;
+                        }
+                        break;
+                    case 0x04:
+                        push(getP() + 2);
+                        setP(this.ram[getP() + 1]);
+                        break;
+                    case 0x08:
+                        int i = this.ram[(getP() + 1) & 0xFF];
+                        setP(pop());
+                        setS(getS() + i);
+                        break;
+                    case 0x0C:
+                        setP(pop());
+                        break;
+                }
+                iLength = 0;
                 break;
 
             case 0xA0:          // cmp
