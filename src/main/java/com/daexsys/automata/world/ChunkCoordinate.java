@@ -27,8 +27,32 @@ public final class ChunkCoordinate {
         return new ChunkCoordinate(world, x, y);
     }
 
+    public static ChunkCoordinate forWorldCoords(World world, int x, int y) {
+        int rx = x / Chunk.DEFAULT_CHUNK_SIZE;
+        int ry = y / Chunk.DEFAULT_CHUNK_SIZE;
+
+        return new ChunkCoordinate(world, rx, ry);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof ChunkCoordinate) {
+            ChunkCoordinate chunkObject = (ChunkCoordinate) o;
+            return chunkObject.world == world
+                    && chunkObject.x == x
+                    && chunkObject.y == y;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return x * Short.MAX_VALUE + y * Byte.MAX_VALUE;
+    }
+
     @Override
     public String toString() {
-        return "{x=" + x + ", y=" + y + "}";
+        return "{world=" + world + ", x=" + x + ", y=" + y + "}";
     }
 }

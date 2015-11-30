@@ -9,14 +9,13 @@ import java.util.Random;
 import java.util.Stack;
 
 // TODO: split up into chunks
+// TODO: Need logging framework.
 public final class World implements Pulsable {
 
     private Random random = new Random();
     private Tile[][][] tiles;
 
     private ChunkManager chunkManager;
-
-    private Stack<QueuedTileChange> queuedTileChangeStack = new Stack<QueuedTileChange>();
 
     public World(final int size) {
         tiles = new Tile[2][size][size];
@@ -84,14 +83,14 @@ public final class World implements Pulsable {
 
     public void queueChangeAt(int x, int y, TileType tileType) {
         Tile newTile = new Tile(new TileCoordinate(this, x, y), tileType);
-        queuedTileChangeStack.push(new QueuedTileChange(x, y, newTile));
+//        queuedTileChangeStack.push(new QueuedTileChange(x, y, newTile));
     }
 
     public void queueChangeAt(int x, int y, TileType tileType, int newEnergy) {
         Tile newTile = new Tile(new TileCoordinate(this, x, y), tileType);
         newTile.setEnergy(newEnergy);
 
-        queuedTileChangeStack.push(new QueuedTileChange(x, y, newTile));
+//        queuedTileChangeStack.push(new QueuedTileChange(x, y, newTile));
     }
 
     public void setTileTypeAt(int x, int y, TileType tileType) {
@@ -112,10 +111,6 @@ public final class World implements Pulsable {
 
         return tiles[layer][x][y];
     }
-
-//    public void setAboveGroundTile(int x, int y, TileType tileType) {
-//        setTileTypeAt();
-//    }
 
     public void setTileAt(Tile type, int x, int y) {
         if(x > -1 && y > -1)
@@ -144,6 +139,6 @@ public final class World implements Pulsable {
 
     @Override
     public void pulse() {
-        chunkManager.pulse();
+        getChunkManager().pulse();
     }
 }
