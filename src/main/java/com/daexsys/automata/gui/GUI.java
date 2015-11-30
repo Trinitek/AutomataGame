@@ -6,7 +6,7 @@ import com.daexsys.automata.gui.listeners.MouseHandler;
 import com.daexsys.automata.gui.listeners.MouseMotionHandler;
 import com.daexsys.automata.gui.listeners.ScrollManager;
 import com.daexsys.automata.gui.util.ImageUtil;
-import com.daexsys.automata.world.WorldModel;
+import com.daexsys.automata.world.World;
 
 import javax.swing.*;
 import java.awt.*;
@@ -99,7 +99,7 @@ public class GUI {
     }
 
     public void playerPlaceTile(int screenX, int screenY, GUI gui) {
-        WorldModel worldModel = gui.getGame().getWorldModel();
+        World worldModel = gui.getGame().getWorldModel();
 
         int tx = (screenX - gui.getOffsets().getOffsetX()) / gui.getZoomLevel();
         int ty = (screenY - gui.getOffsets().getOffsetY()) / gui.getZoomLevel();

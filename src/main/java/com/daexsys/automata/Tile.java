@@ -1,6 +1,8 @@
 package com.daexsys.automata;
 
 import com.daexsys.automata.world.*;
+import com.daexsys.automata.world.tiletypes.TileType;
+import com.daexsys.automata.world.tiletypes.TileTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,12 +65,12 @@ public class Tile implements Pulsable {
         return coordinate;
     }
 
-    public WorldModel getWorld() {
+    public World getWorld() {
         return coordinate.worldModel;
     }
 
     public Optional<List<Tile>> getNeighbors() {
-        WorldModel world = getWorld();
+        World world = getWorld();
         int x = coordinate.x;
         int y = coordinate.y;
 

@@ -1,6 +1,6 @@
 package com.daexsys.automata;
 
-import com.daexsys.automata.world.TileType;
+import com.daexsys.automata.world.tiletypes.TileType;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.daexsys.automata.world;
+package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.Tile;
 

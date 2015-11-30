@@ -1,6 +1,10 @@
-package com.daexsys.automata.world;
+package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.gui.util.ImageUtil;
+import com.daexsys.automata.world.tiletypes.FertileTileType;
+import com.daexsys.automata.world.tiletypes.MinerTileType;
+import com.daexsys.automata.world.tiletypes.TileType;
+import com.daexsys.automata.world.tiletypes.ViralTileType;
 
 public class TileTypes {
 

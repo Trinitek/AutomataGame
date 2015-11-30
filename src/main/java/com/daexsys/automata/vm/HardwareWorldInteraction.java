@@ -1,7 +1,7 @@
 package com.daexsys.automata.vm;
 
 import com.daexsys.automata.Tile;
-import com.daexsys.automata.world.WorldModel;
+import com.daexsys.automata.world.World;
 
 public class HardwareWorldInteraction {
 
@@ -13,7 +13,7 @@ public class HardwareWorldInteraction {
 
     public void placeBlock(int relativeX, int relativeY, Tile tileType) {
         Tile tile = tileVM.getTile();
-        WorldModel world = tile.getWorld();
+        World world = tile.getWorld();
         world.setTileAt(tileType, relativeX, relativeY);
     }
 

@@ -1,18 +1,18 @@
 package com.daexsys.automata;
 
-import com.daexsys.automata.world.TileTypes;
-import com.daexsys.automata.world.WorldModel;
+import com.daexsys.automata.world.tiletypes.TileTypes;
+import com.daexsys.automata.world.World;
 
 public class Game {
 
     private boolean isPaused = false;
-    private WorldModel worldModel;
+    private World worldModel;
     private PlayerState playerState = new PlayerState();
 
     private volatile int tickDelayRate = 250; // 500 default
 
     public Game() {
-        worldModel = new WorldModel(100);
+        worldModel = new World(100);
 
         Thread worldPule = new Thread(new Runnable() {
             @Override
@@ -31,11 +31,11 @@ public class Game {
         worldPule.start();
     }
 
-    public WorldModel getWorldModel() {
+    public World getWorldModel() {
         return worldModel;
     }
 
-    public void placeGliderAt(WorldModel worldModel, int x, int y) {
+    public void placeGliderAt(World worldModel, int x, int y) {
         worldModel.setTileTypeAt(x - 1, y, TileTypes.AUTOMATA_SIMPLE);
         worldModel.setTileTypeAt(x, y, TileTypes.AUTOMATA_SIMPLE);
         worldModel.setTileTypeAt(x + 1, y, TileTypes.AUTOMATA_SIMPLE);

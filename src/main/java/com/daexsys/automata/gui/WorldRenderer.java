@@ -1,8 +1,8 @@
 package com.daexsys.automata.gui;
 
 import com.daexsys.automata.Tile;
-import com.daexsys.automata.world.TileTypes;
-import com.daexsys.automata.world.WorldModel;
+import com.daexsys.automata.world.tiletypes.TileTypes;
+import com.daexsys.automata.world.World;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 public class WorldRenderer implements Renderable {
 
     private GUI gui;
-    private WorldModel worldModel;
+    private World worldModel;
 
     public WorldRenderer(GUI gui) {
         this.gui = gui;

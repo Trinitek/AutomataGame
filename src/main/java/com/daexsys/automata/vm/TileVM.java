@@ -2,7 +2,7 @@ package com.daexsys.automata.vm;
 
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.TileCoordinate;
-import com.daexsys.automata.world.TileType;
+import com.daexsys.automata.world.tiletypes.TileType;
 
 import static java.lang.System.arraycopy;
 

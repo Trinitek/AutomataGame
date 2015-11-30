@@ -1,7 +1,7 @@
 package com.daexsys.automata.gui.listeners;
 
 import com.daexsys.automata.gui.GUI;
-import com.daexsys.automata.world.TileTypes;
+import com.daexsys.automata.world.tiletypes.TileTypes;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

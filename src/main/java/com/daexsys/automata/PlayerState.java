@@ -1,7 +1,7 @@
 package com.daexsys.automata;
 
-import com.daexsys.automata.world.TileType;
-import com.daexsys.automata.world.TileTypes;
+import com.daexsys.automata.world.tiletypes.TileType;
+import com.daexsys.automata.world.tiletypes.TileTypes;
 
 public class PlayerState {
 

@@ -1,9 +1,9 @@
-package com.daexsys.automata.world;
+package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.Tile;
+import com.daexsys.automata.world.*;
 
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
 public class MinerTileType extends TileType {
 
@@ -31,14 +31,14 @@ public class MinerTileType extends TileType {
 
             Tile tileToWeaken = null;
             try {
-                tileToWeaken = tile.getWorld().getTileAt(Layer.ABOVE_GROUND, target.x, target.y);
+                tileToWeaken = tile.getWorld().getTileAt(WorldLayer.ABOVE_GROUND, target.x, target.y);
                 tileToWeaken.setEnergy(tileToWeaken.getEnergy() - breakRate);
 
                 if(tileToWeaken.getEnergy() <= 0) {
                     tile.getWorld().setTileTypeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.DIRT);
-                    tileToWeaken.getWorld().setTileTypeAt(Layer.ABOVE_GROUND, target.x, target.y, TileTypes.AIR);
+                    tileToWeaken.getWorld().setTileTypeAt(WorldLayer.ABOVE_GROUND, target.x, target.y, TileTypes.AIR);
                     tile.getWorld().setTileTypeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.MINER);
-                    Tile newOne = tile.getWorld().getTileAt(Layer.GROUND, tile.getCoordinate().x, tile.getCoordinate().y);
+                    Tile newOne = tile.getWorld().getTileAt(WorldLayer.GROUND, tile.getCoordinate().x, tile.getCoordinate().y);
                     try {
                         newOne.getTileData()[0] = direction;
                     } catch (Exception ignore) {} // for now
