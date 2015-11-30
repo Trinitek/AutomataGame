@@ -1,9 +1,9 @@
 package com.daexsys.automata.world;
 
 import com.daexsys.automata.Pulsable;
-import com.google.common.base.Optional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -19,10 +19,14 @@ public class ChunkManager implements Pulsable {
         this.world = world;
     }
 
-    public Optional<Chunk> getChunk(int x, int y) {
+    public Chunk getChunk(ChunkCoordinate chunkCoordinate) {
+        return getChunk(chunkCoordinate.x, chunkCoordinate.y);
+    }
+
+    public Chunk getChunk(int x, int y) {
         for(Chunk chunk : chunks) {
             if(chunk.getChunkCoordinate().is(x, y)) {
-                return Optional.of(chunk);
+                return chunk;
             }
         }
 
@@ -30,7 +34,7 @@ public class ChunkManager implements Pulsable {
             If we have gotten this far, then the chunk hasn't been generated yet.
             But we need it! It must be generated.
          */
-        return Optional.of(generateChunk(x, y));
+        return generateChunk(x, y);
     }
 
     private Chunk generateChunk(int x, int y) {
@@ -52,8 +56,14 @@ public class ChunkManager implements Pulsable {
     }
 
     public void pulse() {
-        for(Chunk chunk : chunks) {
+        List<Chunk> chunks2 = new ArrayList<Chunk>(chunks);
+
+        for(Chunk chunk : chunks2) {
             chunk.pulse();
         }
+    }
+
+    public Collection<Chunk> getChunks() {
+        return chunks;
     }
 }

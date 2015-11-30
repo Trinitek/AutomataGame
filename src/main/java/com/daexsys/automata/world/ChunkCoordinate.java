@@ -23,15 +23,26 @@ public final class ChunkCoordinate {
         return this.x == x && this.y == y;
     }
 
-    public static ChunkCoordinate of(World world, int x, int y) {
-        return new ChunkCoordinate(world, x, y);
+    public TileCoordinate localifyCoordinates(int x, int y) {
+        return new TileCoordinate(world,
+                localifyX(x),
+                localifyY(y));
     }
 
-    public static ChunkCoordinate forWorldCoords(World world, int x, int y) {
-        int rx = x / Chunk.DEFAULT_CHUNK_SIZE;
-        int ry = y / Chunk.DEFAULT_CHUNK_SIZE;
+    public int localifyX(int x) {
+        return x - (this.x * Chunk.DEFAULT_CHUNK_SIZE);
+    }
 
-        return new ChunkCoordinate(world, rx, ry);
+    public int localifyY(int y) {
+        return y - (this.y * Chunk.DEFAULT_CHUNK_SIZE);
+    }
+
+    public int amplifyLocalX(int x) {
+        return x + (this.x * Chunk.DEFAULT_CHUNK_SIZE);
+    }
+
+    public int amplifyLocalY(int y) {
+        return y + (this.y * Chunk.DEFAULT_CHUNK_SIZE);
     }
 
     @Override
@@ -54,5 +65,16 @@ public final class ChunkCoordinate {
     @Override
     public String toString() {
         return "{world=" + world + ", x=" + x + ", y=" + y + "}";
+    }
+
+    public static ChunkCoordinate of(World world, int x, int y) {
+        return new ChunkCoordinate(world, x, y);
+    }
+
+    public static ChunkCoordinate forWorldCoords(World world, int x, int y) {
+        int rx = x / Chunk.DEFAULT_CHUNK_SIZE;
+        int ry = y / Chunk.DEFAULT_CHUNK_SIZE;
+
+        return new ChunkCoordinate(world, rx, ry);
     }
 }

@@ -6,34 +6,30 @@ import com.daexsys.automata.world.tiletypes.TileType;
 import com.daexsys.automata.world.tiletypes.TileTypes;
 
 import java.util.Random;
-import java.util.Stack;
 
 // TODO: split up into chunks
 // TODO: Need logging framework.
 public final class World implements Pulsable {
 
-    private Random random = new Random();
-    private Tile[][][] tiles;
+    private long seed;
+    private Random random;
 
     private ChunkManager chunkManager;
 
     public World(final int size) {
-        tiles = new Tile[2][size][size];
+        seed = System.currentTimeMillis();
+        random = new Random(seed);
 
         chunkManager = new ChunkManager(this);
 
-        System.out.println("Creating world of size: " + size);
-
-        /* Fill world with grass */
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
-                tiles[WorldLayers.GROUND][x][y] =
-                        new Tile(new TileCoordinate(this, x, y), TileTypes.GRASS);
-
-                tiles[WorldLayers.ABOVE_GROUND][x][y] =
-                        new Tile(new TileCoordinate(this, x, y), TileTypes.AIR);
+        // pre-generate world sections
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                chunkManager.getChunk(i, j);
             }
         }
+
+        System.out.println("Creating world of size: " + size);
 
         /* Add lakes */
         for (int i = 0; i < size / 20; i++) {
@@ -47,7 +43,7 @@ public final class World implements Pulsable {
                     int y = k - lakeY;
 
                     if((x * x + y * y) < lakeSize * lakeSize) {
-                        setTileTypeAt(j, k, TileTypes.WATER);
+                        setTileTypeAt(WorldLayers.GROUND, j, k, TileTypes.WATER);
                     }
                 }
             }
@@ -73,13 +69,49 @@ public final class World implements Pulsable {
                 }
             }
         }
-
-        System.out.println("Initialized world model: " + tiles[0].length * tiles[0][0].length + " tiles loaded");
     }
 
-    public Tile getTileAt(int x, int y) throws AccessOutOfWorldException {
-        return getTileAt(0, x, y);
+    public Tile getTileAt(int layer, int x, int y) {
+        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
+
+        Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
+
+        TileCoordinate tileCoordinate = chunkCoordinate.localifyCoordinates(x, y);
+        return chunk.getTile(layer, tileCoordinate.x, tileCoordinate.y);
     }
+
+    /**
+     * @return whether or not the block was successfully set
+     */
+    public boolean setTileTypeAt(int layer, int x, int y, TileType tileType) {
+        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
+
+        if((layer == 0 || layer == 1)) {
+
+            Chunk chunk =
+                    getChunkManager().getChunk(chunkCoordinate);
+
+//            System.out.println(x + " " + y);
+//            System.out.println(chunkCoordinate);
+//            System.out.println(chunkCoordinate.localifyCoordinates(x, y));
+
+            chunk.flashWithNewType(layer, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), tileType);
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isObstructionAt(int x, int y) {
+        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
+        Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
+
+        return chunk.getTile(WorldLayers.ABOVE_GROUND,
+                chunkCoordinate.localifyX(x),
+                chunkCoordinate.localifyY(y)).
+                getTileType() != TileTypes.AIR;
+    }
+
 
     public void queueChangeAt(int x, int y, TileType tileType) {
         Tile newTile = new Tile(new TileCoordinate(this, x, y), tileType);
@@ -93,42 +125,6 @@ public final class World implements Pulsable {
 //        queuedTileChangeStack.push(new QueuedTileChange(x, y, newTile));
     }
 
-    public void setTileTypeAt(int x, int y, TileType tileType) {
-        setTileTypeAt(WorldLayers.GROUND, x, y, tileType);
-    }
-
-    /* Need changes */
-    public void setTileTypeAt(int layer, int x, int y, TileType tileType) {
-        if(x > -1 && y > -1 && x < tiles[WorldLayers.GROUND].length && y < tiles[0][0].length)
-            if((layer == 0 && !isObstructionAt(x, y)) || layer == 1) {
-                tiles[layer][x][y] = new Tile(new TileCoordinate(this, x, y), tileType);
-            }
-    }
-
-    public Tile getTileAt(int layer, int x, int y) throws AccessOutOfWorldException {
-        if(x < 0 || y < 0 || x > tiles[0].length - 1|| y > tiles[0][0].length - 1)
-            throw new AccessOutOfWorldException();
-
-        return tiles[layer][x][y];
-    }
-
-    public void setTileAt(Tile type, int x, int y) {
-        if(x > -1 && y > -1)
-            tiles[WorldLayers.GROUND][x][y] = type;
-    }
-
-    public boolean isObstructionAt(int x, int y) {
-        if(x >= 0 && y >= 0 && x < tiles[WorldLayers.ABOVE_GROUND][0].length) {
-            return tiles[WorldLayers.ABOVE_GROUND][x][y].getTileType() != TileTypes.AIR;
-        }
-
-        return false;
-    }
-
-    public Tile[][][] getTiles() {
-        return tiles;
-    }
-
     public Random getRandom() {
         return random;
     }
@@ -137,8 +133,17 @@ public final class World implements Pulsable {
         return chunkManager;
     }
 
+    public long getSeed() {
+        return seed;
+    }
+
     @Override
     public void pulse() {
         getChunkManager().pulse();
+    }
+
+    @Override
+    public String toString() {
+        return "{world, seed=" + seed + "}";
     }
 }

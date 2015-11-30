@@ -30,26 +30,22 @@ public class MinerTileType extends TileType {
             final int breakRate = 3;
 
             Tile tileToWeaken = null;
-            try {
-                tileToWeaken = tile.getWorld().getTileAt(WorldLayers.ABOVE_GROUND, target.x, target.y);
-                tileToWeaken.setEnergy(tileToWeaken.getEnergy() - breakRate);
+            tileToWeaken = tile.getWorld().getTileAt(WorldLayers.ABOVE_GROUND, target.x, target.y);
+            tileToWeaken.setEnergy(tileToWeaken.getEnergy() - breakRate);
 
-                if(tileToWeaken.getEnergy() <= 0) {
-                    tile.getWorld().setTileTypeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.DIRT);
-                    tileToWeaken.getWorld().setTileTypeAt(WorldLayers.ABOVE_GROUND, target.x, target.y, TileTypes.AIR);
-                    tile.getWorld().setTileTypeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.MINER);
-                    Tile newOne = tile.getWorld().getTileAt(WorldLayers.GROUND, tile.getCoordinate().x, tile.getCoordinate().y);
-                    try {
-                        newOne.getTileData()[0] = direction;
-                    } catch (Exception ignore) {} // for now
-                }
-            } catch (AccessOutOfWorldException e) {
-                e.printStackTrace();
+            if(tileToWeaken.getEnergy() <= 0) {
+                tile.getWorld().setTileTypeAt(WorldLayers.GROUND, tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.DIRT);
+                tileToWeaken.getWorld().setTileTypeAt(WorldLayers.ABOVE_GROUND, target.x, target.y, TileTypes.AIR);
+                tile.getWorld().setTileTypeAt(WorldLayers.GROUND, tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.MINER);
+                Tile newOne = tile.getWorld().getTileAt(WorldLayers.GROUND, tile.getCoordinate().x, tile.getCoordinate().y);
+                try {
+                    newOne.getTileData()[0] = direction;
+                } catch (Exception ignore) {} // for now
             }
         } else {
 
-            tile.getWorld().setTileTypeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.DIRT);
-            tile.getWorld().setTileTypeAt(target.x, target.y, TileTypes.MINER);
+            tile.getWorld().setTileTypeAt(WorldLayers.GROUND, tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.DIRT);
+            tile.getWorld().setTileTypeAt(WorldLayers.GROUND, target.x, target.y, TileTypes.MINER);
         }
     }
 }

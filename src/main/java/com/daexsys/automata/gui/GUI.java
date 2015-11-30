@@ -7,6 +7,7 @@ import com.daexsys.automata.gui.listeners.MouseMotionHandler;
 import com.daexsys.automata.gui.listeners.ScrollManager;
 import com.daexsys.automata.gui.util.ImageUtil;
 import com.daexsys.automata.world.World;
+import com.daexsys.automata.world.WorldLayers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -104,6 +105,6 @@ public class GUI {
         int tx = (screenX - gui.getOffsets().getOffsetX()) / gui.getZoomLevel();
         int ty = (screenY - gui.getOffsets().getOffsetY()) / gui.getZoomLevel();
 
-        worldModel.setTileTypeAt(tx, ty, gui.getGame().getPlayerState().getInHand());
+        worldModel.setTileTypeAt(WorldLayers.GROUND, tx, ty, gui.getGame().getPlayerState().getInHand());
     }
 }

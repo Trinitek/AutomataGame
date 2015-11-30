@@ -69,35 +69,31 @@ public class Tile implements Pulsable {
         return coordinate.world;
     }
 
-    public Optional<List<Tile>> getNeighbors() {
+    public Optional<List<Tile>> getNeighbors(int layer) {
         World world = getWorld();
         int x = coordinate.x;
         int y = coordinate.y;
 
-        try {
-            Tile up = world.getTileAt    (x, y - 1);
-            Tile down = world.getTileAt  (x, y + 1);
-            Tile left = world.getTileAt  (x - 1, y);
-            Tile right = world.getTileAt (x + 1, y);
-            Tile up_left = world.getTileAt    (x - 1, y - 1);
-            Tile up_right = world.getTileAt   (x + 1, y - 1);
-            Tile down_left = world.getTileAt  (x - 1, y + 1);
-            Tile down_right = world.getTileAt (x + 1, y + 1);
+        Tile up = world.getTileAt    (layer, x, y - 1);
+        Tile down = world.getTileAt  (layer, x, y + 1);
+        Tile left = world.getTileAt  (layer, x - 1, y);
+        Tile right = world.getTileAt (layer, x + 1, y);
+        Tile up_left = world.getTileAt    (layer, x - 1, y - 1);
+        Tile up_right = world.getTileAt   (layer, x + 1, y - 1);
+        Tile down_left = world.getTileAt  (layer, x - 1, y + 1);
+        Tile down_right = world.getTileAt (layer, x + 1, y + 1);
 
-            List<Tile> neighbors = new ArrayList<Tile>();
-            neighbors.add(up);
-            neighbors.add(down);
-            neighbors.add(left);
-            neighbors.add(right);
-            neighbors.add(up_left);
-            neighbors.add(up_right);
-            neighbors.add(down_left);
-            neighbors.add(down_right);
+        List<Tile> neighbors = new ArrayList<Tile>();
+        neighbors.add(up);
+        neighbors.add(down);
+        neighbors.add(left);
+        neighbors.add(right);
+        neighbors.add(up_left);
+        neighbors.add(up_right);
+        neighbors.add(down_left);
+        neighbors.add(down_right);
 
-            return Optional.of(neighbors);
-        } catch (AccessOutOfWorldException ignore) {}
-
-        return Optional.empty();
+        return Optional.of(neighbors);
     }
 
     public void setEnergy(int energy) {

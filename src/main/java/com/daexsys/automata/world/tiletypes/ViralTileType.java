@@ -1,6 +1,7 @@
 package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.Tile;
+import com.daexsys.automata.world.WorldLayers;
 
 import java.awt.image.BufferedImage;
 
@@ -20,7 +21,7 @@ public class ViralTileType extends TileType {
             int j = tile.getWorld().getRandom().nextInt(3) - 1;
 
             try {//
-                if (tile.getWorld().getTileAt(tile.getCoordinate().x + i, tile.getCoordinate().y + j).getTileType() != TileTypes.VIRUS && tile.getEnergy() > 0) {
+                if (tile.getWorld().getTileAt(WorldLayers.GROUND, tile.getCoordinate().x + i, tile.getCoordinate().y + j).getTileType() != TileTypes.VIRUS && tile.getEnergy() > 0) {
                     tile.getWorld().queueChangeAt(tile.getCoordinate().x + i, tile.getCoordinate().y + j, TileTypes.VIRUS, tile.getEnergy() / 2);
                     tile.setEnergy(tile.getEnergy() / 2);
                 }

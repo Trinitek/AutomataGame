@@ -27,7 +27,7 @@ public final class Chunk implements Pulsable {
         queuedTileChangeStack = new Stack<QueuedTileChange>();
 
         fillLayerWith(WorldLayers.ABOVE_GROUND, TileTypes.AIR);
-        fillLayerWith(WorldLayers.GROUND, TileTypes.DIRT);
+        fillLayerWith(WorldLayers.GROUND, TileTypes.GRASS);
     }
 
     public void fillLayerWith(int layer, TileType tileType) {
@@ -54,15 +54,20 @@ public final class Chunk implements Pulsable {
     }
 
     public Tile getTile(int layer, int x, int y) {
-        return contents[layer][x][y];
+        if(x >= 0 && y >= 0)
+            return contents[layer][x][y];
+
+        return null;
     }
 
     public void setTile(int layer, int x, int y, Tile tile) {
-        contents[layer][x][y] = tile;
+        if(x >= 0 && y >= 0)
+            contents[layer][x][y] = tile;
     }
 
     public void flashWithNewType(int layer, int x, int y, TileType tileType) {
-        contents[layer][x][y] = new Tile(new TileCoordinate(chunkCoordinate.world, x, y), tileType);
+        if(x >= 0 && y >= 0)
+            contents[layer][x][y] = new Tile(new TileCoordinate(chunkCoordinate.world, x, y), tileType);
     }
 
     public ChunkCoordinate getChunkCoordinate() {

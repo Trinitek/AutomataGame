@@ -35,14 +35,6 @@ public class Game {
         return worldModel;
     }
 
-    public void placeGliderAt(World worldModel, int x, int y) {
-        worldModel.setTileTypeAt(x - 1, y, TileTypes.AUTOMATA_SIMPLE);
-        worldModel.setTileTypeAt(x, y, TileTypes.AUTOMATA_SIMPLE);
-        worldModel.setTileTypeAt(x + 1, y, TileTypes.AUTOMATA_SIMPLE);
-        worldModel.setTileTypeAt(x + 1, y - 1, TileTypes.AUTOMATA_SIMPLE);
-        worldModel.setTileTypeAt(x, y - 2, TileTypes.AUTOMATA_SIMPLE);
-    }
-
     public boolean isPaused() {
         return isPaused;
     }
