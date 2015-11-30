@@ -5,6 +5,7 @@ import com.daexsys.automata.world.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class Tile implements Pulsable {
 
@@ -46,6 +47,7 @@ public class Tile implements Pulsable {
     public void lazyInit() {
         if(tileData == null) {
             tileData = new byte[RAM_AMOUNT];
+            getTileData()[0] = (byte) new Random().nextInt(2);
         }
     }
 
