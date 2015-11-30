@@ -171,3 +171,15 @@ not [x]
 
 cls
 sts
+
+call a
+call b
+call x
+call [x]
+call 0xFF
+
+ret a
+ret b
+ret x
+ret 0xFF
+ret

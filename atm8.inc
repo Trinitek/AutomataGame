@@ -117,6 +117,39 @@ macro popf {
     pop f
 }
 
+macro call dest* {
+    if dest in <a>
+        db 0x90
+    else if dest in <b>
+        db 0x90 or 01b
+    else if dest in <x>
+        db 0x90 or 10b
+    else if dest in <[x]>
+        db 0x90 or 11b
+    end if
+    if ~ dest in <a,b,x,[x]>
+        db 0x94
+        db dest
+    end if
+}
+
+macro ret src {
+    if src eq
+        db 0x9C
+    else
+        if src in <a>
+            db 0x98
+        else if src in <b>
+            db 0x98 or 01b
+        else if src in <x>
+            db 0x98 or 10b
+        else
+            db 0x98 or 11b
+            db src
+        end if
+    end if
+}
+
 macro cmp dest*, src* {
     _i = 0xA0
     if dest in <b>
