@@ -13,7 +13,7 @@ public final class ChunkCoordinate {
     public final int x;
     public final int y;
 
-    public ChunkCoordinate(World world, int x, int y) {
+    private ChunkCoordinate(World world, int x, int y) {
         this.world = world;
         this.x = x;
         this.y = y;

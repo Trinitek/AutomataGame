@@ -21,7 +21,7 @@ public final class Chunk implements Pulsable {
     private Stack<QueuedTileChange> queuedTileChangeStack;
 
     public Chunk(World world, int x, int y) {
-        this.chunkCoordinate = new ChunkCoordinate(world, x, y);
+        this.chunkCoordinate = ChunkCoordinate.of(world, x, y);
 
         contents = new Tile[2][DEFAULT_CHUNK_SIZE][DEFAULT_CHUNK_SIZE];
         queuedTileChangeStack = new Stack<QueuedTileChange>();
