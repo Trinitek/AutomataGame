@@ -150,3 +150,16 @@ or [x], a
 or [x], b
 or [x], x
 or [x], 0xFF
+
+push a
+push b
+push x
+push [x]
+push f
+push 0xFF
+
+pop a
+pop b
+pop x
+pop [x]
+pop f

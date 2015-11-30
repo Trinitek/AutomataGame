@@ -75,6 +75,48 @@ macro mov dest*, src* {
     end if
 }
 
+macro push src* {
+    _i = 0x60
+    if src in <a>
+        db _i or 1000b
+    else if src in <b>
+        db _i or 1001b
+    else if src in <x>
+        db _i or 1010b
+    else if src in <[x]>
+        db _i or 1011b
+    else if src in <f>
+        db 0xD2
+    end if
+    if ~ src in <a,b,x,[x],f>
+        db 0x64
+        db src
+    end if
+}
+
+macro pushf {
+    push f
+}
+
+macro pop dest* {
+    _i = 0x60
+    if dest in <a>
+        db _i or 1100b
+    else if dest in <b>
+        db _i or 1101b
+    else if dest in <x>
+        db _i or 1110b
+    else if dest in <[x]>
+        db _i or 1111b
+    else if dest in <f>
+        db 0xD3
+    end if
+}
+
+macro popf {
+    pop f
+}
+
 macro cmp dest*, src* {
     _i = 0xA0
     if dest in <b>
