@@ -288,7 +288,7 @@ public class TileVM implements VM {
                         break;
                     case 0x04:  // call imm
                         push(getP() + 2);
-                        setP(this.ram[getP() + 1]);
+                        setP(this.ram[(getP() + 1) & 0xFF]);
                         break;
                     case 0x08:  // ret src
                         int i = 0;
@@ -531,7 +531,7 @@ public class TileVM implements VM {
                 else iLength = 1;
                 break;
         }
-       setP(ptr + iLength);
+        if (iLength != 0) setP(ptr + iLength);
     }
 
     public VMArg parseArg(VMArgType type, int arg) {
