@@ -66,7 +66,7 @@ public class Tile implements Pulsable {
     }
 
     public World getWorld() {
-        return coordinate.worldModel;
+        return coordinate.world;
     }
 
     public Optional<List<Tile>> getNeighbors() {

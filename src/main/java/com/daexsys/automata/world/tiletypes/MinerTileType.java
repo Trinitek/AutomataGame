@@ -20,10 +20,10 @@ public class MinerTileType extends TileType {
 
         if(direction == 0) {
             target = new TileCoordinate(
-                    tile.getCoordinate().worldModel, tile.getCoordinate().x + 1, tile.getCoordinate().y);
+                    tile.getCoordinate().world, tile.getCoordinate().x + 1, tile.getCoordinate().y);
         } else {
             target = new TileCoordinate(
-                    tile.getCoordinate().worldModel, tile.getCoordinate().x - 1, tile.getCoordinate().y);
+                    tile.getCoordinate().world, tile.getCoordinate().x - 1, tile.getCoordinate().y);
         }
 
         if(tile.getWorld().isObstructionAt(target.x, target.y)) {
@@ -31,14 +31,14 @@ public class MinerTileType extends TileType {
 
             Tile tileToWeaken = null;
             try {
-                tileToWeaken = tile.getWorld().getTileAt(WorldLayer.ABOVE_GROUND, target.x, target.y);
+                tileToWeaken = tile.getWorld().getTileAt(WorldLayers.ABOVE_GROUND, target.x, target.y);
                 tileToWeaken.setEnergy(tileToWeaken.getEnergy() - breakRate);
 
                 if(tileToWeaken.getEnergy() <= 0) {
                     tile.getWorld().setTileTypeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.DIRT);
-                    tileToWeaken.getWorld().setTileTypeAt(WorldLayer.ABOVE_GROUND, target.x, target.y, TileTypes.AIR);
+                    tileToWeaken.getWorld().setTileTypeAt(WorldLayers.ABOVE_GROUND, target.x, target.y, TileTypes.AIR);
                     tile.getWorld().setTileTypeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.MINER);
-                    Tile newOne = tile.getWorld().getTileAt(WorldLayer.GROUND, tile.getCoordinate().x, tile.getCoordinate().y);
+                    Tile newOne = tile.getWorld().getTileAt(WorldLayers.GROUND, tile.getCoordinate().x, tile.getCoordinate().y);
                     try {
                         newOne.getTileData()[0] = direction;
                     } catch (Exception ignore) {} // for now

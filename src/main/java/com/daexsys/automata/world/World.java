@@ -5,8 +5,6 @@ import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.tiletypes.TileType;
 import com.daexsys.automata.world.tiletypes.TileTypes;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
@@ -16,22 +14,24 @@ public final class World implements Pulsable {
     private Random random = new Random();
     private Tile[][][] tiles;
 
-    private List<Chunk> chunkList = new ArrayList<Chunk>();
+    private ChunkManager chunkManager;
 
     private Stack<QueuedTileChange> queuedTileChangeStack = new Stack<QueuedTileChange>();
 
     public World(final int size) {
         tiles = new Tile[2][size][size];
 
+        chunkManager = new ChunkManager(this);
+
         System.out.println("Creating world of size: " + size);
 
         /* Fill world with grass */
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                tiles[WorldLayer.GROUND][x][y] =
+                tiles[WorldLayers.GROUND][x][y] =
                         new Tile(new TileCoordinate(this, x, y), TileTypes.GRASS);
 
-                tiles[WorldLayer.ABOVE_GROUND][x][y] =
+                tiles[WorldLayers.ABOVE_GROUND][x][y] =
                         new Tile(new TileCoordinate(this, x, y), TileTypes.AIR);
             }
         }
@@ -66,9 +66,9 @@ public final class World implements Pulsable {
 
                     if((x * x + y * y) < lakeSize * lakeSize) {
                         if(random.nextBoolean()) {
-                            setTileTypeAt(WorldLayer.ABOVE_GROUND, j, k, TileTypes.STONE);
+                            setTileTypeAt(WorldLayers.ABOVE_GROUND, j, k, TileTypes.STONE);
                         } else {
-                            setTileTypeAt(WorldLayer.ABOVE_GROUND, j, k, TileTypes.ENERGY_ORE);
+                            setTileTypeAt(WorldLayers.ABOVE_GROUND, j, k, TileTypes.ENERGY_ORE);
                         }
                     }
                 }
@@ -95,12 +95,12 @@ public final class World implements Pulsable {
     }
 
     public void setTileTypeAt(int x, int y, TileType tileType) {
-        setTileTypeAt(WorldLayer.GROUND, x, y, tileType);
+        setTileTypeAt(WorldLayers.GROUND, x, y, tileType);
     }
 
     /* Need changes */
     public void setTileTypeAt(int layer, int x, int y, TileType tileType) {
-        if(x > -1 && y > -1 && x < tiles[WorldLayer.GROUND].length && y < tiles[0][0].length)
+        if(x > -1 && y > -1 && x < tiles[WorldLayers.GROUND].length && y < tiles[0][0].length)
             if((layer == 0 && !isObstructionAt(x, y)) || layer == 1) {
                 tiles[layer][x][y] = new Tile(new TileCoordinate(this, x, y), tileType);
             }
@@ -119,12 +119,12 @@ public final class World implements Pulsable {
 
     public void setTileAt(Tile type, int x, int y) {
         if(x > -1 && y > -1)
-            tiles[WorldLayer.GROUND][x][y] = type;
+            tiles[WorldLayers.GROUND][x][y] = type;
     }
 
     public boolean isObstructionAt(int x, int y) {
-        if(x >= 0 && y >= 0 && x < tiles[WorldLayer.ABOVE_GROUND][0].length) {
-            return tiles[WorldLayer.ABOVE_GROUND][x][y].getTileType() != TileTypes.AIR;
+        if(x >= 0 && y >= 0 && x < tiles[WorldLayers.ABOVE_GROUND][0].length) {
+            return tiles[WorldLayers.ABOVE_GROUND][x][y].getTileType() != TileTypes.AIR;
         }
 
         return false;
@@ -138,29 +138,12 @@ public final class World implements Pulsable {
         return random;
     }
 
-    public Chunk getChunk(int x, int y) {
-        for(Chunk c : chunkList) {
-            if(c.getX() == x && c.getY() == y) {
-                return c;
-            }
-        }
-
-        return null;
+    public ChunkManager getChunkManager() {
+        return chunkManager;
     }
 
     @Override
     public void pulse() {
-        // Pulse all tiles (for now, eventually this needs to be handled in a more intelligent way)
-        for (int i = 0; i < tiles[WorldLayer.GROUND].length; i++) {
-            for (int j = 0; j < tiles[WorldLayer.GROUND][i].length; j++) {
-                tiles[WorldLayer.GROUND][i][j].pulse();
-            }
-        }
-
-        while(!queuedTileChangeStack.isEmpty()) {
-            QueuedTileChange queuedTileChange = queuedTileChangeStack.pop();
-
-            setTileAt(queuedTileChange.t, queuedTileChange.x, queuedTileChange.y);
-        }
+        chunkManager.pulse();
     }
 }
