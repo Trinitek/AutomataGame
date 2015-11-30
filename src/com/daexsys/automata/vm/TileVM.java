@@ -268,7 +268,7 @@ public class TileVM implements VM {
 
             case 0x90:          // (special) function calling and returning
                 switch (this.ram[ptr] & 0x0C) {
-                    case 0x00:
+                    case 0x00:  // call dest
                         push(getP() + 1);
                         dest = parseArg(VMArgType.DEST, ram[ptr] & 0x03);
                         switch (dest) {
@@ -286,16 +286,16 @@ public class TileVM implements VM {
                                 break;
                         }
                         break;
-                    case 0x04:
+                    case 0x04:  // call imm
                         push(getP() + 2);
                         setP(this.ram[getP() + 1]);
                         break;
-                    case 0x08:
+                    case 0x08:  // ret src
                         int i = this.ram[(getP() + 1) & 0xFF];
                         setP(pop());
                         setS(getS() + i);
                         break;
-                    case 0x0C:
+                    case 0x0C:  // ret
                         setP(pop());
                         break;
                 }
