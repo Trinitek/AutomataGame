@@ -335,3 +335,7 @@ macro not dest* {
         db 0xD0 or 0111b
     end if
 }
+
+macro nop {
+    mov a, a
+}
