@@ -386,6 +386,64 @@ public class TileVM implements VM {
                 break;
 
             case 0xC0:          // (special)
+                dest = parseArg(VMArgType.DEST, ram[ptr] & 0x03);
+                switch (this.ram[ptr] & 0x0C) {
+                    case 0x00:  // inc
+                        switch (dest) {
+                            case A:
+                                setA(getA() + 1);
+                                break;
+                            case B:
+                                setB(getB() + 1);
+                                break;
+                            case X:
+                                setX(getX() + 1);
+                                break;
+                            case MEM:
+                                this.ram[getX()] = (byte) (this.ram[getX()] + 1);
+                                break;
+                        }
+                        iLength = 1;
+                        break;
+                    case 0x04:  // dec
+                        switch (dest) {
+                            case A:
+                                setA(getA() - 1);
+                                break;
+                            case B:
+                                setB(getB() - 1);
+                                break;
+                            case X:
+                                setX(getX() - 1);
+                                break;
+                            case MEM:
+                                this.ram[getX()] = (byte) (this.ram[getX()] - 1);
+                                break;
+                        }
+                        iLength = 1;
+                        break;
+                    case 0x08:  // jmp dest
+                        switch (dest) {
+                            case A:
+                                setP(getA());
+                                break;
+                            case B:
+                                setP(getB());
+                                break;
+                            case X:
+                                setP(getX());
+                                break;
+                            case MEM:
+                                setP(this.ram[getX()]);
+                                break;
+                        }
+                        iLength = 0;
+                        break;
+                    case 0x0C:  // jmp imm
+                        setP(this.ram[(ptr + 1) & 0xFF]);
+                        iLength = 0;
+                        break;
+                }
                 break;
 
             case 0xD0:          // (special)
