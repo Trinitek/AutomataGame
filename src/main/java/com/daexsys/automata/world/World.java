@@ -170,7 +170,7 @@ public final class World implements Pulsable {
 
     public void pulse() {
         ticksPulsed++;
-        System.out.println("Pulsing #" + ticksPulsed);
+        System.out.println("Pulsing frame #" + ticksPulsed);
         getChunkManager().pulse();
     }
 
