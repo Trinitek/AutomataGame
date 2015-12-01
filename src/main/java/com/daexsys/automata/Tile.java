@@ -1,5 +1,7 @@
 package com.daexsys.automata;
 
+import com.daexsys.automata.vm.TileVM;
+import com.daexsys.automata.vm.VM;
 import com.daexsys.automata.world.*;
 import com.daexsys.automata.world.tiletypes.TileType;
 import com.daexsys.automata.world.tiletypes.TileTypes;
@@ -13,11 +15,12 @@ public class Tile implements Pulsable {
 
     private static final int RAM_AMOUNT = 256; // 256 bytes
 
-    private Chunk chunk;
-    private TileCoordinate coordinate;
-    private TileType tileType;
+    private final TileCoordinate coordinate;
     private byte[] tileData;
     private int energy;
+    private TileType tileType;
+
+    private VM tileVM = new TileVM(this);
 
     public Tile(TileCoordinate tileCoordinate, TileType type) {
         this.coordinate = tileCoordinate;
@@ -26,9 +29,8 @@ public class Tile implements Pulsable {
     }
 
     public void pulse() {
-        if(getTileType() == TileTypes.AIR) return;
-
-        lazyInit(); // Init byte array if not done already
+        if(getTileType() == TileTypes.AIR)
+            return;
 
         tileType.pulse(this);
 
@@ -105,6 +107,10 @@ public class Tile implements Pulsable {
         neighbors.add(down_right);
 
         return Optional.of(neighbors);
+    }
+
+    public VM getTileVM() {
+        return tileVM;
     }
 
     public void setEnergy(int energy) {
