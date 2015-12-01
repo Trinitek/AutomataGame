@@ -8,7 +8,7 @@ import com.daexsys.automata.world.tiletypes.TileTypes;
 public class PlayerState {
 
     private Game game;
-    private Structure selectedStructure;
+    private Structure selectedStructure = null;
     private TileType inHand = TileTypes.CGOL;
 
     public PlayerState(Game game) {
