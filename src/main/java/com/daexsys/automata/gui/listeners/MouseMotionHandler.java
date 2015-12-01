@@ -42,4 +42,12 @@ public class MouseMotionHandler implements MouseMotionListener {
     public int getY() {
         return y;
     }
+
+    public int getTileX() {
+        return getX() / gui.getZoomLevel();
+    }
+
+    public int getTileY() {
+        return getY() / gui.getZoomLevel();
+    }
 }

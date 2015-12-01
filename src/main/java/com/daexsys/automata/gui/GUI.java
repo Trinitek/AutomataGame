@@ -109,6 +109,9 @@ public class GUI {
                     graphics2D.drawString("X: " + getOffsets().getOffsetX() * -1, 40, 360);
                     graphics2D.drawString("Y: " + getOffsets().getOffsetY() * -1, 40, 400);
 
+                    graphics2D.drawString("Cursor-Tile-X: " + getMouseMotionHandler().getTileX(), 40, 440);
+                    graphics2D.drawString("Cursor-Tile-Y: " + getMouseMotionHandler().getTileY(), 40, 480);
+
                     jFrame.getBufferStrategy().show();
 
                     fps++;
@@ -176,6 +179,10 @@ public class GUI {
         int ty = (screenY - gui.getOffsets().getOffsetY()) / gui.getZoomLevel();
 
         worldModel.setTileTypeAt(WorldLayers.GROUND, tx, ty, gui.getGame().getPlayerState().getInHand());
+    }
+
+    public MouseMotionHandler getMouseMotionHandler() {
+        return mouseMotionHandler;
     }
 
     public int getFPS() {

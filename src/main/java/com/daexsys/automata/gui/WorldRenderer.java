@@ -67,76 +67,18 @@ public class WorldRenderer implements Renderable {
                             }
                         }
                     }
-
                 }
-
-//        Collection<Chunk> chunks = new ArrayList<Chunk>(chunkManager.getChunks());
-//        Rectangle screen = new Rectangle(0, 0,
-//                (int) getGUI().getWindowSize().getWidth(), (int) getGUI().getWindowSize().getHeight());
-//
-//        for(Chunk chunk : chunks) {
-//            ChunkCoordinate chunkCoordinate = chunk.getChunkCoordinate();
-//
-//            Rectangle chunkRect = new Rectangle(
-//                    (chunkCoordinate.x * Chunk.DEFAULT_CHUNK_SIZE * gui.getZoomLevel())
-//                            + getGUI().getOffsets().getOffsetX() - gui.getZoomLevel(),
-//                    (chunkCoordinate.y * Chunk.DEFAULT_CHUNK_SIZE * gui.getZoomLevel())
-//                            + getGUI().getOffsets().getOffsetY() - gui.getZoomLevel(),
-//                    80, 80
-//            );
-//
-//            if(screen.intersects(chunkRect)) { // If chunk is on-screen
-//                if(getGUI().getZoomLevel() <= 4 && chunk.isHomogenous()) {
-//                    graphics.setColor(new Color(chunk.getTile(0, 0, 0).getTileType().getImage().getRGB(0, 0)));
-//                    graphics.fillRect(
-//                            chunkCoordinate.x * 16 *
-//                                    getGUI().getZoomLevel() +
-//                                    getGUI().getOffsets().getOffsetX(),
-//                            chunkCoordinate.y * 16 *
-//                                    getGUI().getZoomLevel() +
-//                                    getGUI().getOffsets().getOffsetY(),
-//
-//                            getGUI().getZoomLevel() * Chunk.DEFAULT_CHUNK_SIZE, getGUI().getZoomLevel() * Chunk.DEFAULT_CHUNK_SIZE);
-//                } else {
-//                    for (int x = 0; x < Chunk.DEFAULT_CHUNK_SIZE; x++) {
-//                        for (int y = 0; y < Chunk.DEFAULT_CHUNK_SIZE; y++) {
-//                            for (int layer = 0; layer < 2; layer++) {
-//                                Tile tile = chunk.getTile(layer, x, y);
-//
-//                                if (tile.getTileType() != TileTypes.AIR) {
-//                                    BufferedImage imageToRender = tile.getTileType().getImage();
-//
-//                                    // If it's small enough, we don't have to render the whole image
-//                                    if (getGUI().getZoomLevel() <= 4) {
-//                                        graphics.setColor(new Color(imageToRender.getRGB(0, 0)));
-//                                        graphics.fillRect(chunkCoordinate.amplifyLocalX(x) *
-//                                                        getGUI().getZoomLevel() +
-//                                                        getGUI().getOffsets().getOffsetX(),
-//                                                chunkCoordinate.amplifyLocalY(y) *
-//                                                        getGUI().getZoomLevel() +
-//                                                        getGUI().getOffsets().getOffsetY(),
-//                                                getGUI().getZoomLevel(), getGUI().getZoomLevel());
-//                                    } else {
-//                                        graphics.drawImage(imageToRender,
-//                                                chunkCoordinate.amplifyLocalX(x) *
-//                                                        getGUI().getZoomLevel() +
-//                                                        getGUI().getOffsets().getOffsetX(),
-//                                                chunkCoordinate.amplifyLocalY(y) *
-//                                                        getGUI().getZoomLevel() +
-//                                                        getGUI().getOffsets().getOffsetY(),
-//                                                getGUI().getZoomLevel(), getGUI().getZoomLevel(),
-//                                                null
-//                                        );
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-            }}
+            }
         }
+
+        graphics.setColor(new Color(50, 50, 50, 155));
+        graphics.fillRect(
+                getGUI().getMouseMotionHandler().getTileX() * getGUI().getZoomLevel(),
+                getGUI().getMouseMotionHandler().getTileY() * getGUI().getZoomLevel(),
+                getGUI().getZoomLevel(),
+                getGUI().getZoomLevel()
+        );
+    }
 
     public List<Chunk> getChunksToRender(ChunkManager chunkManager) {
         Collection<Chunk> allChunks = chunkManager.getChunks();
