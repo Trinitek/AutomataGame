@@ -19,26 +19,27 @@ public class Offsets {
         return offsetY;
     }
 
+    private int speed = 1;
     public void moveUp() {
-        offsetY+=gui.getZoomLevel() * 2;
+        offsetY+=gui.getZoomLevel() * speed;
 
         if(offsetY > 0)
             offsetY = 0;
     }
 
     public void moveDown() {
-        offsetY-=gui.getZoomLevel() * 2;
+        offsetY-=gui.getZoomLevel() * speed;
     }
 
     public void moveLeft() {
-        offsetX += gui.getZoomLevel() * 2;
+        offsetX += gui.getZoomLevel() * speed;
 
         if(offsetX > 0)
             offsetX = 0;
     }
 
     public void moveRight() {
-        offsetX -= gui.getZoomLevel() * 2;
+        offsetX -= gui.getZoomLevel() * speed;
     }
 
     @Override

@@ -52,22 +52,22 @@ public class KeyboardHandler implements KeyListener {
         else if(e.getKeyCode() == KeyEvent.VK_Q) {
             gui.getGame().setTickDelayRate(gui.getGame().getTickDelayRate() + 10);
         }
-
-        if(e.getKeyCode() == KeyEvent.VK_D) {
-            gui.getOffsets().moveRight();
-        }
-
-        if(e.getKeyCode() == KeyEvent.VK_A) {
-            gui.getOffsets().moveLeft();
-        }
-
-        if(e.getKeyCode() == KeyEvent.VK_W) {
-            gui.getOffsets().moveUp();
-        }
-
-        if(e.getKeyCode() == KeyEvent.VK_S) {
-            gui.getOffsets().moveDown();
-        }
+//
+//        if(e.getKeyCode() == KeyEvent.VK_D) {
+//            gui.getOffsets().moveRight();
+//        }
+//
+//        if(e.getKeyCode() == KeyEvent.VK_A) {
+//            gui.getOffsets().moveLeft();
+//        }
+//
+//        if(e.getKeyCode() == KeyEvent.VK_W) {
+//            gui.getOffsets().moveUp();
+//        }
+//
+//        if(e.getKeyCode() == KeyEvent.VK_S) {
+//            gui.getOffsets().moveDown();
+//        }
 
         keysDown.put(e.getKeyCode(), true);
     }

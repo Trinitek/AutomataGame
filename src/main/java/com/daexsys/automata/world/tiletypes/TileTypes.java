@@ -12,10 +12,10 @@ public class TileTypes {
             new TileType((byte) 0, "stone", ImageUtil.loadImage("images/stone.png"), 50, 0);
 
     public static final TileType VM_255_BYTE_RAM =
-            new TileType((byte) 1, "computer", ImageUtil.loadImage("images/digital.png"), 1000, 5);
+            new TileType((byte) 1, "virtual machine", ImageUtil.loadImage("images/digital.png"), 1000, 5);
 
     public static final TileType AUTOMATA_SIMPLE =
-            new TileType((byte) 2, "automata", ImageUtil.loadImage("images/automata.png"), 10, 1);
+            new TileType((byte) 2, "CGoL", ImageUtil.loadImage("images/automata.png"), 10, 1);
 
     public static final TileType GRASS =
             new FertileTileType((byte) 3, "stone", ImageUtil.loadImage("images/grass.png"), 25, 1);
@@ -27,7 +27,7 @@ public class TileTypes {
             new TileType((byte) 5, "stone", ImageUtil.loadImage("images/water.png"), 500, 1);
 
     public static final TileType VIRUS =
-            new ViralTileType((byte) 6, "virus", ImageUtil.loadImage("images/virus.png"), 2000, 1);
+            new ViralTileType((byte) 6, "greedy virus", ImageUtil.loadImage("images/virus.png"), 2000, 1);
 
     // TODO: rename
     public static final TileType ENERGY_ORE =
@@ -40,5 +40,5 @@ public class TileTypes {
             new TileType((byte) 9, "stone", ImageUtil.loadImage("images/stone.png"), 50, 0);
 
     public static final TileType MINER =
-            new MinerTileType((byte) 10, "miner", ImageUtil.loadImage("images/miner.png"), 50, 0);
+            new MinerTileType((byte) 10, "miner test", ImageUtil.loadImage("images/miner.png"), 50, 0);
 }

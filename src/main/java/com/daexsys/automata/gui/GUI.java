@@ -11,6 +11,7 @@ import com.daexsys.automata.world.WorldLayers;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public class GUI {
@@ -79,7 +80,7 @@ public class GUI {
                             mouseMotionHandler.getX(), mouseMotionHandler.getY(), 20, 20, null);
 
                     if(game.isPaused()) {
-                        graphics2D.drawImage(paused, 40, 40, null);
+                        graphics2D.drawImage(paused, 260, 40, null);
                     }
 
                     graphics2D.setFont(theFont);
@@ -94,14 +95,17 @@ public class GUI {
                     if(getGame().getTPS() > 1000 / getGame().getTickDelayRate() - 1) {
                         goodTPS = true;
                     }
-
                     if(goodTPS) {
                         graphics2D.setColor(Color.GREEN);
                     } else {
                         graphics2D.setColor(Color.RED);
                     }
-
                     graphics2D.drawString("TPS: " + getGame().getTPS(), 40, 280);
+
+                    graphics2D.setColor(Color.WHITE);
+                    graphics2D.drawString("Item in-hand: " + getGame().getPlayerState().getInHand().getTileName(), 40, 320);
+                    graphics2D.drawString("X: " + getOffsets().getOffsetX() * -1, 40, 360);
+                    graphics2D.drawString("Y: " + getOffsets().getOffsetY() * -1, 40, 400);
 
                     jFrame.getBufferStrategy().show();
 
@@ -117,6 +121,19 @@ public class GUI {
                         Thread.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                    }
+
+                    if(KeyboardHandler.isDown(KeyEvent.VK_W)) {
+                        getOffsets().moveUp();
+                    }
+                    if(KeyboardHandler.isDown(KeyEvent.VK_S)) {
+                        getOffsets().moveDown();
+                    }
+                    if(KeyboardHandler.isDown(KeyEvent.VK_A)) {
+                        getOffsets().moveLeft();
+                    }
+                    if(KeyboardHandler.isDown(KeyEvent.VK_D)) {
+                        getOffsets().moveRight();
                     }
                 }
             }
