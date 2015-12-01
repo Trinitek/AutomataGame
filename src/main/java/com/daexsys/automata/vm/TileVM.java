@@ -13,6 +13,20 @@ import java.io.IOException;
 /**
  * Virtual machine for a single tile automaton.
  */
+
+enum VMArg {
+    A,
+    B,
+    X,
+    MEM,
+    IMM
+}
+
+enum VMArgType {
+    SRC,
+    DEST
+}
+
 public class TileVM implements VM, Pulsable {
 
     private int regA, regB, regX, regS, regF, regP, regTS, regTD;
