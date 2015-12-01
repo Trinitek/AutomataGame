@@ -18,7 +18,7 @@ public class Game {
     private int tps = 0;
 
     public Game() {
-        worldModel = new World(100);
+        worldModel = new World();
         structures = new Structures();
         playerState = new PlayerState(this);
 
@@ -31,6 +31,7 @@ public class Game {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
                 if(!isPaused) {
                     worldModel.pulse();
                     tps++;
@@ -80,7 +81,5 @@ public class Game {
         if(tickDelayRate > 0) {
             this.tickDelayRate = tickDelayRate;
         }
-
-        System.out.println(tickDelayRate);
     }
 }

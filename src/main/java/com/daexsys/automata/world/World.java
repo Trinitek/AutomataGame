@@ -16,7 +16,7 @@ public final class World implements Pulsable {
 
     private ChunkManager chunkManager;
 
-    public World(final int size) {
+    public World() {
         seed = System.currentTimeMillis();
         random = new Random(seed);
 
@@ -28,8 +28,6 @@ public final class World implements Pulsable {
                 chunkManager.getChunk(i, j);
             }
         }
-
-        System.out.println("Creating world of size: " + size);
 
 //        /* Add lakes */
 //        for (int i = 0; i < size / 20; i++) {
@@ -168,7 +166,6 @@ public final class World implements Pulsable {
 
     public void pulse() {
         ticksPulsed++;
-        System.out.println("Pulsing frame #" + ticksPulsed);
         getChunkManager().pulse();
     }
 

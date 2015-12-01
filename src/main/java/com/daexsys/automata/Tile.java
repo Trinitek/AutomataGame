@@ -9,18 +9,18 @@ import com.daexsys.automata.world.tiletypes.TileTypes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 public class Tile implements Pulsable {
 
     private static final int RAM_AMOUNT = 256; // 256 bytes
 
+    private VM tileVM = new TileVM(this);
+
     private final TileCoordinate coordinate;
-    private byte[] tileData;
-    private int energy;
     private TileType tileType;
 
-    private VM tileVM = new TileVM(this);
+    private int energy;
+    private byte[] tileData;
 
     public Tile(TileCoordinate tileCoordinate, TileType type) {
         this.coordinate = tileCoordinate;
@@ -33,6 +33,8 @@ public class Tile implements Pulsable {
             return;
 
         tileType.pulse(this);
+
+        ((Pulsable) tileVM).pulse();
 
         /* Randomly lose energy to entropy. */
         if(getWorld().getRandom().nextBoolean())
@@ -51,18 +53,15 @@ public class Tile implements Pulsable {
         return energy;
     }
 
-    public void lazyInit() {
-        if(tileData == null) {
-            tileData = new byte[RAM_AMOUNT];
-            getTileData()[0] = (byte) new Random().nextInt(2);
-        }
-    }
-
     public TileType getTileType() {
         return tileType;
     }
 
     public byte[] getTileData() {
+        if(tileData == null) {
+            tileData = new byte[RAM_AMOUNT];
+        }
+
         return tileData;
     }
 

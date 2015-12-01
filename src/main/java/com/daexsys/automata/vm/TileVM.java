@@ -1,5 +1,6 @@
 package com.daexsys.automata.vm;
 
+import com.daexsys.automata.Pulsable;
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.TileCoordinate;
 import com.daexsys.automata.world.tiletypes.TileType;
@@ -12,7 +13,7 @@ import java.io.IOException;
 /**
  * Virtual machine for a single tile automaton.
  */
-public class TileVM implements VM {
+public class TileVM implements VM, Pulsable {
 
     private int regA, regB, regX, regS, regF, regP, regTS, regTD;
     private byte[] ram;
@@ -759,5 +760,10 @@ public class TileVM implements VM {
 
     public Tile getTile() {
         return tile;
+    }
+
+    @Override
+    public void pulse() {
+        step();
     }
 }

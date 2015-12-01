@@ -41,8 +41,6 @@ public final class Chunk implements Pulsable {
     }
 
     public void pulse() {
-//        if(homogenous) return;
-
         // Pulse all tiles (for now, eventually this needs to be handled in a more intelligent way)
         for (int i = 0; i < contents[WorldLayers.GROUND].length; i++) {
             for (int j = 0; j < contents[WorldLayers.GROUND][i].length; j++) {
