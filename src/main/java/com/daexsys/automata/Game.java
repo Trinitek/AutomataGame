@@ -1,5 +1,6 @@
 package com.daexsys.automata;
 
+import com.daexsys.automata.client.IOPair;
 import com.daexsys.automata.world.structures.Structures;
 import com.daexsys.automata.world.tiletypes.TileTypes;
 import com.daexsys.automata.world.World;
@@ -81,5 +82,9 @@ public class Game {
         if(tickDelayRate > 0) {
             this.tickDelayRate = tickDelayRate;
         }
+    }
+
+    public IOPair localConnection() {
+        return new IOPair(null, null);
     }
 }
