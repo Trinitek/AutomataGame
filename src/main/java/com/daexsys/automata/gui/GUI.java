@@ -6,6 +6,7 @@ import com.daexsys.automata.gui.listeners.MouseHandler;
 import com.daexsys.automata.gui.listeners.MouseMotionHandler;
 import com.daexsys.automata.gui.listeners.ScrollManager;
 import com.daexsys.automata.gui.util.ImageUtil;
+import com.daexsys.automata.world.TileCoordinate;
 import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.WorldLayers;
 

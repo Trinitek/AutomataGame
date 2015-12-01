@@ -16,6 +16,10 @@ public final class TileCoordinate {
         this.y = y;
     }
 
+    public TileCoordinate add(int x, int y) {
+        return new TileCoordinate(this.world, this.x + x, this.y + y);
+    }
+
     @Override
     public String toString() {
         return "{x=" + x + ", y=" + y + "}";

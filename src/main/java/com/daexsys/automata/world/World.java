@@ -23,8 +23,8 @@ public final class World implements Pulsable {
         chunkManager = new ChunkManager(this);
 
         // pre-generate world sections
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
                 chunkManager.getChunk(i, j);
             }
         }
@@ -80,6 +80,19 @@ public final class World implements Pulsable {
         return chunk.getTile(layer, tileCoordinate.x, tileCoordinate.y);
     }
 
+    public Tile sampleTileAt(int layer, int x, int y) {
+        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
+
+        if(doesChunkExist(chunkCoordinate.x, chunkCoordinate.y)) {
+            Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
+
+            TileCoordinate tileCoordinate = chunkCoordinate.localifyCoordinates(x, y);
+            return chunk.getTile(layer, tileCoordinate.x, tileCoordinate.y);
+        }
+
+        return null;
+    }
+
     /**
      * @return whether or not the block was successfully set
      */
@@ -87,13 +100,8 @@ public final class World implements Pulsable {
         ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
 
         if((layer == 0 || layer == 1)) {
-
             Chunk chunk =
                     getChunkManager().getChunk(chunkCoordinate);
-
-//            System.out.println(x + " " + y);
-//            System.out.println(chunkCoordinate);
-//            System.out.println(chunkCoordinate.localifyCoordinates(x, y));
 
             chunk.flashWithNewType(layer, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), tileType);
             return true;
@@ -106,23 +114,34 @@ public final class World implements Pulsable {
         ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
         Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
 
-        return chunk.getTile(WorldLayers.ABOVE_GROUND,
-                chunkCoordinate.localifyX(x),
-                chunkCoordinate.localifyY(y)).
-                getTileType() != TileTypes.AIR;
+//        return chunk.getTile(WorldLayers.ABOVE_GROUND,
+//                chunkCoordinate.localifyX(x),
+//                chunkCoordinate.localifyY(y)).
+//                getTileType() != TileTypes.AIR;
+
+        return false;
     }
 
 
     public void queueChangeAt(int x, int y, TileType tileType) {
+        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
         Tile newTile = new Tile(new TileCoordinate(this, x, y), tileType);
-//        queuedTileChangeStack.push(new QueuedTileChange(x, y, newTile));
+        Chunk chunk =
+                getChunkManager().getChunk(chunkCoordinate);
+
+        chunk.queueChangeAt(WorldLayers.GROUND, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), newTile);
     }
 
     public void queueChangeAt(int x, int y, TileType tileType, int newEnergy) {
+        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
         Tile newTile = new Tile(new TileCoordinate(this, x, y), tileType);
         newTile.setEnergy(newEnergy);
 
-//        queuedTileChangeStack.push(new QueuedTileChange(x, y, newTile));
+        Chunk chunk =
+                getChunkManager().getChunk(chunkCoordinate);
+
+        chunk.queueChangeAt(WorldLayers.GROUND,
+                chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), newTile);
     }
 
     public Random getRandom() {
@@ -133,11 +152,20 @@ public final class World implements Pulsable {
         return chunkManager;
     }
 
+    public boolean doesChunkExist(int x, int y) {
+        for(Chunk c : chunkManager.getChunks()) {
+            if(c.getChunkCoordinate().is(x, y)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public long getSeed() {
         return seed;
     }
 
-    @Override
     public void pulse() {
         getChunkManager().pulse();
     }

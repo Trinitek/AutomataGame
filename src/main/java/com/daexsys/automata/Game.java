@@ -17,15 +17,15 @@ public class Game {
         Thread worldPule = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(true) {
-                    try {
-                        Thread.sleep(tickDelayRate);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if(!isPaused) worldModel.pulse();
-
+            while(true) {
+                try {
+                    Thread.sleep(tickDelayRate);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                if(!isPaused) worldModel.pulse();
+
+            }
             }
         });
         worldPule.start();

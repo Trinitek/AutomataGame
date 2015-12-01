@@ -66,8 +66,17 @@ public final class Chunk implements Pulsable {
     }
 
     public void flashWithNewType(int layer, int x, int y, TileType tileType) {
+        TileCoordinate coordinate = new TileCoordinate(chunkCoordinate.world,
+                getChunkCoordinate().amplifyLocalX(x),
+                getChunkCoordinate().amplifyLocalY(y)
+        );
+
         if(x >= 0 && y >= 0)
-            contents[layer][x][y] = new Tile(new TileCoordinate(chunkCoordinate.world, x, y), tileType);
+            contents[layer][x][y] = new Tile(coordinate, tileType);
+    }
+
+    public void queueChangeAt(int layer, int x, int y, Tile t) {
+        queuedTileChangeStack.push(new QueuedTileChange(x, y, t));
     }
 
     public ChunkCoordinate getChunkCoordinate() {

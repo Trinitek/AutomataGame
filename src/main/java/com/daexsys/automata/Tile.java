@@ -13,6 +13,7 @@ public class Tile implements Pulsable {
 
     private static final int RAM_AMOUNT = 256; // 256 bytes
 
+    private Chunk chunk;
     private TileCoordinate coordinate;
     private TileType tileType;
     private byte[] tileData;
@@ -65,8 +66,16 @@ public class Tile implements Pulsable {
         return coordinate;
     }
 
+    public TileCoordinate getWorldCoordinate() {
+        return getChunk().getChunkCoordinate().localifyCoordinates(getCoordinate().x, getCoordinate().y);
+    }
+
     public World getWorld() {
         return coordinate.world;
+    }
+
+    public Chunk getChunk() {
+        return getWorld().getChunkManager().getChunk(getCoordinate().x / Chunk.DEFAULT_CHUNK_SIZE, getCoordinate().y / Chunk.DEFAULT_CHUNK_SIZE);
     }
 
     public Optional<List<Tile>> getNeighbors(int layer) {
@@ -74,14 +83,14 @@ public class Tile implements Pulsable {
         int x = coordinate.x;
         int y = coordinate.y;
 
-        Tile up = world.getTileAt    (layer, x, y - 1);
-        Tile down = world.getTileAt  (layer, x, y + 1);
-        Tile left = world.getTileAt  (layer, x - 1, y);
-        Tile right = world.getTileAt (layer, x + 1, y);
-        Tile up_left = world.getTileAt    (layer, x - 1, y - 1);
-        Tile up_right = world.getTileAt   (layer, x + 1, y - 1);
-        Tile down_left = world.getTileAt  (layer, x - 1, y + 1);
-        Tile down_right = world.getTileAt (layer, x + 1, y + 1);
+        Tile up = world.sampleTileAt(layer, x, y - 1);
+        Tile down = world.sampleTileAt(layer, x, y + 1);
+        Tile left = world.sampleTileAt(layer, x - 1, y);
+        Tile right = world.sampleTileAt(layer, x + 1, y);
+        Tile up_left = world.sampleTileAt(layer, x - 1, y - 1);
+        Tile up_right = world.sampleTileAt(layer, x + 1, y - 1);
+        Tile down_left = world.sampleTileAt(layer, x - 1, y + 1);
+        Tile down_right = world.sampleTileAt(layer, x + 1, y + 1);
 
         List<Tile> neighbors = new ArrayList<Tile>();
         neighbors.add(up);
