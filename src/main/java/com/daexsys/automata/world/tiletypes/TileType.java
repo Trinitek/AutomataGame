@@ -28,7 +28,7 @@ public class TileType {
         return defaultDecayRate;
     }
 
-    public String getBlockName() {
+    public String getTileName() {
         return blockName;
     }
 
