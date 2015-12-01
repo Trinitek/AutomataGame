@@ -63,6 +63,8 @@ public class GUI {
                 Font theFont = new Font("Tahoma", Font.BOLD, 24);
 
                 while(true) {
+                    long frameStartTime = System.currentTimeMillis();
+
                     Graphics2D graphics2D = (Graphics2D) jFrame.getBufferStrategy().getDrawGraphics();
 
                     graphics2D.setColor(Color.BLACK);
@@ -123,17 +125,19 @@ public class GUI {
                         e.printStackTrace();
                     }
 
+                    long delta = System.currentTimeMillis() - frameStartTime;
+
                     if(KeyboardHandler.isDown(KeyEvent.VK_W)) {
-                        getOffsets().moveUp();
+                        getOffsets().moveUp(delta);
                     }
                     if(KeyboardHandler.isDown(KeyEvent.VK_S)) {
-                        getOffsets().moveDown();
+                        getOffsets().moveDown(delta);
                     }
                     if(KeyboardHandler.isDown(KeyEvent.VK_A)) {
-                        getOffsets().moveLeft();
+                        getOffsets().moveLeft(delta);
                     }
                     if(KeyboardHandler.isDown(KeyEvent.VK_D)) {
-                        getOffsets().moveRight();
+                        getOffsets().moveRight(delta);
                     }
                 }
             }

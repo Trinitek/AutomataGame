@@ -20,26 +20,31 @@ public class Offsets {
     }
 
     private int speed = 1;
-    public void moveUp() {
-        offsetY+=gui.getZoomLevel() * speed;
+
+    public void moveUp(double delta) {
+        delta /= 20;
+        offsetY+=gui.getZoomLevel() * speed * delta;
 
         if(offsetY > 0)
             offsetY = 0;
     }
 
-    public void moveDown() {
-        offsetY-=gui.getZoomLevel() * speed;
+    public void moveDown(double delta) {
+        delta /= 20;
+        offsetY-=gui.getZoomLevel() * speed * delta;
     }
 
-    public void moveLeft() {
-        offsetX += gui.getZoomLevel() * speed;
+    public void moveLeft(double delta) {
+        delta /= 20;
+        offsetX += gui.getZoomLevel() * speed * delta;
 
         if(offsetX > 0)
             offsetX = 0;
     }
 
-    public void moveRight() {
-        offsetX -= gui.getZoomLevel() * speed;
+    public void moveRight(double delta) {
+        delta /= 20;
+        offsetX -= gui.getZoomLevel() * speed * delta;
     }
 
     @Override
