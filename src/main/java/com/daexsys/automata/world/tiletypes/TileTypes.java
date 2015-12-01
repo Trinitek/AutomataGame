@@ -24,7 +24,7 @@ public class TileTypes {
             new FertileTileType((byte) 4, "stone", ImageUtil.loadImage("images/dirt.png"), 45, 1);
 
     public static final TileType WATER =
-            new TileType((byte) 5, "stone", ImageUtil.loadImage("images/water.png"), 500, 1);
+            new WaterTileType((byte) 5, "water", ImageUtil.loadImage("images/water.png"), 5000, 0);
 
     public static final TileType VIRUS =
             new ViralTileType((byte) 6, "greedy virus", ImageUtil.loadImage("images/virus.png"), 2000, 1);

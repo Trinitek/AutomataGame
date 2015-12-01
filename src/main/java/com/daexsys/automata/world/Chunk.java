@@ -47,6 +47,7 @@ public final class Chunk implements Pulsable {
         for (int i = 0; i < contents[WorldLayers.GROUND].length; i++) {
             for (int j = 0; j < contents[WorldLayers.GROUND][i].length; j++) {
                 contents[WorldLayers.GROUND][i][j].pulse();
+                contents[WorldLayers.ABOVE_GROUND][i][j].pulse();
             }
         }
     }

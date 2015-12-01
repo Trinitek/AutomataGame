@@ -26,6 +26,8 @@ public class Tile implements Pulsable {
     }
 
     public void pulse() {
+        if(getTileType() == TileTypes.AIR) return;
+
         lazyInit(); // Init byte array if not done already
 
         tileType.pulse(this);

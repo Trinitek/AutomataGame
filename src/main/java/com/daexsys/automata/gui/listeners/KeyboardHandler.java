@@ -59,6 +59,11 @@ public class KeyboardHandler implements KeyListener {
             gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 
+        else if(e.getKeyCode() == KeyEvent.VK_7) {
+            gui.getGame().getPlayerState().setInHand(TileTypes.WATER);
+            gui.getGame().getPlayerState().setSelectedStructure(null);
+        }
+
         else if(e.getKeyCode() == KeyEvent.VK_E) {
             gui.getGame().setTickDelayRate(gui.getGame().getTickDelayRate() - 10);
         }
