@@ -144,6 +144,13 @@ public class GUI {
                     if(KeyboardHandler.isDown(KeyEvent.VK_D)) {
                         getOffsets().moveRight(delta);
                     }
+
+                    int newValue = scrollManager.retrieveScrollQueue() + getZoomLevel();
+                    if(newValue < 7)
+                        newValue = 7;
+                    else if(newValue > 21)
+                        newValue = 21;
+                    setZoomLevel(newValue);
                 }
             }
         });

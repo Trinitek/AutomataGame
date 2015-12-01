@@ -1,6 +1,7 @@
 package com.daexsys.automata.gui.listeners;
 
 import com.daexsys.automata.gui.GUI;
+import org.omg.CORBA.NVList;
 
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
@@ -13,17 +14,16 @@ public class ScrollManager implements MouseWheelListener {
         this.gui = gui;
     }
 
+    private int scrollQueue = 0;
+
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        int rotation = e.getWheelRotation() * -1;
-        int newValue = gui.getZoomLevel() + rotation;
+        scrollQueue = e.getWheelRotation() * -1;
+    }
 
-        // Keep user from scrolling too far in or too far out
-        if(newValue < 7)
-            newValue = 7;
-        else if(newValue > 21)
-            newValue = 21;
-
-        gui.setZoomLevel(newValue);
+    public int retrieveScrollQueue() {
+        int cache = scrollQueue;
+        scrollQueue = 0;
+        return cache;
     }
 }
