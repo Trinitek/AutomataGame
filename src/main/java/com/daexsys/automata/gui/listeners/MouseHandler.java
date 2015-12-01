@@ -1,6 +1,7 @@
 package com.daexsys.automata.gui.listeners;
 
 import com.daexsys.automata.gui.GUI;
+import com.daexsys.automata.world.WorldLayers;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -20,6 +21,12 @@ public class MouseHandler implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if(e.getButton() == MouseEvent.BUTTON1) {
+            gui.layerBuildingOn = WorldLayers.GROUND;
+        } else {
+            gui.layerBuildingOn = WorldLayers.ABOVE_GROUND;
+        }
+
         gui.playerPlaceTile(e.getX(), e.getY(), gui);
 
         mouseDown = true;

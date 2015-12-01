@@ -34,6 +34,8 @@ public class GUI {
     private int lastFPS = 0;
     private int fps = 0;
 
+    public int layerBuildingOn = WorldLayers.GROUND;
+
     public GUI(Game game) {
         this.game = game;
     }
@@ -189,7 +191,7 @@ public class GUI {
         int ty = (screenY - gui.getOffsets().getOffsetY()) / gui.getZoomLevel();
 
         if(playerStructure == null) {
-            worldModel.setTileTypeAt(WorldLayers.GROUND, tx, ty, gui.getGame().getPlayerState().getInHand());
+            worldModel.setTileTypeAt(layerBuildingOn, tx, ty, gui.getGame().getPlayerState().getInHand());
         } else {
             playerStructure.placeInWorldAt(worldModel, tx, ty);
         }
