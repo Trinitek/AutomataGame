@@ -17,6 +17,8 @@ public class TileVM implements VM {
     private int regA, regB, regX, regS, regF, regP, regTS, regTD;
     private byte[] ram;
 
+    private VMHardware hardware;
+
     private Tile tile;
 
     public TileVM(Tile tile) {
@@ -111,11 +113,49 @@ public class TileVM implements VM {
     }
 
     private int readPort(int port) {
-        return 0;
+        Tile tTemp;
+        switch (port) {
+            case 0x00:          // get tile's X position
+                return this.tile.getCoordinate().x;
+            case 0x01:          // get tile's Y position
+                return this.tile.getCoordinate().y;
+            case 0x02:          // get ID of above tile
+                tTemp = this.tile.getWorld().sampleTileAt(
+                        hardware.viewingLayer,
+                        this.tile.getCoordinate().x,
+                        this.tile.getCoordinate().y - 1);
+                return tTemp != null ? tTemp.getTileType().getId() : 0;
+            case 0x03:          // get ID of right tile
+                tTemp = this.tile.getWorld().sampleTileAt(
+                        hardware.viewingLayer,
+                        this.tile.getCoordinate().x + 1,
+                        this.tile.getCoordinate().y);
+                return tTemp != null ? tTemp.getTileType().getId() : 0;
+            case 0x04:          // get ID of bottom tile
+                tTemp = this.tile.getWorld().sampleTileAt(
+                        hardware.viewingLayer,
+                        this.tile.getCoordinate().x,
+                        this.tile.getCoordinate().y + 1);
+                return tTemp != null ? tTemp.getTileType().getId() : 0;
+            case 0x05:          // get ID of left tile
+                tTemp = this.tile.getWorld().sampleTileAt(
+                        hardware.viewingLayer,
+                        this.tile.getCoordinate().x - 1,
+                        this.tile.getCoordinate().y);
+                return tTemp != null ? tTemp.getTileType().getId() : 0;
+            case 0x06:          // get viewing layer
+                return hardware.viewingLayer;
+            default:
+                return 0;
+        }
     }
 
     private void writePort(int port, int x) {
-        //
+        switch (port) {
+            case 0x06:          // set viewing layer
+                hardware.viewingLayer = x;
+                break;
+        }
     }
 
     // Returns the pointer to the next instruction
