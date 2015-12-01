@@ -9,8 +9,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-//import static java.lang.System.arraycopy;
-
 /**
  * Virtual machine for a single tile automaton.
  */
