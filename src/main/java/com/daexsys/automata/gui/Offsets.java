@@ -19,7 +19,7 @@ public class Offsets {
         return offsetY;
     }
 
-    private int speed = 1;
+    private double speed = .25;
 
     public void moveUp(double delta) {
         delta /= 20;
