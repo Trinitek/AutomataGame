@@ -19,6 +19,7 @@ public final class Chunk implements Pulsable {
     private ChunkCoordinate chunkCoordinate;
     private Tile[][][] contents;
     private Stack<QueuedTileChange> queuedTileChangeStack;
+    private boolean homogenous = true;
 
     public Chunk(World world, int x, int y) {
         this.chunkCoordinate = ChunkCoordinate.of(world, x, y);
@@ -28,6 +29,7 @@ public final class Chunk implements Pulsable {
 
         fillLayerWith(WorldLayers.ABOVE_GROUND, TileTypes.AIR);
         fillLayerWith(WorldLayers.GROUND, TileTypes.GRASS);
+        homogenous = true;
     }
 
     public void fillLayerWith(int layer, TileType tileType) {
@@ -39,6 +41,8 @@ public final class Chunk implements Pulsable {
     }
 
     public void pulse() {
+        if(homogenous) return;
+
         // Pulse all tiles (for now, eventually this needs to be handled in a more intelligent way)
         for (int i = 0; i < contents[WorldLayers.GROUND].length; i++) {
             for (int j = 0; j < contents[WorldLayers.GROUND][i].length; j++) {
@@ -61,11 +65,15 @@ public final class Chunk implements Pulsable {
     }
 
     public void setTile(int layer, int x, int y, Tile tile) {
+        homogenous = false;
+
         if(x >= 0 && y >= 0)
             contents[layer][x][y] = tile;
     }
 
     public void flashWithNewType(int layer, int x, int y, TileType tileType) {
+        homogenous = false;
+
         TileCoordinate coordinate = new TileCoordinate(chunkCoordinate.world,
                 getChunkCoordinate().amplifyLocalX(x),
                 getChunkCoordinate().amplifyLocalY(y)
@@ -77,6 +85,10 @@ public final class Chunk implements Pulsable {
 
     public void queueChangeAt(int layer, int x, int y, Tile t) {
         queuedTileChangeStack.push(new QueuedTileChange(x, y, t));
+    }
+
+    public boolean isHomogenous() {
+        return homogenous;
     }
 
     public ChunkCoordinate getChunkCoordinate() {

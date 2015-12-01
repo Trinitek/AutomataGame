@@ -6,7 +6,6 @@ import com.daexsys.automata.gui.listeners.MouseHandler;
 import com.daexsys.automata.gui.listeners.MouseMotionHandler;
 import com.daexsys.automata.gui.listeners.ScrollManager;
 import com.daexsys.automata.gui.util.ImageUtil;
-import com.daexsys.automata.world.TileCoordinate;
 import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.WorldLayers;
 
@@ -26,13 +25,16 @@ public class GUI {
     private Game game;
     private BufferedImage paused = ImageUtil.loadImage("images/paused.png");
 
+    private Dimension windowSize;
+
     public GUI(Game game) {
         this.game = game;
     }
 
     public void spawnWindow() {
         final JFrame jFrame = new JFrame(System.getProperty("game-name"));
-        jFrame.setSize(1600, 900);
+        windowSize = new Dimension(1600, 900);
+        jFrame.setSize(windowSize);
         jFrame.setLocationRelativeTo(null);
         jFrame.setVisible(true);
 
@@ -98,6 +100,10 @@ public class GUI {
 
     public boolean isMouseDown() {
         return mouseHandler.isMouseDown();
+    }
+
+    public Dimension getWindowSize() {
+        return windowSize;
     }
 
     public void playerPlaceTile(int screenX, int screenY, GUI gui) {
