@@ -3,7 +3,6 @@ package com.daexsys.automata.world;
 import com.daexsys.automata.Pulsable;
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.tiletypes.TileType;
-import com.daexsys.automata.world.tiletypes.TileTypes;
 
 import java.util.Random;
 

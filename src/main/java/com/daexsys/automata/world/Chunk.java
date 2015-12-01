@@ -41,7 +41,7 @@ public final class Chunk implements Pulsable {
     }
 
     public void pulse() {
-        if(homogenous) return;
+//        if(homogenous) return;
 
         // Pulse all tiles (for now, eventually this needs to be handled in a more intelligent way)
         for (int i = 0; i < contents[WorldLayers.GROUND].length; i++) {
@@ -49,7 +49,9 @@ public final class Chunk implements Pulsable {
                 contents[WorldLayers.GROUND][i][j].pulse();
             }
         }
+    }
 
+    public void depositQueue() {
         while(!queuedTileChangeStack.isEmpty()) {
             QueuedTileChange queuedTileChange = queuedTileChangeStack.pop();
 

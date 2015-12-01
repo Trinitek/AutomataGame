@@ -61,6 +61,9 @@ public class ChunkManager implements Pulsable {
         for(Chunk chunk : chunks2) {
             chunk.pulse();
         }
+        for(Chunk chunk : chunks2) {
+            chunk.depositQueue();
+        }
     }
 
     public Collection<Chunk> getChunks() {

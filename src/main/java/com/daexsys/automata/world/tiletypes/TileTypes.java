@@ -41,4 +41,7 @@ public class TileTypes {
 
     public static final TileType MINER =
             new MinerTileType((byte) 10, "miner test", ImageUtil.loadImage("images/miner.png"), 50, 0);
+
+    public static final TileType EQUAL_VIRUS =
+            new EqualVirusTileType((byte) 11, "shockwave test virus", ImageUtil.loadImage("images/shockwave.png"), 50, 0);
 }
