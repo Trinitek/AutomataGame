@@ -15,6 +15,12 @@ public class ScrollManager implements MouseWheelListener {
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        gui.setZoomLevel(gui.getZoomLevel() + e.getWheelRotation() * -1);
+        int rotation = e.getWheelRotation() * -1;
+        int newValue = gui.getZoomLevel() + rotation;
+
+        if(newValue < 7) newValue = 7;
+        if(newValue > 21) newValue = 21;
+
+        gui.setZoomLevel(newValue);
     }
 }

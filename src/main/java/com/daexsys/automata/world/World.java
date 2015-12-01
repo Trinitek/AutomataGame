@@ -23,8 +23,8 @@ public final class World implements Pulsable {
         chunkManager = new ChunkManager(this);
 
         // pre-generate world sections
-        for (int i = 0; i < 50; i++) {
-            for (int j = 0; j < 50; j++) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 chunkManager.getChunk(i, j);
             }
         }

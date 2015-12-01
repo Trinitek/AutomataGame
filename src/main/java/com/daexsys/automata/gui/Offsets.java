@@ -20,18 +20,18 @@ public class Offsets {
     }
 
     public void moveUp() {
-        offsetY+=gui.getZoomLevel();
+        offsetY+=gui.getZoomLevel() * 2;
     }
 
     public void moveDown() {
-        offsetY-=gui.getZoomLevel();
+        offsetY-=gui.getZoomLevel() * 2;
     }
 
     public void moveLeft() {
-        offsetX+=gui.getZoomLevel();
+        offsetX+=gui.getZoomLevel() * 2;
     }
 
     public void moveRight() {
-        offsetX-=gui.getZoomLevel();
+        offsetX-=gui.getZoomLevel() * 2;
     }
 }

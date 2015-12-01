@@ -39,10 +39,10 @@ public class WorldRenderer implements Renderable {
 
             Rectangle chunkRect = new Rectangle(
                     (chunkCoordinate.x * Chunk.DEFAULT_CHUNK_SIZE * gui.getZoomLevel())
-                            + getGUI().getOffsets().getOffsetX(),
+                            + getGUI().getOffsets().getOffsetX() - gui.getZoomLevel(),
                     (chunkCoordinate.y * Chunk.DEFAULT_CHUNK_SIZE * gui.getZoomLevel())
-                            + getGUI().getOffsets().getOffsetY(),
-                    40, 40
+                            + getGUI().getOffsets().getOffsetY() - gui.getZoomLevel(),
+                    80, 80
             );
 
             System.out.println(getGUI().getZoomLevel());
