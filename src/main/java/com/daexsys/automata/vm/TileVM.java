@@ -28,6 +28,8 @@ public class TileVM implements VM {
         this.regS = 255;
 
         this.ram = tile.getTileData();
+
+        this.hardware = new VMHardware();
     }
 
     private int getA() {
@@ -124,27 +126,27 @@ public class TileVM implements VM {
                         hardware.viewingLayer,
                         this.tile.getCoordinate().x,
                         this.tile.getCoordinate().y - 1);
-                return tTemp != null ? tTemp.getTileType().getId() : 0;
+                return tTemp != null ? tTemp.getTileType().getId() : 0xFF;
             case 0x03:          // get ID of right tile
                 tTemp = this.tile.getWorld().sampleTileAt(
                         hardware.viewingLayer,
                         this.tile.getCoordinate().x + 1,
                         this.tile.getCoordinate().y);
-                return tTemp != null ? tTemp.getTileType().getId() : 0;
+                return tTemp != null ? tTemp.getTileType().getId() : 0xFF;
             case 0x04:          // get ID of bottom tile
                 tTemp = this.tile.getWorld().sampleTileAt(
                         hardware.viewingLayer,
                         this.tile.getCoordinate().x,
                         this.tile.getCoordinate().y + 1);
-                return tTemp != null ? tTemp.getTileType().getId() : 0;
+                return tTemp != null ? tTemp.getTileType().getId() : 0xFF;
             case 0x05:          // get ID of left tile
                 tTemp = this.tile.getWorld().sampleTileAt(
                         hardware.viewingLayer,
                         this.tile.getCoordinate().x - 1,
                         this.tile.getCoordinate().y);
-                return tTemp != null ? tTemp.getTileType().getId() : 0;
+                return tTemp != null ? tTemp.getTileType().getId() : 0xFF;
             case 0x06:          // get viewing layer
-                return hardware.viewingLayer;
+                return this.hardware.viewingLayer;
             default:
                 return 0;
         }
