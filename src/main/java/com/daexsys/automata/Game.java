@@ -1,5 +1,6 @@
 package com.daexsys.automata;
 
+import com.daexsys.automata.world.structures.Structures;
 import com.daexsys.automata.world.tiletypes.TileTypes;
 import com.daexsys.automata.world.World;
 
@@ -7,7 +8,8 @@ public class Game {
 
     private boolean isPaused = false;
     private World worldModel;
-    private PlayerState playerState = new PlayerState();
+    private Structures structures;
+    private PlayerState playerState;
 
     private volatile int tickDelayRate = 250; // 500 default
 
@@ -17,6 +19,8 @@ public class Game {
 
     public Game() {
         worldModel = new World(100);
+        structures = new Structures();
+        playerState = new PlayerState(this);
 
         Thread worldPule = new Thread(new Runnable() {
             @Override
@@ -62,6 +66,10 @@ public class Game {
 
     public PlayerState getPlayerState() {
         return playerState;
+    }
+
+    public Structures getStructures() {
+        return structures;
     }
 
     public int getTickDelayRate() {

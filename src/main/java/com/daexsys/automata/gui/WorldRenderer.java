@@ -4,6 +4,8 @@ import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.Chunk;
 import com.daexsys.automata.world.ChunkCoordinate;
 import com.daexsys.automata.world.ChunkManager;
+import com.daexsys.automata.world.structures.Structure;
+import com.daexsys.automata.world.structures.StructureElement;
 import com.daexsys.automata.world.tiletypes.TileTypes;
 import com.daexsys.automata.world.World;
 
@@ -72,12 +74,25 @@ public class WorldRenderer implements Renderable {
         }
 
         graphics.setColor(new Color(50, 50, 50, 155));
-        graphics.fillRect(
-                getGUI().getMouseMotionHandler().getTileX() * getGUI().getZoomLevel(),
-                getGUI().getMouseMotionHandler().getTileY() * getGUI().getZoomLevel(),
-                getGUI().getZoomLevel(),
-                getGUI().getZoomLevel()
-        );
+        Structure structure = getGUI().getGame().getPlayerState().getSelectedStructure();
+
+        if(structure == null) {
+            graphics.fillRect(
+                    getGUI().getMouseMotionHandler().getTileX() * getGUI().getZoomLevel(),
+                    getGUI().getMouseMotionHandler().getTileY() * getGUI().getZoomLevel(),
+                    getGUI().getZoomLevel(),
+                    getGUI().getZoomLevel()
+            );
+        } else {
+            for (StructureElement structureElement : structure.getStructureElements()) {
+                graphics.fillRect(
+                        (getGUI().getMouseMotionHandler().getTileX() + structureElement.getX()) * getGUI().getZoomLevel(),
+                        (getGUI().getMouseMotionHandler().getTileY() + structureElement.getY()) * getGUI().getZoomLevel(),
+                        getGUI().getZoomLevel(),
+                        getGUI().getZoomLevel());
+
+            }
+        }
     }
 
     public List<Chunk> getChunksToRender(ChunkManager chunkManager) {
