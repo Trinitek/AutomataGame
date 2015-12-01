@@ -28,7 +28,7 @@ public final class Chunk implements Pulsable {
         queuedTileChangeStack = new Stack<QueuedTileChange>();
 
         fillLayerWith(WorldLayers.ABOVE_GROUND, TileTypes.AIR);
-        fillLayerWith(WorldLayers.GROUND, TileTypes.GRASS);
+        fillLayerWith(WorldLayers.GROUND, TileTypes.TALL_GRASS);
         homogenous = true;
     }
 
