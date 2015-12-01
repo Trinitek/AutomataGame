@@ -2,6 +2,9 @@ package com.daexsys.automata.world;
 
 import com.daexsys.automata.Pulsable;
 import com.daexsys.automata.Tile;
+import com.daexsys.automata.world.terrain.DesertTerrain;
+import com.daexsys.automata.world.terrain.TemperateTerrain;
+import com.daexsys.automata.world.terrain.TerrainGenerator;
 import com.daexsys.automata.world.tiletypes.TileType;
 
 import java.util.Random;
@@ -15,10 +18,13 @@ public final class World implements Pulsable {
     private int ticksPulsed = 0;
 
     private ChunkManager chunkManager;
+    private TerrainGenerator terrainGenerator;
 
     public World() {
         seed = System.currentTimeMillis();
         random = new Random(seed);
+
+        terrainGenerator = random.nextBoolean() ? new TemperateTerrain(this) : new DesertTerrain(this);
 
         chunkManager = new ChunkManager(this);
 
@@ -171,6 +177,10 @@ public final class World implements Pulsable {
 
     public int getTicksPulsed() {
         return ticksPulsed;
+    }
+
+    public TerrainGenerator getTerrainGenerator() {
+        return terrainGenerator;
     }
 
     @Override

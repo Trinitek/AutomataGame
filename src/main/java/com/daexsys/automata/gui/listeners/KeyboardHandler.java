@@ -35,7 +35,7 @@ public class KeyboardHandler implements KeyListener {
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_2) {
-            gui.getGame().getPlayerState().setInHand(TileTypes.VIRUS);
+            gui.getGame().getPlayerState().setInHand(TileTypes.GREEDY_VIRUS);
             gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 
@@ -50,7 +50,7 @@ public class KeyboardHandler implements KeyListener {
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_5) {
-            gui.getGame().getPlayerState().setInHand(TileTypes.EQUAL_VIRUS);
+            gui.getGame().getPlayerState().setInHand(TileTypes.SHOCKWAVE_VIRUS);
             gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 

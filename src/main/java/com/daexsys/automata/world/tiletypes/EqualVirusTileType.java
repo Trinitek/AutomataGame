@@ -2,7 +2,6 @@ package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.TileCoordinate;
-import com.daexsys.automata.world.WorldLayers;
 
 import java.awt.image.BufferedImage;
 
@@ -22,7 +21,7 @@ public class EqualVirusTileType extends TileType {
                 tile.getWorld().queueChangeAt(
                     newCoordinate.x,
                     newCoordinate.y,
-                    TileTypes.EQUAL_VIRUS,
+                    TileTypes.SHOCKWAVE_VIRUS,
                     tile.getEnergy() / 2
             );
             }

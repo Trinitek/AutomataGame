@@ -41,7 +41,9 @@ public class ChunkManager implements Pulsable {
 
     private Chunk generateChunk(int x, int y) {
         Chunk chunk = new Chunk(world, x, y);
+        world.getTerrainGenerator().generate(chunk);
         addChunk(chunk);
+
         return chunk;
     }
 

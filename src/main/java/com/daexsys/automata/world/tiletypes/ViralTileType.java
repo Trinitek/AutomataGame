@@ -16,7 +16,7 @@ public class ViralTileType extends TileType {
     public void pulse(Tile tile) {
         super.pulse(tile);
 
-        if(this == TileTypes.VIRUS && tile.getEnergy() > 0) {
+        if(this == TileTypes.GREEDY_VIRUS && tile.getEnergy() > 0) {
 
             int offsetX = tile.getWorld().getRandom().nextInt(3) - 1;
             int offsetY = tile.getWorld().getRandom().nextInt(3) - 1;
@@ -26,7 +26,7 @@ public class ViralTileType extends TileType {
                         WorldLayers.GROUND,
                         tile.getCoordinate().x + offsetX,
                         tile.getCoordinate().y + offsetY)
-                            .getTileType() != TileTypes.VIRUS
+                            .getTileType() != TileTypes.GREEDY_VIRUS
                             && tile.getEnergy() > 0
                         ) {
 
@@ -36,7 +36,7 @@ public class ViralTileType extends TileType {
                     tile.getWorld().queueChangeAt(
                             newCoordinate.x,
                             newCoordinate.y,
-                            TileTypes.VIRUS,
+                            TileTypes.GREEDY_VIRUS,
                             tile.getEnergy() / 2
                     );
                     tile.setEnergy(tile.getEnergy() / 2);

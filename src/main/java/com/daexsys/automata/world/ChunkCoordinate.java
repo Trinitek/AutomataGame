@@ -9,6 +9,17 @@ package com.daexsys.automata.world;
  */
 public final class ChunkCoordinate {
 
+    public static ChunkCoordinate of(World world, int x, int y) {
+        return new ChunkCoordinate(world, x, y);
+    }
+
+    public static ChunkCoordinate forWorldCoords(World world, int x, int y) {
+        int rx = x / Chunk.DEFAULT_CHUNK_SIZE;
+        int ry = y / Chunk.DEFAULT_CHUNK_SIZE;
+
+        return new ChunkCoordinate(world, rx, ry);
+    }
+
     public final World world;
     public final int x;
     public final int y;
@@ -17,16 +28,6 @@ public final class ChunkCoordinate {
         this.world = world;
         this.x = x;
         this.y = y;
-    }
-
-    public boolean is(int x, int y) {
-        return this.x == x && this.y == y;
-    }
-
-    public TileCoordinate localifyCoordinates(int x, int y) {
-        return new TileCoordinate(world,
-                localifyX(x),
-                localifyY(y));
     }
 
     public int localifyX(int x) {
@@ -43,6 +44,16 @@ public final class ChunkCoordinate {
 
     public int amplifyLocalY(int y) {
         return y + (this.y * Chunk.DEFAULT_CHUNK_SIZE);
+    }
+
+    public TileCoordinate localifyCoordinates(int x, int y) {
+        return new TileCoordinate(world,
+                localifyX(x),
+                localifyY(y));
+    }
+
+    public boolean is(int x, int y) {
+        return this.x == x && this.y == y;
     }
 
     @Override
@@ -65,16 +76,5 @@ public final class ChunkCoordinate {
     @Override
     public String toString() {
         return "{world=" + world + ", x=" + x + ", y=" + y + "}";
-    }
-
-    public static ChunkCoordinate of(World world, int x, int y) {
-        return new ChunkCoordinate(world, x, y);
-    }
-
-    public static ChunkCoordinate forWorldCoords(World world, int x, int y) {
-        int rx = x / Chunk.DEFAULT_CHUNK_SIZE;
-        int ry = y / Chunk.DEFAULT_CHUNK_SIZE;
-
-        return new ChunkCoordinate(world, rx, ry);
     }
 }
