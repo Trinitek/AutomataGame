@@ -87,6 +87,9 @@ public final class Chunk implements Pulsable {
         queuedTileChangeStack.push(new QueuedTileChange(x, y, t));
     }
 
+    /**
+     * Whether or not a chunk is comprised of only one tile type
+     */
     public boolean isHomogenous() {
         return homogenous;
     }
