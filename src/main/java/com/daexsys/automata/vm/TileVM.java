@@ -28,6 +28,8 @@ public class TileVM implements VM {
         this.regS = 255;
 
         this.ram = tile.getTileData();
+
+        this.hardware = new VMHardware();
     }
 
     private int getA() {
@@ -144,7 +146,7 @@ public class TileVM implements VM {
                         this.tile.getCoordinate().y);
                 return tTemp != null ? tTemp.getTileType().getId() : 0;
             case 0x06:          // get viewing layer
-                return hardware.viewingLayer;
+                return this.hardware.viewingLayer;
             default:
                 return 0;
         }
