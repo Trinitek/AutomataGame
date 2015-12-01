@@ -8,6 +8,7 @@ import com.daexsys.automata.gui.listeners.ScrollManager;
 import com.daexsys.automata.gui.util.ImageUtil;
 import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.WorldLayers;
+import com.daexsys.automata.world.structures.Structure;
 import com.daexsys.automata.world.structures.Structures;
 
 import javax.swing.*;
@@ -174,13 +175,17 @@ public class GUI {
     }
 
     public void playerPlaceTile(int screenX, int screenY, GUI gui) {
+        Structure playerStructure = getGame().getPlayerState().getSelectedStructure();
         World worldModel = gui.getGame().getWorld();
 
         int tx = (screenX - gui.getOffsets().getOffsetX()) / gui.getZoomLevel();
         int ty = (screenY - gui.getOffsets().getOffsetY()) / gui.getZoomLevel();
 
-//        worldModel.setTileTypeAt(WorldLayers.GROUND, tx, ty, gui.getGame().getPlayerState().getInHand());
-        Structures.CGOL_LWSS.placeInWorldAt(worldModel, tx, ty);
+        if(playerStructure == null) {
+            worldModel.setTileTypeAt(WorldLayers.GROUND, tx, ty, gui.getGame().getPlayerState().getInHand());
+        } else {
+            playerStructure.placeInWorldAt(worldModel, tx, ty);
+        }
     }
 
     public MouseMotionHandler getMouseMotionHandler() {
