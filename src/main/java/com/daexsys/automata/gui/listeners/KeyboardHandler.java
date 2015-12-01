@@ -30,7 +30,7 @@ public class KeyboardHandler implements KeyListener {
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_1) {
-            gui.getGame().getPlayerState().setInHand(TileTypes.AUTOMATA_SIMPLE);
+            gui.getGame().getPlayerState().setInHand(TileTypes.CGOL);
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_2) {

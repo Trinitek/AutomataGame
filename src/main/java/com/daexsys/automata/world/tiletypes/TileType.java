@@ -51,20 +51,20 @@ public class TileType {
             List<Tile> tiles = neighborOptional.get();
             for (Tile t : tiles) {
                 if(t != null) {
-                    if (t.getTileType() == TileTypes.AUTOMATA_SIMPLE) {
+                    if (t.getTileType() == TileTypes.CGOL) {
                         number++;
                     }
                 }
             }
         }
-        if(this == TileTypes.AUTOMATA_SIMPLE) {
+        if(this == TileTypes.CGOL) {
             if (number < 2) {
                 tile.getWorld().queueChangeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.DIRT);
             }
             else if (number > 3) { tile.getWorld().queueChangeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.DIRT); }
         } else if (number == 3) {
             if(this != TileTypes.WATER) {
-                tile.getWorld().queueChangeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.AUTOMATA_SIMPLE);
+                tile.getWorld().queueChangeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileTypes.CGOL);
             }
         }
     }

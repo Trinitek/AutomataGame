@@ -14,8 +14,8 @@ public class TileTypes {
     public static final TileType VM_255_BYTE_RAM =
             new TileType((byte) 1, "virtual machine", ImageUtil.loadImage("images/digital.png"), 1000, 5);
 
-    public static final TileType AUTOMATA_SIMPLE =
-            new TileType((byte) 2, "CGoL", ImageUtil.loadImage("images/automata.png"), 10, 1);
+    public static final TileType CGOL =
+            new TileType((byte) 2, "CGOL", ImageUtil.loadImage("images/automata.png"), 10, 1);
 
     public static final TileType GRASS =
             new FertileTileType((byte) 3, "stone", ImageUtil.loadImage("images/grass.png"), 25, 1);

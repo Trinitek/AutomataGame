@@ -5,7 +5,7 @@ import com.daexsys.automata.world.tiletypes.TileTypes;
 
 public class PlayerState {
 
-    private TileType inHand = TileTypes.AUTOMATA_SIMPLE;
+    private TileType inHand = TileTypes.CGOL;
 
     public TileType getInHand() {
         return inHand;
