@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class Tile implements Pulsable {
 
-    private static final int RAM_AMOUNT = 255; // 255 bytes
+    private static final int RAM_AMOUNT = 256; // 256 bytes
 
     private TileCoordinate coordinate;
     private TileType tileType;
