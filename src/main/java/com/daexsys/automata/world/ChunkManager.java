@@ -5,6 +5,8 @@ import com.daexsys.automata.Pulsable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Worth noting this class is going to get a LOT more complex.
@@ -56,11 +58,37 @@ public class ChunkManager implements Pulsable {
     }
 
     public void pulse() {
-        List<Chunk> chunks2 = new ArrayList<Chunk>(chunks);
+//        int coreCount = Runtime.getRuntime().availableProcessors();
+//        coreCount--;
+//        ExecutorService executorService = Executors.newFixedThreadPool(coreCount);
+//
+//        for (int i = 0; i < coreCount; i++) {
+//            final int segment = chunks.size() / coreCount;
+//            final int ii = i;
+//
+//            Runnable thread = new Runnable() {
+//                @Override
+//                public void run() {
+//                    final List<Chunk> chunks2 = new ArrayList<>(chunks.subList(segment * ii, segment * (ii + 1)));
+//
+//                    for(Chunk chunk : chunks2) {
+//                        chunk.pulse();
+//                    }
+//
+//                    for(Chunk chunk : chunks2) {
+//                        chunk.depositQueue();
+//                    }
+//                }
+//            };
+//            executorService.execute(thread);
+//        }
+
+        final List<Chunk> chunks2 = new ArrayList<>(chunks);
 
         for(Chunk chunk : chunks2) {
             chunk.pulse();
         }
+
         for(Chunk chunk : chunks2) {
             chunk.depositQueue();
         }

@@ -7,8 +7,18 @@ import com.daexsys.automata.world.tiletypes.TileTypes;
 
 public class PlayerState {
 
-    private Structure selectedStructure = Structures.CGOL_R_PENTOMINO;
+    private Game game;
+    private Structure selectedStructure;
     private TileType inHand = TileTypes.CGOL;
+
+    public PlayerState(Game game) {
+        this.game = game;
+        selectedStructure = game.getStructures().getStructureByName("cgol_glider");
+    }
+
+    public Game getGame() {
+        return game;
+    }
 
     public TileType getInHand() {
         return inHand;

@@ -2,32 +2,35 @@ package com.daexsys.automata.world.structures;
 
 import com.daexsys.automata.world.tiletypes.TileTypes;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Structures {
 
-    public static final Structure TILE = new Structure() {};
+    private Map<String, Structure> structureMap = new HashMap<>();
 
-    public static final Structure CGOL_GLIDER = new Structure(3, new int[] {
-            0, 1, 0,
-            0, 0, 1,
-            1, 1, 1
-    }, TileTypes.CGOL);
+    public Structures() {
+        structureMap.put("cgol_glider", new Structure(3, new int[] {
+                0, 1, 0,
+                0, 0, 1,
+                1, 1, 1
+        }, TileTypes.CGOL));
 
-    public static final Structure CGOL_LWSS = new Structure(5, new int[] {
-            1, 0, 0, 1, 0,
-            0, 0, 0, 0, 1,
-            1, 0, 0, 0, 1,
-            0, 1, 1, 1, 1,
-    }, TileTypes.CGOL);
+        structureMap.put("cgol_lwss", new Structure(5, new int[] {
+                1, 0, 0, 1, 0,
+                0, 0, 0, 0, 1,
+                1, 0, 0, 0, 1,
+                0, 1, 1, 1, 1,
+        }, TileTypes.CGOL));
 
-    public static final Structure CGOL_R_PENTOMINO = new Structure(3, new int[] {
-            0, 1, 1,
-            1, 1, 0,
-            0, 1, 0
-    }, TileTypes.CGOL);
+        structureMap.put("cgol_r-pentomino", new Structure(3, new int[] {
+                0, 1, 1,
+                1, 1, 0,
+                0, 1, 0
+        }, TileTypes.CGOL));
+    }
 
-    public static void main(String[] args) {
-        for(StructureElement structureElement : CGOL_GLIDER.getStructureElements()) {
-            System.out.println(structureElement);
-        }
+    public Structure getStructureByName(String name) {
+        return structureMap.get(name);
     }
 }
