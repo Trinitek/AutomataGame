@@ -44,7 +44,7 @@ public class GUI {
 
         jFrame.addKeyListener(new KeyboardHandler(this));
 
-        jFrame.createBufferStrategy(2);
+        jFrame.createBufferStrategy(3);
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         final GUI theGUI = this;
@@ -59,6 +59,12 @@ public class GUI {
 
                     graphics2D.setColor(Color.BLACK);
                     graphics2D.fillRect(0, 0, 1920, 1080);
+
+                    try {
+                        Thread.sleep(2);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
                     worldRenderer.render(graphics2D);
 

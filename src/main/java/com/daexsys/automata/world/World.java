@@ -14,6 +14,8 @@ public final class World implements Pulsable {
     private long seed;
     private Random random;
 
+    private int ticksPulsed = 0;
+
     private ChunkManager chunkManager;
 
     public World(final int size) {
@@ -167,6 +169,8 @@ public final class World implements Pulsable {
     }
 
     public void pulse() {
+        ticksPulsed++;
+        System.out.println("Pulsing #" + ticksPulsed);
         getChunkManager().pulse();
     }
 

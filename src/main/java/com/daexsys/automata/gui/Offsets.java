@@ -28,10 +28,18 @@ public class Offsets {
     }
 
     public void moveLeft() {
-        offsetX+=gui.getZoomLevel() * 2;
+        offsetX += gui.getZoomLevel() * 2;
+
+        if(offsetX < 0)
+            offsetX = 0;
     }
 
     public void moveRight() {
-        offsetX-=gui.getZoomLevel() * 2;
+        offsetX -= gui.getZoomLevel() * 2;
+    }
+
+    @Override
+    public String toString() {
+        return offsetX + " " + offsetY;
     }
 }

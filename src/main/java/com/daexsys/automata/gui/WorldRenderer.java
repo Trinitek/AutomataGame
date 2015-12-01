@@ -45,8 +45,6 @@ public class WorldRenderer implements Renderable {
                     80, 80
             );
 
-            System.out.println(getGUI().getZoomLevel());
-
             if(screen.intersects(chunkRect)) { // If chunk is on-screen
                 if(getGUI().getZoomLevel() <= 4 && chunk.isHomogenous()) {
                     graphics.setColor(new Color(chunk.getTile(0, 0, 0).getTileType().getImage().getRGB(0, 0)));
