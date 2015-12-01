@@ -31,22 +31,27 @@ public class KeyboardHandler implements KeyListener {
 
         else if(e.getKeyCode() == KeyEvent.VK_1) {
             gui.getGame().getPlayerState().setInHand(TileTypes.CGOL);
+            gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_2) {
             gui.getGame().getPlayerState().setInHand(TileTypes.VIRUS);
+            gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_3) {
             gui.getGame().getPlayerState().setInHand(TileTypes.VM_255_BYTE_RAM);
+            gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_4) {
             gui.getGame().getPlayerState().setInHand(TileTypes.MINER);
+            gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_5) {
             gui.getGame().getPlayerState().setInHand(TileTypes.EQUAL_VIRUS);
+            gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_E) {
@@ -55,6 +60,14 @@ public class KeyboardHandler implements KeyListener {
 
         else if(e.getKeyCode() == KeyEvent.VK_Q) {
             gui.getGame().setTickDelayRate(gui.getGame().getTickDelayRate() + 10);
+        }
+
+        else if(e.getKeyCode() == KeyEvent.VK_G) {
+            gui.getGame().getPlayerState().setSelectedStructure(gui.getGame().getStructures().getStructureByName("cgol_glider"));
+        }
+
+        else if(e.getKeyCode() == KeyEvent.VK_L) {
+            gui.getGame().getPlayerState().setSelectedStructure(gui.getGame().getStructures().getStructureByName("cgol_lwss"));
         }
 //
 //        if(e.getKeyCode() == KeyEvent.VK_D) {

@@ -1,5 +1,6 @@
 package com.daexsys.automata.world.structures;
 
+import com.daexsys.automata.world.tiletypes.TileType;
 import com.daexsys.automata.world.tiletypes.TileTypes;
 
 import java.util.HashMap;
@@ -37,6 +38,21 @@ public class Structures {
                 1, 1, 1, 1, 0, 0, 0,
                 0, 1, 1, 0, 0, 0, 0
         }, TileTypes.STONE));
+
+        structureMap.put("vanilla:bush", new Structure(4, new int[] {
+                0, 1, 1, 0,
+                1, 1, 1, 1,
+                0, 1, 1, 0,
+                0, 2, 2, 0
+        }, TileTypes.LEAVES, TileTypes.WOOD));
+
+        structureMap.put("vanilla:pine_tree", new Structure(5, new int[] {
+                0, 0, 1, 0, 0,
+                0, 1, 1, 1, 0,
+                0, 1, 1, 1, 0,
+                1, 1, 1, 1, 1,
+                0, 0, 2, 0, 0
+        }, TileTypes.LEAVES, TileTypes.WOOD));
     }
 
     public Structure getStructureByName(String name) {

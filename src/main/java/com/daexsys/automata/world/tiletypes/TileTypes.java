@@ -44,4 +44,10 @@ public class TileTypes {
 
     public static final TileType EQUAL_VIRUS =
             new EqualVirusTileType((byte) 11, "shockwave test virus", ImageUtil.loadImage("images/shockwave.png"), 50, 0);
+
+    public static final TileType WOOD =
+            new TileType((byte) 12, "wood", ImageUtil.loadImage("images/wood.png"), 50, 0);
+
+    public static final TileType LEAVES =
+            new TileType((byte) 13, "leaves", ImageUtil.loadImage("images/leaves.png"), 50, 0);
 }

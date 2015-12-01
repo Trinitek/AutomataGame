@@ -31,4 +31,8 @@ public class PlayerState {
     public Structure getSelectedStructure() {
         return selectedStructure;
     }
+
+    public void setSelectedStructure(Structure structure) {
+        this.selectedStructure = structure;
+    }
 }

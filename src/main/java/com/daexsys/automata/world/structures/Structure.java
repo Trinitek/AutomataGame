@@ -10,6 +10,7 @@ import java.util.List;
 public class Structure {
 
     private List<StructureElement> structureElements = new ArrayList<>();
+    private int rowLength;
 
     public Structure() {}
 
@@ -17,13 +18,14 @@ public class Structure {
         structureElements.addAll(elements);
     }
 
-    public Structure(int rowLength, int[] elements, TileType trueValue) {
+    public Structure(int rowLength, int[] elements, TileType... trueValue) {
+        this.rowLength = rowLength;
         for (int i = 0; i < elements.length; i++) {
             int column = i % rowLength;
             int row = i / rowLength;
 
-            if(elements[i] == 1)
-                structureElements.add(new StructureElement(trueValue, column, row));
+            if(elements[i] > 0)
+                structureElements.add(new StructureElement(trueValue[elements[i] - 1], column, row));
         }
     }
 
