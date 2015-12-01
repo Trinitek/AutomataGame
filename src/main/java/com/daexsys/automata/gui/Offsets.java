@@ -21,6 +21,9 @@ public class Offsets {
 
     public void moveUp() {
         offsetY+=gui.getZoomLevel() * 2;
+
+        if(offsetY > 0)
+            offsetY = 0;
     }
 
     public void moveDown() {
@@ -30,7 +33,7 @@ public class Offsets {
     public void moveLeft() {
         offsetX += gui.getZoomLevel() * 2;
 
-        if(offsetX < 0)
+        if(offsetX > 0)
             offsetX = 0;
     }
 
