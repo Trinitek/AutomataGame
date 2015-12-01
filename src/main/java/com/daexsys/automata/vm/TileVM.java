@@ -110,6 +110,14 @@ public class TileVM implements VM {
         return ((int) this.ram[getS()]) & 0xFF;
     }
 
+    private int readPort(int port) {
+        return 0;
+    }
+
+    private void writePort(int port, int x) {
+        //
+    }
+
     // Returns the pointer to the next instruction
     public void step() {
         int ptr = getP();
@@ -331,31 +339,41 @@ public class TileVM implements VM {
                 }
                 break;
 
-            case 0x70:          // TODO in
+            case 0x70:          // in
+                src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
+                dest = parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
+                switch (dest) {
+                    case A:
+                        setA(readPort(getTS()));
+                        break;
+                    case B:
+                        setB(readPort(getTS()));
+                        break;
+                    case X:
+                        setX(readPort(getTS()));
+                        break;
+                    case MEM:
+                        this.ram[getX()] = (byte) (readPort(getTS()) & 0xFF);
+                        break;
+                }
+                if (src == VMArg.IMM) iLength = 2;
+                else iLength = 1;
                 break;
 
-            case 0x80:          // TODO out
+            case 0x80:          // out
+                src = parseArg(VMArgType.SRC, ram[ptr] & 0x03);
+                parseArg(VMArgType.DEST, (ram[ptr] >> 2) & 0x03);
+                writePort(getTS(), getTD());
+                if (src == VMArg.IMM) iLength = 2;
+                else iLength = 1;
                 break;
 
             case 0x90:          // (special) function calling and returning
                 switch (this.ram[ptr] & 0x0C) {
                     case 0x00:  // call dest
                         push(getP() + 1);
-                        dest = parseArg(VMArgType.DEST, ram[ptr] & 0x03);
-                        switch (dest) {
-                            case A:
-                                setP(getA());
-                                break;
-                            case B:
-                                setP(getB());
-                                break;
-                            case X:
-                                setP(getX());
-                                break;
-                            case MEM:
-                                setP(this.ram[getX()]);
-                                break;
-                        }
+                        parseArg(VMArgType.DEST, ram[ptr] & 0x03);
+                        setP(getTD());
                         break;
                     case 0x04:  // call imm
                         push(getP() + 2);
