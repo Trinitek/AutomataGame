@@ -18,8 +18,11 @@ public class ScrollManager implements MouseWheelListener {
         int rotation = e.getWheelRotation() * -1;
         int newValue = gui.getZoomLevel() + rotation;
 
-        if(newValue < 7) newValue = 7;
-        if(newValue > 21) newValue = 21;
+        // Keep user from scrolling too far in or too far out
+        if(newValue < 7)
+            newValue = 7;
+        else if(newValue > 21)
+            newValue = 21;
 
         gui.setZoomLevel(newValue);
     }

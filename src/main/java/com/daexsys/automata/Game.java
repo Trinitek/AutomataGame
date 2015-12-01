@@ -11,6 +11,10 @@ public class Game {
 
     private volatile int tickDelayRate = 250; // 500 default
 
+    private int lastTPS = 0;
+    private long lastTPSTime = System.currentTimeMillis();
+    private int tps = 0;
+
     public Game() {
         worldModel = new World(100);
 
@@ -23,7 +27,16 @@ public class Game {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if(!isPaused) worldModel.pulse();
+                if(!isPaused) {
+                    worldModel.pulse();
+                    tps++;
+
+                    if(System.currentTimeMillis() > lastTPSTime + 1000) {
+                        lastTPSTime = System.currentTimeMillis();
+                        lastTPS = tps;
+                        tps = 0;
+                    }
+                }
 
             }
             }
@@ -31,7 +44,11 @@ public class Game {
         worldPule.start();
     }
 
-    public World getWorldModel() {
+    public int getTPS() {
+        return lastTPS;
+    }
+
+    public World getWorld() {
         return worldModel;
     }
 

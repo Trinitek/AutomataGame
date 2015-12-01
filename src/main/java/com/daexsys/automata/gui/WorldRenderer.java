@@ -20,7 +20,7 @@ public class WorldRenderer implements Renderable {
 
     public WorldRenderer(GUI gui) {
         this.gui = gui;
-        this.worldModel = gui.getGame().getWorldModel();
+        this.worldModel = gui.getGame().getWorld();
     }
 
     public GUI getGUI() {
@@ -157,7 +157,6 @@ public class WorldRenderer implements Renderable {
             if(screen.intersects(chunkTangle)) {
                 toRender.add(c);
             }
-
         }
 
         return toRender;

@@ -7,7 +7,6 @@ import com.daexsys.automata.world.tiletypes.TileTypes;
 
 import java.util.Random;
 
-// TODO: split up into chunks
 // TODO: Need logging framework.
 public final class World implements Pulsable {
 
