@@ -174,6 +174,10 @@ public final class World implements Pulsable {
         getChunkManager().pulse();
     }
 
+    public int getTicksPulsed() {
+        return ticksPulsed;
+    }
+
     @Override
     public String toString() {
         return "{world, seed=" + seed + "}";
