@@ -182,6 +182,50 @@ macro popf {
     pop f
 }
 
+macro in dest*, src* {
+    _i = 0x70
+    if dest in <b>
+        _i = _i or 0100b
+    else if dest in <x>
+        _i = _i or 1000b
+    else if dest in <[x]>
+        _i = _i or 1100b
+    end if
+    if src in <b>
+        _i = _i or 01b
+    else if src in <x>
+        _i = _i or 10b
+    else if ~ src in <a>
+        _i = _i or 11b
+    end if
+    db _i
+    if ~ src in <a,b,x>
+        db src
+    end if
+}
+
+macro out dest*, src* {
+    _i = 0x80
+    if dest in <b>
+        _i = _i or 0100b
+    else if dest in <x>
+        _i = _i or 1000b
+    else if dest in <[x]>
+        _i = _i or 1100b
+    end if
+    if src in <b>
+        _i = _i or 01b
+    else if src in <x>
+        _i = _i or 10b
+    else if ~ src in <a>
+        _i = _i or 11b
+    end if
+    db _i
+    if ~ src in <a,b,x>
+        db src
+    end if
+}
+
 macro call dest* {
     if dest in <a>
         db 0x90

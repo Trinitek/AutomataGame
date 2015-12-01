@@ -261,3 +261,43 @@ mod [x], a
 mod [x], b
 mod [x], x
 mod [x], 0xFF
+
+in a, a
+in a, b
+in a, x
+in a, 0xFF
+
+in b, a
+in b, b
+in b, x
+in b, 0xFF
+
+in x, a
+in x, b
+in x, x
+in x, 0xFF
+
+in [x], a
+in [x], b
+in [x], x
+in [x], 0xFF
+
+out a, a
+out a, b
+out a, x
+out a, 0xFF
+
+out b, a
+out b, b
+out b, x
+out b, 0xFF
+
+out x, a
+out x, b
+out x, x
+out x, 0xFF
+
+out [x], a
+out [x], b
+out [x], x
+out [x], 0xFF
