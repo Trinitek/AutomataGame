@@ -22,7 +22,7 @@ public class WorldRenderer implements Renderable {
         this.worldModel = gui.getGame().getWorldModel();
     }
 
-    public GUI getGui() {
+    public GUI getGUI() {
         return gui;
     }
 
@@ -31,54 +31,43 @@ public class WorldRenderer implements Renderable {
         ChunkManager chunkManager = worldModel.getChunkManager();
 
         Collection<Chunk> chunks = new ArrayList<Chunk>(chunkManager.getChunks());
+        Rectangle screen = new Rectangle(0, 0, 1920, 1080);
 
         for(Chunk chunk : chunks) {
             ChunkCoordinate chunkCoordinate = chunk.getChunkCoordinate();
 
-            for (int x = 0; x < Chunk.DEFAULT_CHUNK_SIZE; x++) {
-                for (int y = 0; y < Chunk.DEFAULT_CHUNK_SIZE; y++) {
-                    for (int layer = 0; layer < 2; layer++) {
-                        Tile tile = chunk.getTile(layer, x, y);
+            Rectangle chunkRect = new Rectangle(
+                    (chunkCoordinate.x * Chunk.DEFAULT_CHUNK_SIZE * gui.getZoomLevel())
+                            + getGUI().getOffsets().getOffsetX(),
+                    (chunkCoordinate.y * Chunk.DEFAULT_CHUNK_SIZE * gui.getZoomLevel())
+                            + getGUI().getOffsets().getOffsetY(),
+                    40, 40
+            );
 
-                        if(tile.getTileType() != TileTypes.AIR) {
-                            BufferedImage imageToRender = tile.getTileType().getImage();
+            if(screen.intersects(chunkRect)) { // If chunk is on-screen
+                for (int x = 0; x < Chunk.DEFAULT_CHUNK_SIZE; x++) {
+                    for (int y = 0; y < Chunk.DEFAULT_CHUNK_SIZE; y++) {
+                        for (int layer = 0; layer < 2; layer++) {
+                            Tile tile = chunk.getTile(layer, x, y);
 
-                            graphics.drawImage(imageToRender,
-                                    chunkCoordinate.amplifyLocalX(x) * getGui().getZoomLevel() + getGui().getOffsets().getOffsetX(),
-                                    chunkCoordinate.amplifyLocalY(y) * getGui().getZoomLevel() + getGui().getOffsets().getOffsetY(),
-                                    getGui().getZoomLevel(), getGui().getZoomLevel(),
-                                    null
-                            );
+                            if (tile.getTileType() != TileTypes.AIR) {
+                                BufferedImage imageToRender = tile.getTileType().getImage();
+
+                                graphics.drawImage(imageToRender,
+                                        chunkCoordinate.amplifyLocalX(x) *
+                                                getGUI().getZoomLevel() +
+                                                getGUI().getOffsets().getOffsetX(),
+                                        chunkCoordinate.amplifyLocalY(y) *
+                                                getGUI().getZoomLevel() +
+                                                getGUI().getOffsets().getOffsetY(),
+                                        getGUI().getZoomLevel(), getGUI().getZoomLevel(),
+                                        null
+                                );
+                            }
                         }
                     }
                 }
             }
         }
-
-//        for (int x = 0; x < tiles.length; x++) {
-//            for (int y = 0; y < tiles[x].length; y++) {
-//                for (int i = 0; i < 2; i++) {
-//                    try {
-//                        Tile tile = worldModel.getTileAt(i, x, y);
-//
-//                        if(tile.getTileType() != TileTypes.AIR) {
-//                            BufferedImage imageToRender = tile.getTileType().getImage();
-//
-//                            graphics.drawImage(imageToRender,
-//                                    x * getGui().getZoomLevel() + getGui().getOffsets().getOffsetX(),
-//                                    y * getGui().getZoomLevel() + getGui().getOffsets().getOffsetY(),
-//                                    getGui().getZoomLevel(), getGui().getZoomLevel(),
-//                                    null
-//                            );
-//                        }
-//
-//                        if(i == 1 && gui.getGame().isPaused()) {
-////                            graphics.setColor(Color.WHITE);
-////                            graphics.drawString(tile.getEnergy() + "", x * getGui().getZoomLevel() + getGui()..getOffsetX() + 20, y * getGui() + offsets.getOffsetY() + 20);
-//                        }
-//                    } catch (Exception ignore) {ignore.printStackTrace();}
-//                }
-//            }
-//        }
     }
 }
