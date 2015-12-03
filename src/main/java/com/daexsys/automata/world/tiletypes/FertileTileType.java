@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 
 public class FertileTileType extends TileType {
 
-    public FertileTileType(byte id, String blockName, String image, int defaultEnergy, int defaultDecayRate) {
-        super(id, blockName, image, defaultEnergy, defaultDecayRate);
+    public FertileTileType(byte id, String blockName, String imageUrl, int defaultEnergy, int defaultDecayRate) {
+        super(id, blockName, imageUrl, defaultEnergy, defaultDecayRate);
     }
 
     @Override

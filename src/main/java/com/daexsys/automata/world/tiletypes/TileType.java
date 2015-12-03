@@ -2,8 +2,6 @@ package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.gui.util.ImageUtil;
-import com.daexsys.automata.world.WorldLayer;
-import com.google.common.base.Optional;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -72,10 +70,10 @@ public class TileType {
 
     private static ArrayList<TileType> types = new ArrayList<>();
 
-    public TileType(byte id, String blockName, String image, int defaultEnergy, int defaultDecayRate) {
+    public TileType(byte id, String blockName, String imageUrl, int defaultEnergy, int defaultDecayRate) {
         this.id = id;
         this.blockName = blockName;
-        this.image = ImageUtil.loadImage(image);
+        this.image = ImageUtil.loadImage(imageUrl);
         this.defaultEnergy = defaultEnergy;
         this.defaultDecayRate = defaultDecayRate;
         types.add(this);
