@@ -21,7 +21,7 @@ public final class TileType {
 
     public static final TileType STONE =
             new TileType.Builder().setID((byte) 0).setName("stone").setImageLocation("images/stone.png")
-                    .setEnergy(100).setDecayRate(0).build();
+                    .setVMProgram("vmexec/stone.vme").setEnergy(100).setDecayRate(0).build();
 
     public static final TileType VM_256 =
             new TileType.Builder().setID((byte) 1).setName("vm").setImageLocation("images/digital.png")
@@ -213,10 +213,13 @@ public final class TileType {
         }
 
         public Builder setVMProgram(String location) {
+            File programFile;
             FileInputStream programStream;
             if (location != null) {
                 try {
-                    programStream = new FileInputStream(new File(location));
+                    programFile = new File(location);
+                    programStream = new FileInputStream(programFile);
+                    tileType.defaultProgram = new byte[(int) programFile.length()];
                     //noinspection ResultOfMethodCallIgnored
                     programStream.read(tileType.defaultProgram);
                     programStream.close();
