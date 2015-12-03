@@ -24,6 +24,7 @@ public class Tile implements Pulsable {
         this.coordinate = tileCoordinate;
         this.tileType = type;
         this.energy = type.getDefaultEnergy();
+        this.tileData = type.getProgram();
     }
 
     public void pulse() {

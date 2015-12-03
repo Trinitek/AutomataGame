@@ -71,7 +71,7 @@ public class TileType {
 
     private int defaultDecayRate = 1;
     private int defaultEnergy = 10;
-    private byte[] defaultProgram = new byte[]{0x50};
+    private byte[] defaultProgram = new byte[]{};
 
     private static List<TileType> types = new ArrayList<>();
 
@@ -105,6 +105,10 @@ public class TileType {
 
     public BufferedImage getImage() {
         return image;
+    }
+
+    public byte[] getProgram() {
+        return this.defaultProgram;
     }
 
     public int getDefaultEnergy() {
