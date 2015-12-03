@@ -1,13 +1,28 @@
 package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.Tile;
-import com.daexsys.automata.world.TileCoordinate;
+import com.daexsys.automata.world.TileCoord;
+import com.google.common.base.Optional;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Virus tile type that spreads out, consuming everything indefinitely.
+ * While it has an 'energy' value, it doesn't really respect it and never stops.
+ *
+ * After a few ticks of expansion, it develops a pulsing pattern. It is unknown why
+ * this is but it likely has something to do with the tile.getEnergy() / 2 operation
+ * and the initial energy level of the tile.
+ */
 public class ShockwaveVirusTileType extends TileType {
 
-    public ShockwaveVirusTileType(byte id, String blockName, BufferedImage image, int defaultEnergy, int defaultDecayRate) {
+    public ShockwaveVirusTileType(
+            byte id,
+            String blockName,
+            BufferedImage image,
+            int defaultEnergy,
+            int defaultDecayRate
+    ) {
         super(id, blockName, image, defaultEnergy, defaultDecayRate);
     }
 
@@ -15,23 +30,19 @@ public class ShockwaveVirusTileType extends TileType {
     public void pulse(Tile tile) {
         super.pulse(tile);
 
-        for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-                TileCoordinate shiftedCoord = tile.getCoordinate().add(x, y);
+        // Speed of light of the shockwave virus
+        int c = 1;
 
-                try {
-                    if (shiftedCoord.getTile().getType() !=
-                            TileType.SHOCKWAVE_VIRUS) {
+        for (int x = -c; x <= c; x++) {
+            for (int y = -c; y <= c; y++) {
+                TileCoord shiftedCoord = tile.getCoordinate().add(x, y);
+                Optional<Tile> residentTile = shiftedCoord.getTile();
 
-                        tile.getWorld().queueChangeAt(
-                                shiftedCoord.x,
-                                shiftedCoord.y,
-                                TileType.SHOCKWAVE_VIRUS,
-                                tile.getEnergy() / 2
-                        );
+                if (residentTile.isPresent()) {
+                    if (residentTile.get().getType() != TileType.SHOCKWAVE_VIRUS){
+                        shiftedCoord.queueChange(TileType.SHOCKWAVE_VIRUS, tile.getEnergy() / 2);
                     }
-
-                } catch (NullPointerException ignore){}
+                }
             }
         }
     }

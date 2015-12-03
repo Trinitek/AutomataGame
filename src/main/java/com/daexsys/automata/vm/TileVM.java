@@ -2,7 +2,7 @@ package com.daexsys.automata.vm;
 
 import com.daexsys.automata.Pulsable;
 import com.daexsys.automata.Tile;
-import com.daexsys.automata.world.TileCoordinate;
+import com.daexsys.automata.world.TileCoord;
 import com.daexsys.automata.world.WorldLayer;
 import com.daexsys.automata.world.tiletypes.TileType;
 
@@ -709,7 +709,7 @@ public class TileVM implements VM, Pulsable {
     }
 
     public static void main(String[] args) {
-        Tile tile = new Tile(new TileCoordinate(WorldLayer.GROUND, null, 0, 0),
+        Tile tile = new Tile(new TileCoord(WorldLayer.GROUND, null, 0, 0),
                 new TileType((byte) 0, "", null, 100, 1));
         TileVM tileVM = new TileVM(tile);
 

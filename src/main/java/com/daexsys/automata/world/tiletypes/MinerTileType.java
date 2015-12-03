@@ -16,14 +16,12 @@ public class MinerTileType extends TileType {
         super.pulse(tile);
 
         byte direction = tile.getTileData()[0];
-        TileCoordinate target;
+        TileCoord target;
 
         if(direction == 0) {
-            target = new TileCoordinate(WorldLayer.GROUND,
-                    tile.getCoordinate().world, tile.getCoordinate().x + 1, tile.getCoordinate().y);
+            target = tile.getCoordinate().add(1, 0);
         } else {
-            target = new TileCoordinate(WorldLayer.GROUND,
-                    tile.getCoordinate().world, tile.getCoordinate().x - 1, tile.getCoordinate().y);
+            target = tile.getCoordinate().sub(1, 0);
         }
 
         if(tile.getWorld().isObstructionAt(target.x, target.y)) {
@@ -34,9 +32,9 @@ public class MinerTileType extends TileType {
             tileToWeaken.setEnergy(tileToWeaken.getEnergy() - breakRate);
 
             if(tileToWeaken.getEnergy() <= 0) {
-                tile.getWorld().setTileTypeAt(WorldLayer.GROUND, tile.getCoordinate().x, tile.getCoordinate().y, TileType.DIRT);
-                tileToWeaken.getWorld().setTileTypeAt(WorldLayer.ABOVE_GROUND, target.x, target.y, TileType.AIR);
-                tile.getWorld().setTileTypeAt(WorldLayer.GROUND, tile.getCoordinate().x, tile.getCoordinate().y, TileType.MINER);
+                tile.getWorld().setTileTypeAt(WorldLayer.GROUND, tile.getCoordinate(), TileType.DIRT);
+                tileToWeaken.getWorld().setTileTypeAt(WorldLayer.ABOVE_GROUND, target, TileType.AIR);
+                tile.getWorld().setTileTypeAt(WorldLayer.GROUND, tile.getCoordinate(), TileType.MINER);
                 Tile newOne = tile.getWorld().getTileAt(WorldLayer.GROUND, tile.getCoordinate().x, tile.getCoordinate().y);
                 try {
                     newOne.getTileData()[0] = direction;

@@ -18,11 +18,11 @@ public class FertileTileType extends TileType {
         tile.setEnergy(tile.getEnergy() + 2);
 
         if(this == TileType.DIRT && tile.getEnergy() > 500) {
-            tile.getWorld().queueChangeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileType.GRASS);
+            tile.getCoordinate().queueChange(TileType.GRASS);
         }
 
-        if(this == TileType.GRASS && tile.getEnergy() > 1000) {
-            tile.getWorld().queueChangeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileType.TALL_GRASS);
+        else if(this == TileType.GRASS && tile.getEnergy() > 1000) {
+            tile.getCoordinate().queueChange(TileType.TALL_GRASS);
         }
     }
 }

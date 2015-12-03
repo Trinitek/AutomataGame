@@ -26,7 +26,7 @@ public class ChunkManager implements Pulsable {
     }
 
     public Chunk getChunk(int x, int y) {
-        for(Chunk chunk : new ArrayList<Chunk>(chunks)) {
+        for(Chunk chunk : new ArrayList<>(chunks)) {
             if(chunk.getChunkCoordinate().is(x, y)) {
                 return chunk;
             }

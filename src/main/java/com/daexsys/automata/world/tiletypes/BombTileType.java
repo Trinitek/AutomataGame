@@ -14,8 +14,7 @@ public class BombTileType extends TileType {
 
     @Override
     public void destruct(Tile tile) {
-
-        World world = tile.getWorld();//
+        World world = tile.getWorld();
 
         int size = world.getRandom().nextInt(5);
 
@@ -24,14 +23,14 @@ public class BombTileType extends TileType {
             int lakeY = world.getRandom().nextInt(size) + tile.getCoordinate().y;
             int lakeSize = world.getRandom().nextInt(15) + 3;
 
-            for (int j = lakeX - lakeSize; j < lakeX + lakeSize; j++) {
-                for (int k = lakeY - lakeSize; k < lakeY + lakeSize; k++) {
-                    int x = j - lakeX;
-                    int y = k - lakeY;
+            for (int fx = lakeX - lakeSize; fx < lakeX + lakeSize; fx++) {
+                for (int fy = lakeY - lakeSize; fy < lakeY + lakeSize; fy++) {
+                    int x = fx - lakeX;
+                    int y = fy - lakeY;
 
                     if((x * x + y * y) < lakeSize * lakeSize) {
-                        world.setTileTypeAt(WorldLayer.GROUND, j, k, TileType.DIRT);
-                        world.setTileTypeAt(WorldLayer.ABOVE_GROUND, j, k, TileType.SMOKE);
+                        world.setTileTypeAt(WorldLayer.GROUND, fx, fy, TileType.DIRT);
+                        world.setTileTypeAt(WorldLayer.ABOVE_GROUND, fx, fy, TileType.SMOKE);
                     }
                 }
             }

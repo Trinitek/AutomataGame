@@ -1,7 +1,7 @@
 package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.Tile;
-import com.daexsys.automata.world.TileCoordinate;
+import com.daexsys.automata.world.TileCoord;
 import com.daexsys.automata.world.WorldLayer;
 
 import java.awt.image.BufferedImage;
@@ -30,12 +30,11 @@ public class ViralTileType extends TileType {
                             && tile.getEnergy() > 0
                         ) {
 
-                    TileCoordinate newCoordinate = tile.getCoordinate().add(offsetX, offsetY);
+                    TileCoord newCoordinate = tile.getCoordinate().add(offsetX, offsetY);
 
                     // Create a new virus and split the energy of this one amonst the two.
                     tile.getWorld().queueChangeAt(
-                            newCoordinate.x,
-                            newCoordinate.y,
+                            newCoordinate,
                             TileType.GREEDY_VIRUS,
                             tile.getEnergy() / 2
                     );

@@ -79,7 +79,7 @@ public final class World implements Pulsable {
 
         Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
 
-        TileCoordinate tileCoordinate = chunkCoordinate.localifyCoordinates(x, y);
+        TileCoord tileCoordinate = chunkCoordinate.localifyCoordinates(x, y);
         return chunk.getTile(layer, tileCoordinate.x, tileCoordinate.y);
     }
 
@@ -89,8 +89,7 @@ public final class World implements Pulsable {
         if(doesChunkExist(chunkCoordinate.x, chunkCoordinate.y)) {
             Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
 
-            TileCoordinate tileCoordinate = chunkCoordinate.localifyCoordinates(x, y);
-            return chunk.getTile(layer, tileCoordinate.x, tileCoordinate.y);
+            return chunk.getTile(layer, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y));
         }
 
         return null;
@@ -103,14 +102,20 @@ public final class World implements Pulsable {
         ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
 
         if((layer == 0 || layer == 1)) {
-            Chunk chunk =
-                    getChunkManager().getChunk(chunkCoordinate);
-
+            Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
             chunk.flashWithNewType(layer, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), tileType);
             return true;
         }
 
         return false;
+    }
+
+    public boolean setTileTypeAt(int layer, TileCoord coord, TileType tileType) {
+        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, coord.x, coord.y);
+
+        Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
+        chunk.flashWithNewType(layer, chunkCoordinate.localifyX(coord.x), chunkCoordinate.localifyY(coord.y), tileType);
+        return true;
     }
 
     public boolean isObstructionAt(int x, int y) {
@@ -125,34 +130,29 @@ public final class World implements Pulsable {
         return false;
     }
 
-    public void queueChangeAt(int layer, int x, int y, TileType tileType) {
-        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
-        Tile newTile = new Tile(new TileCoordinate(WorldLayer.GROUND, this, x, y), tileType);
+    public void queueChangeAt(TileCoord tileCoord, TileType tileType) {
+        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, tileCoord.x, tileCoord.y);
+        Tile newTile = new Tile(tileCoord, tileType);
         Chunk chunk =
                 getChunkManager().getChunk(chunkCoordinate);
 
-        chunk.queueChangeAt(layer, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), newTile);
+        chunk.queueChangeAt(tileCoord.layer, chunkCoordinate.localifyX(tileCoord.x), chunkCoordinate.localifyY(tileCoord.y), newTile);
     }
 
-    public void queueChangeAt(int x, int y, TileType tileType) {
-        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
-        Tile newTile = new Tile(new TileCoordinate(WorldLayer.GROUND, this, x, y), tileType);
-        Chunk chunk =
-                getChunkManager().getChunk(chunkCoordinate);
-
-        chunk.queueChangeAt(WorldLayer.GROUND, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), newTile);
-    }
-
-    public void queueChangeAt(int x, int y, TileType tileType, int newEnergy) {
-        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
-        Tile newTile = new Tile(new TileCoordinate(WorldLayer.GROUND, this, x, y), tileType);
+    public void queueChangeAt(TileCoord coord, TileType tileType, int newEnergy) {
+        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, coord.x, coord.y);
+        Tile newTile = new Tile(coord, tileType);
         newTile.setEnergy(newEnergy);
 
         Chunk chunk =
                 getChunkManager().getChunk(chunkCoordinate);
 
-        chunk.queueChangeAt(WorldLayer.GROUND,
-                chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), newTile);
+        chunk.queueChangeAt(
+                coord.layer,
+                chunkCoordinate.localifyX(coord.x),
+                chunkCoordinate.localifyY(coord.y),
+                newTile
+        );
     }
 
     public Random getRandom() {

@@ -68,7 +68,7 @@ public final class Chunk implements Pulsable {
 
         homogenous = false;
 
-        TileCoordinate coordinate = new TileCoordinate(layer, chunkCoordinate.world,
+        TileCoord coordinate = new TileCoord(layer, chunkCoordinate.world,
                 getChunkCoordinate().amplifyLocalX(x),
                 getChunkCoordinate().amplifyLocalY(y)
         );

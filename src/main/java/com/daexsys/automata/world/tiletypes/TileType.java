@@ -3,10 +3,10 @@ package com.daexsys.automata.world.tiletypes;
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.gui.util.ImageUtil;
 import com.daexsys.automata.world.WorldLayer;
+import com.google.common.base.Optional;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
-import java.util.Optional;
 
 public class TileType {
 
@@ -98,31 +98,29 @@ public class TileType {
     }
 
     public void pulse(Tile tile) {
-        Optional<List<Tile>> neighborOptional = tile.getNeighbors(WorldLayer.GROUND);
+        List<Tile> neighborOptional = tile.getNeighbors(0);
         int number = 0;
-        if(neighborOptional.isPresent()) {
-            List<Tile> tiles = neighborOptional.get();
-            for (Tile t : tiles) {
-                if(t != null) {
-                    if (t.getType() == TileType.CGOL) {
-                        number++;
-                    }
+
+        for (Tile t : neighborOptional) {
+            if(t != null) {
+                if (t.getType() == TileType.CGOL) {
+                    number++;
                 }
             }
         }
         if(this == TileType.CGOL) {
             if (number < 2) {
-                tile.getWorld().queueChangeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileType.DIRT);
+                tile.getCoordinate().queueChange(TileType.DIRT);
             }
-            else if (number > 3) { tile.getWorld().queueChangeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileType.DIRT); }
+            else if (number > 3) { tile.getCoordinate().queueChange(TileType.DIRT); }
         } else if (number == 3) {
             if(this != TileType.WATER) {
-                tile.getWorld().queueChangeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileType.CGOL);
+                tile.getCoordinate().queueChange(TileType.CGOL);
             }
         }
     }
 
     public void destruct(Tile tile) {
-        tile.getWorld().queueChangeAt(tile.getCoordinate().x, tile.getCoordinate().y, TileType.DIRT);
+        tile.getCoordinate().queueChange(TileType.DIRT);
     }
 }

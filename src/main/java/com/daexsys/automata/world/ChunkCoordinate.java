@@ -30,6 +30,10 @@ public final class ChunkCoordinate {
         this.y = y;
     }
 
+    public Chunk getChunk() {
+        return world.getChunkManager().getChunk(this);
+    }
+
     public int localifyX(int x) {
         return x - (this.x * Chunk.DEFAULT_CHUNK_SIZE);
     }
@@ -46,8 +50,8 @@ public final class ChunkCoordinate {
         return y + (this.y * Chunk.DEFAULT_CHUNK_SIZE);
     }
 
-    public TileCoordinate localifyCoordinates(int x, int y) {
-        return new TileCoordinate(WorldLayer.GROUND, world,
+    public TileCoord localifyCoordinates(int x, int y) {
+        return new TileCoord(WorldLayer.GROUND, world,
                 localifyX(x),
                 localifyY(y));
     }
