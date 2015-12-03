@@ -172,6 +172,18 @@ public class TileVM implements VM, Pulsable {
                 return tTemp != null ? tTemp.getType().getID() : 0xFF;
             case 0x06:          // get viewing layer
                 return this.hardware.viewingLayer;
+            case 0x07:          // get ID of top left tile
+                tTemp = world.sampleTileAt(hardware.viewingLayer, x - 1, y - 1);
+                return tTemp != null ? tTemp.getType().getID() : 0xFF;
+            case 0x08:          // get ID of top right tile
+                tTemp = world.sampleTileAt(hardware.viewingLayer, x + 1, y - 1);
+                return tTemp != null ? tTemp.getType().getID() : 0xFF;
+            case 0x09:          // get ID of bottom right tile
+                tTemp = world.sampleTileAt(hardware.viewingLayer, x + 1, y + 1);
+                return tTemp != null ? tTemp.getType().getID() : 0xFF;
+            case 0x0A:          // get ID of bottom left tile
+                tTemp = world.sampleTileAt(hardware.viewingLayer, x - 1, y + 1);
+                return tTemp != null ? tTemp.getType().getID() : 0xFF;
             default:
                 return 0;
         }
@@ -204,6 +216,26 @@ public class TileVM implements VM, Pulsable {
                 break;
             case 0x06:          // set viewing layer
                 hardware.viewingLayer = data;
+                break;
+            case 0x07:          // place tile at top left
+                world.queueChangeAt(
+                        new TileCoord(hardware.viewingLayer, world, x - 1, y - 1),
+                        TileType.getTileFromId((byte) data));
+                break;
+            case 0x08:          // place tile at top right
+                world.queueChangeAt(
+                        new TileCoord(hardware.viewingLayer, world, x + 1, y - 1),
+                        TileType.getTileFromId((byte) data));
+                break;
+            case 0x09:          // place tile at bottom right
+                world.queueChangeAt(
+                        new TileCoord(hardware.viewingLayer, world, x + 1, y + 1),
+                        TileType.getTileFromId((byte) data));
+                break;
+            case 0x0A:          // place tile at bottom left
+                world.queueChangeAt(
+                        new TileCoord(hardware.viewingLayer, world, x - 1, y + 1),
+                        TileType.getTileFromId((byte) data));
                 break;
         }
     }
