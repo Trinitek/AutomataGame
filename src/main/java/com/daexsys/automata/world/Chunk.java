@@ -83,8 +83,12 @@ public final class Chunk implements Pulsable {
                 getChunkCoordinate().amplifyLocalY(y)
         );
 
-        if(x >= 0 && y >= 0)
-            contents[layer][x][y] = new Tile(coordinate, tileType);
+        Tile newTile;
+        if(x >= 0 && y >= 0) {
+            newTile = new Tile(coordinate, tileType);
+            contents[layer][x][y] = newTile;
+            newTile.getTileVM().initialize();
+        }
     }
 
     public void fillLayerWith(int layer, TileType tileType) {
