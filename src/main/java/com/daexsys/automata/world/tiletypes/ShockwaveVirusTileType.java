@@ -17,14 +17,21 @@ public class ShockwaveVirusTileType extends TileType {
 
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
-                TileCoordinate newCoordinate = tile.getCoordinate().add(x, y);
+                TileCoordinate shiftedCoord = tile.getCoordinate().add(x, y);
 
-                tile.getWorld().queueChangeAt(
-                    newCoordinate.x,
-                    newCoordinate.y,
-                    TileTypes.SHOCKWAVE_VIRUS,
-                    tile.getEnergy() / 2
-                );
+                try {
+                    if (shiftedCoord.getTile().getType() !=
+                            TileType.SHOCKWAVE_VIRUS) {
+
+                        tile.getWorld().queueChangeAt(
+                                shiftedCoord.x,
+                                shiftedCoord.y,
+                                TileType.SHOCKWAVE_VIRUS,
+                                tile.getEnergy() / 2
+                        );
+                    }
+
+                } catch (NullPointerException ignore){}
             }
         }
     }

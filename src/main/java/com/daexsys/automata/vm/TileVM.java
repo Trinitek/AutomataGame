@@ -3,6 +3,7 @@ package com.daexsys.automata.vm;
 import com.daexsys.automata.Pulsable;
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.TileCoordinate;
+import com.daexsys.automata.world.WorldLayers;
 import com.daexsys.automata.world.tiletypes.TileType;
 
 import java.io.File;
@@ -141,25 +142,25 @@ public class TileVM implements VM, Pulsable {
                         hardware.viewingLayer,
                         this.tile.getCoordinate().x,
                         this.tile.getCoordinate().y - 1);
-                return tTemp != null ? tTemp.getTileType().getId() : 0xFF;
+                return tTemp != null ? tTemp.getType().getId() : 0xFF;
             case 0x03:          // get ID of right tile
                 tTemp = this.tile.getWorld().sampleTileAt(
                         hardware.viewingLayer,
                         this.tile.getCoordinate().x + 1,
                         this.tile.getCoordinate().y);
-                return tTemp != null ? tTemp.getTileType().getId() : 0xFF;
+                return tTemp != null ? tTemp.getType().getId() : 0xFF;
             case 0x04:          // get ID of bottom tile
                 tTemp = this.tile.getWorld().sampleTileAt(
                         hardware.viewingLayer,
                         this.tile.getCoordinate().x,
                         this.tile.getCoordinate().y + 1);
-                return tTemp != null ? tTemp.getTileType().getId() : 0xFF;
+                return tTemp != null ? tTemp.getType().getId() : 0xFF;
             case 0x05:          // get ID of left tile
                 tTemp = this.tile.getWorld().sampleTileAt(
                         hardware.viewingLayer,
                         this.tile.getCoordinate().x - 1,
                         this.tile.getCoordinate().y);
-                return tTemp != null ? tTemp.getTileType().getId() : 0xFF;
+                return tTemp != null ? tTemp.getType().getId() : 0xFF;
             case 0x06:          // get viewing layer
                 return this.hardware.viewingLayer;
             default:
@@ -708,7 +709,7 @@ public class TileVM implements VM, Pulsable {
     }
 
     public static void main(String[] args) {
-        Tile tile = new Tile(new TileCoordinate(null, 0, 0),
+        Tile tile = new Tile(new TileCoordinate(WorldLayers.GROUND, null, 0, 0),
                 new TileType((byte) 0, "", null, 100, 1));
         TileVM tileVM = new TileVM(tile);
 

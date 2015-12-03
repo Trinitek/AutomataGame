@@ -1,7 +1,6 @@
 package com.daexsys.automata;
 
 import com.daexsys.automata.world.structures.Structures;
-import com.daexsys.automata.world.tiletypes.TileTypes;
 import com.daexsys.automata.world.World;
 
 public class Game {

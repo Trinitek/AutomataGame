@@ -4,7 +4,6 @@ import com.daexsys.automata.vm.TileVM;
 import com.daexsys.automata.vm.VM;
 import com.daexsys.automata.world.*;
 import com.daexsys.automata.world.tiletypes.TileType;
-import com.daexsys.automata.world.tiletypes.TileTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,7 @@ public class Tile implements Pulsable {
     }
 
     public void pulse() {
-        if(getTileType() == TileTypes.AIR)
+        if(getType() == TileType.AIR)
             return;
 
         tileType.pulse(this);
@@ -41,19 +40,16 @@ public class Tile implements Pulsable {
             energy -= tileType.getDefaultDecayRate();
 
         /* If energy is below or equal to 0, this tile will be destroyed */
-        if(energy <= 0)
-            destruct();
-    }
-
-    public void destruct() {
-        getWorld().queueChangeAt(coordinate.x, coordinate.y, TileTypes.DIRT);
+        if(energy <= 0) {
+            tileType.destruct(this);
+        }
     }
 
     public int getEnergy() {
         return energy;
     }
 
-    public TileType getTileType() {
+    public TileType getType() {
         return tileType;
     }
 

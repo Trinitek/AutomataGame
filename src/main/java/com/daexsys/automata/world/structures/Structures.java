@@ -1,7 +1,6 @@
 package com.daexsys.automata.world.structures;
 
 import com.daexsys.automata.world.tiletypes.TileType;
-import com.daexsys.automata.world.tiletypes.TileTypes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,34 +16,34 @@ public class Structures {
                 0, 1, 0,
                 0, 0, 1,
                 1, 1, 1
-        }, TileTypes.CGOL));
+        }, TileType.CGOL));
 
         structureMap.put("cgol_lwss", new Structure(5, new int[] {
                 1, 0, 0, 1, 0,
                 0, 0, 0, 0, 1,
                 1, 0, 0, 0, 1,
                 0, 1, 1, 1, 1,
-        }, TileTypes.CGOL));
+        }, TileType.CGOL));
 
         structureMap.put("cgol_r-pentomino", new Structure(3, new int[] {
                 0, 1, 1,
                 1, 1, 0,
                 0, 1, 0
-        }, TileTypes.CGOL));
+        }, TileType.CGOL));
 
         structureMap.put("vanilla:stone-pointer", new Structure(7, new int[] {
                 0, 1, 1, 0, 0, 0, 0,
                 1, 1, 1, 1, 1, 1, 1,
                 1, 1, 1, 1, 0, 0, 0,
                 0, 1, 1, 0, 0, 0, 0
-        }, TileTypes.STONE));
+        }, TileType.STONE));
 
         structureMap.put("vanilla:bush", new Structure(4, new int[] {
                 0, 1, 1, 0,
                 1, 1, 1, 1,
                 0, 1, 1, 0,
                 0, 2, 2, 0
-        }, TileTypes.LEAVES, TileTypes.WOOD));
+        }, TileType.LEAVES, TileType.WOOD));
 
         structureMap.put("vanilla:pine_tree", new Structure(5, new int[] {
                 0, 0, 1, 0, 0,
@@ -52,7 +51,7 @@ public class Structures {
                 0, 1, 1, 1, 0,
                 1, 1, 1, 1, 1,
                 0, 0, 2, 0, 0
-        }, TileTypes.LEAVES, TileTypes.WOOD));
+        }, TileType.LEAVES, TileType.WOOD));
     }
 
     public Structure getStructureByName(String name) {

@@ -3,7 +3,6 @@ package com.daexsys.automata.world;
 import com.daexsys.automata.Pulsable;
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.tiletypes.TileType;
-import com.daexsys.automata.world.tiletypes.TileTypes;
 
 import java.util.Stack;
 
@@ -42,7 +41,7 @@ public final class Chunk implements Pulsable {
         while(!queuedTileChangeStack.isEmpty()) {
             QueuedTileChange queuedTileChange = queuedTileChangeStack.pop();
 
-            setTile(WorldLayers.GROUND, queuedTileChange.x, queuedTileChange.y, queuedTileChange.t);
+            setTile(queuedTileChange.layer, queuedTileChange.x, queuedTileChange.y, queuedTileChange.t);
         }
     }
 
@@ -69,7 +68,7 @@ public final class Chunk implements Pulsable {
 
         homogenous = false;
 
-        TileCoordinate coordinate = new TileCoordinate(chunkCoordinate.world,
+        TileCoordinate coordinate = new TileCoordinate(layer, chunkCoordinate.world,
                 getChunkCoordinate().amplifyLocalX(x),
                 getChunkCoordinate().amplifyLocalY(y)
         );
@@ -87,7 +86,7 @@ public final class Chunk implements Pulsable {
     }
 
     public void queueChangeAt(int layer, int x, int y, Tile t) {
-        queuedTileChangeStack.push(new QueuedTileChange(x, y, t));
+        queuedTileChangeStack.push(new QueuedTileChange(layer, x, y, t));
     }
 
     private void pingNearby() {

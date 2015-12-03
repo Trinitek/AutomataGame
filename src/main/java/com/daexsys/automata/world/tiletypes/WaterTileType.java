@@ -16,7 +16,7 @@ public class WaterTileType extends TileType {
     public void pulse(Tile tile) {
         super.pulse(tile);
 
-        if(this == TileTypes.WATER && tile.getEnergy() > 0) {
+        if(this == TileType.WATER && tile.getEnergy() > 0) {
 
             int offsetX = tile.getWorld().getRandom().nextInt(3) - 1;
             int offsetY = tile.getWorld().getRandom().nextInt(3) - 1;
@@ -26,7 +26,7 @@ public class WaterTileType extends TileType {
                         WorldLayers.ABOVE_GROUND,
                         tile.getCoordinate().x + offsetX,
                         tile.getCoordinate().y + offsetY)
-                        .getTileType() == TileTypes.AIR
+                        .getType() == TileType.AIR
                         && tile.getEnergy() > 0
                         ) {
 
@@ -36,7 +36,7 @@ public class WaterTileType extends TileType {
                     tile.getWorld().queueChangeAt(
                             newCoordinate.x,
                             newCoordinate.y,
-                            TileTypes.WATER,
+                            TileType.WATER,
                             tile.getEnergy()
                     );
 

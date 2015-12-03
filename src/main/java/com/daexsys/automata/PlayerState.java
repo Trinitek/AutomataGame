@@ -1,15 +1,13 @@
 package com.daexsys.automata;
 
 import com.daexsys.automata.world.structures.Structure;
-import com.daexsys.automata.world.structures.Structures;
 import com.daexsys.automata.world.tiletypes.TileType;
-import com.daexsys.automata.world.tiletypes.TileTypes;
 
 public class PlayerState {
 
     private Game game;
     private Structure selectedStructure = null;
-    private TileType inHand = TileTypes.CGOL;
+    private TileType inHand = TileType.CGOL;
 
     public PlayerState(Game game) {
         this.game = game;

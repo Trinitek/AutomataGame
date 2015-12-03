@@ -6,8 +6,8 @@ import com.daexsys.automata.world.ChunkCoordinate;
 import com.daexsys.automata.world.ChunkManager;
 import com.daexsys.automata.world.structures.Structure;
 import com.daexsys.automata.world.structures.StructureElement;
-import com.daexsys.automata.world.tiletypes.TileTypes;
 import com.daexsys.automata.world.World;
+import com.daexsys.automata.world.tiletypes.TileType;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -42,8 +42,8 @@ public class WorldRenderer implements Renderable {
                     for (int layer = 0; layer < 2; layer++) {
                         Tile tile = chunk.getTile(layer, x, y);
 
-                        if (tile.getTileType() != TileTypes.AIR) {
-                            BufferedImage imageToRender = tile.getTileType().getImage();
+                        if (tile.getType() != TileType.AIR) {
+                            BufferedImage imageToRender = tile.getType().getImage();
 
                             // If it's small enough, we don't have to render the whole image
                             if (getGUI().getZoomLevel() <= 4) {

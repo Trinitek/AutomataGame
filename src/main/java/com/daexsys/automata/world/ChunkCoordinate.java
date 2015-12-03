@@ -47,7 +47,7 @@ public final class ChunkCoordinate {
     }
 
     public TileCoordinate localifyCoordinates(int x, int y) {
-        return new TileCoordinate(world,
+        return new TileCoordinate(WorldLayers.GROUND, world,
                 localifyX(x),
                 localifyY(y));
     }

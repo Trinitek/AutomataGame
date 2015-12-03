@@ -1,7 +1,7 @@
 package com.daexsys.automata.gui.listeners;
 
 import com.daexsys.automata.gui.GUI;
-import com.daexsys.automata.world.tiletypes.TileTypes;
+import com.daexsys.automata.world.tiletypes.TileType;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -30,37 +30,42 @@ public class KeyboardHandler implements KeyListener {
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_1) {
-            gui.getGame().getPlayerState().setInHand(TileTypes.CGOL);
+            gui.getGame().getPlayerState().setInHand(TileType.CGOL);
             gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_2) {
-            gui.getGame().getPlayerState().setInHand(TileTypes.GREEDY_VIRUS);
+            gui.getGame().getPlayerState().setInHand(TileType.GREEDY_VIRUS);
             gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_3) {
-            gui.getGame().getPlayerState().setInHand(TileTypes.VM_255_BYTE_RAM);
+            gui.getGame().getPlayerState().setInHand(TileType.VM_255_BYTE_RAM);
             gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_4) {
-            gui.getGame().getPlayerState().setInHand(TileTypes.MINER);
+            gui.getGame().getPlayerState().setInHand(TileType.MINER);
             gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_5) {
-            gui.getGame().getPlayerState().setInHand(TileTypes.SHOCKWAVE_VIRUS);
+            gui.getGame().getPlayerState().setInHand(TileType.SHOCKWAVE_VIRUS);
             gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_6) {
-            gui.getGame().getPlayerState().setInHand(TileTypes.GRASS);
+            gui.getGame().getPlayerState().setInHand(TileType.GRASS);
             gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_7) {
-            gui.getGame().getPlayerState().setInHand(TileTypes.WATER);
+            gui.getGame().getPlayerState().setInHand(TileType.WATER);
+            gui.getGame().getPlayerState().setSelectedStructure(null);
+        }
+
+        else if(e.getKeyCode() == KeyEvent.VK_8) {
+            gui.getGame().getPlayerState().setInHand(TileType.BOMB);
             gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 
