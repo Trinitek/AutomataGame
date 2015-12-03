@@ -16,7 +16,7 @@ public class TileType {
             new TileType((byte) 1, "virtual machine", "images/digital.png", 1000, 5);
 
     public static final TileType CGOL =
-            new TileType((byte) 2, "CGoL", "images/automata.png", 10, 0);
+            new CGoLTileType((byte) 2, "CGoL", "images/automata.png", 10, 0);
 
     public static final TileType GRASS =
             new FertileTileType((byte) 3, "stone", "images/grass.png", 25, 1);
@@ -76,7 +76,7 @@ public class TileType {
         this.image = ImageUtil.loadImage(imageUrl);
         this.defaultEnergy = defaultEnergy;
         this.defaultDecayRate = defaultDecayRate;
-        types.add(this);
+//        types.add(this);
     }
 
     public int getDefaultDecayRate() {
@@ -103,46 +103,7 @@ public class TileType {
         return types.get(id);
     }
 
-    public void pulse(Tile tile) {
-
-        if(this == TileType.CGOL) {
-            List<Tile> neighborOptional = new ArrayList<>(tile.getNeighbors(0));
-            int number = 0;
-
-            for (Tile t : neighborOptional) {
-                if (t != null) {
-                    if (t.getType() == TileType.CGOL) {
-                        number++;
-                    }
-//
-                    else {
-                        List<Tile> neighborOptional2 = t.getNeighbors(0);
-                        int number2 = 0;
-
-                        for (Tile t2 : neighborOptional2) {
-                            if (t2 != null) {
-                                if (t2.getType() == TileType.CGOL) {
-                                    number2++;
-                                }
-                            }
-                        }
-
-                        if(number2 == 3) {
-                            t.getCoordinate().queueChange(TileType.CGOL);
-                        }
-                    }
-                }
-            }
-
-            if (this == TileType.CGOL) {
-                if (number < 2) {
-                    tile.getCoordinate().queueChange(TileType.DIRT);
-                } else if (number > 3) {
-                    tile.getCoordinate().queueChange(TileType.DIRT);
-                }
-            }
-        }
-    }
+    public void pulse(Tile tile) {}
 
     public void destruct(Tile tile) {
         tile.getCoordinate().queueChange(TileType.DIRT);
