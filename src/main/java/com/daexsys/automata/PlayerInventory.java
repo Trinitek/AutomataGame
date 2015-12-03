@@ -1,17 +1,24 @@
 package com.daexsys.automata;
 
+import com.daexsys.automata.gui.GUI;
+import com.daexsys.automata.gui.chat.ChatMessage;
 import com.daexsys.automata.world.tiletypes.TileType;
+
+import java.awt.*;
 
 public class PlayerInventory {
 
+    private PlayerState playerState;
     private int selectedSlot = 1;
 
-    public PlayerInventory(int size) {
-
+    public PlayerInventory(PlayerState playerState, int size) {
+        this.playerState = playerState;
     }
 
     public void selectSlot(int slotNum) {
         selectedSlot = slotNum;
+        playerState.getGame().getChatManager()
+                .addChatMessage(new ChatMessage("Selected slot: " + slotNum + ": " + getInHand(), Color.WHITE));
     }
 
     public TileType getInHand() {

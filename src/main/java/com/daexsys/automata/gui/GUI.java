@@ -1,6 +1,8 @@
 package com.daexsys.automata.gui;
 
 import com.daexsys.automata.Game;
+import com.daexsys.automata.gui.chat.ChatMessage;
+import com.daexsys.automata.gui.chat.ChatRenderer;
 import com.daexsys.automata.gui.listeners.KeyboardHandler;
 import com.daexsys.automata.gui.listeners.MouseHandler;
 import com.daexsys.automata.gui.listeners.MouseMotionHandler;
@@ -20,6 +22,7 @@ public class GUI {
     private MouseHandler mouseHandler = new MouseHandler(this);
     private MouseMotionHandler mouseMotionHandler = new MouseMotionHandler(this);
     private ScrollManager scrollManager = new ScrollManager(this);
+    private KeyboardHandler keyboardHandler = new KeyboardHandler(this);
 
     private Offsets offsets = new Offsets(this);
     private int zoomLevel = 21;
@@ -32,6 +35,8 @@ public class GUI {
     private long lastFPSTime = System.currentTimeMillis();
     private int lastFPS = 0;
     private int fps = 0;
+
+    public ChatRenderer chatRenderer = new ChatRenderer(this);
 
     public int layerBuildingOn = WorldLayer.GROUND;
 
@@ -50,7 +55,7 @@ public class GUI {
         jFrame.addMouseMotionListener(mouseMotionHandler);
         jFrame.addMouseWheelListener(scrollManager);
 
-        jFrame.addKeyListener(new KeyboardHandler(this));
+        jFrame.addKeyListener(keyboardHandler);
 
         jFrame.createBufferStrategy(3);
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -83,6 +88,8 @@ public class GUI {
 
                     graphics2D.drawImage (game.getPlayerState().getInHand().getImage(),
                             mouseMotionHandler.getX(), mouseMotionHandler.getY(), 20, 20, null);
+
+                    chatRenderer.render(graphics2D);
 
                     if(game.isPaused()) {
                         graphics2D.drawImage(paused, 260, 40, null);
@@ -136,17 +143,19 @@ public class GUI {
 
                     long delta = System.currentTimeMillis() - frameStartTime;
 
-                    if(KeyboardHandler.isDown(KeyEvent.VK_W)) {
-                        getOffsets().moveUp(delta);
-                    }
-                    if(KeyboardHandler.isDown(KeyEvent.VK_S)) {
-                        getOffsets().moveDown(delta);
-                    }
-                    if(KeyboardHandler.isDown(KeyEvent.VK_A)) {
-                        getOffsets().moveLeft(delta);
-                    }
-                    if(KeyboardHandler.isDown(KeyEvent.VK_D)) {
-                        getOffsets().moveRight(delta);
+                    if(!getChatRenderer().isTyping()) {
+                        if (KeyboardHandler.isDown(KeyEvent.VK_W)) {
+                            getOffsets().moveUp(delta);
+                        }
+                        if (KeyboardHandler.isDown(KeyEvent.VK_S)) {
+                            getOffsets().moveDown(delta);
+                        }
+                        if (KeyboardHandler.isDown(KeyEvent.VK_A)) {
+                            getOffsets().moveLeft(delta);
+                        }
+                        if (KeyboardHandler.isDown(KeyEvent.VK_D)) {
+                            getOffsets().moveRight(delta);
+                        }
                     }
 
                     int newValue = scrollManager.retrieveScrollQueue() + getZoomLevel();
@@ -159,6 +168,10 @@ public class GUI {
             }
         });
         renderThread.start();
+    }
+
+    public KeyboardHandler getKeyboardHandler() {
+        return keyboardHandler;
     }
 
     public Game getGame() {
@@ -197,6 +210,10 @@ public class GUI {
         } else {
             playerStructure.placeInWorldAt(worldModel, tx, ty);
         }
+    }
+
+    public ChatRenderer getChatRenderer() {
+        return chatRenderer;
     }
 
     public MouseMotionHandler getMouseMotionHandler() {

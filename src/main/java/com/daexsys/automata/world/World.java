@@ -1,5 +1,6 @@
 package com.daexsys.automata.world;
 
+import com.daexsys.automata.Game;
 import com.daexsys.automata.Pulsable;
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.terrain.DesertTerrain;
@@ -16,10 +17,12 @@ public final class World implements Pulsable {
 
     private int ticksPulsed = 0;
 
+    private Game game;
     private ChunkManager chunkManager;
     private TerrainGenerator terrainGenerator;
 
-    public World() {
+    public World(Game game) {
+        this.game = game;
         seed = System.currentTimeMillis();
         random = new Random(seed);
 
@@ -73,6 +76,10 @@ public final class World implements Pulsable {
 //                }
 //            }
 //        }
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     public Tile getTileAt(int layer, int x, int y) {

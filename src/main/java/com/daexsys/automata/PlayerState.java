@@ -11,7 +11,7 @@ public class PlayerState {
 
     public PlayerState(Game game) {
         this.game = game;
-        inventory = new PlayerInventory(0);
+        inventory = new PlayerInventory(this, 0);
         selectedStructure = game.getStructures().getStructureByName("vanilla:cotton_candy");
     }
 

@@ -1,5 +1,6 @@
 package com.daexsys.automata;
 
+import com.daexsys.automata.gui.chat.ChatMessage;
 import com.daexsys.automata.world.structures.StructureRegistry;
 import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.tiletypes.TileRegistry;
@@ -12,6 +13,8 @@ public class Game {
     private TileRegistry tileRegistry;
     private StructureRegistry structures;
 
+    private ChatManager chatManager;
+
     private PlayerState playerState;
     private volatile int tickDelayRate = 250; // 500 default
 
@@ -20,10 +23,12 @@ public class Game {
     private int tps = 0;
 
     public Game() {
-        worldModel = new World();
+        worldModel = new World(this);
 
         tileRegistry = new TileRegistry();
         structures = new StructureRegistry();
+
+        chatManager = new ChatManager(this);
 
         playerState = new PlayerState(this);
 
@@ -90,5 +95,9 @@ public class Game {
         if(tickDelayRate >= 0) {
             this.tickDelayRate = tickDelayRate;
         }
+    }
+
+    public ChatManager getChatManager() {
+        return chatManager;
     }
 }
