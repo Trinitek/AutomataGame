@@ -162,6 +162,8 @@ public final class TileType {
     public void pulse(Tile tile) {
         if(tilePulser != null) {
             tilePulser.pulse(tile);
+        } else {
+            tile.getTileVM().step();
         }
     }
 
