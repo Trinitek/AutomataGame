@@ -1,7 +1,7 @@
 package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.Tile;
-import com.daexsys.automata.world.WorldLayers;
+import com.daexsys.automata.world.WorldLayer;
 
 import java.awt.image.BufferedImage;
 
@@ -16,7 +16,7 @@ public class SmokeTileType extends TileType {
         super.destruct(tile);
 
         tile.getWorld().queueChangeAt(
-                WorldLayers.ABOVE_GROUND,
+                WorldLayer.ABOVE_GROUND,
                 tile.getCoordinate().x, tile.getCoordinate().y,
                 TileType.AIR
         );

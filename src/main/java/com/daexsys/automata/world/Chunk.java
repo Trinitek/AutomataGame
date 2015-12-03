@@ -29,10 +29,10 @@ public final class Chunk implements Pulsable {
 
     public void pulse() {
         // Pulse all tiles (for now, eventually this needs to be handled in a more intelligent way)
-        for (int i = 0; i < contents[WorldLayers.GROUND].length; i++) {
-            for (int j = 0; j < contents[WorldLayers.GROUND][i].length; j++) {
-                contents[WorldLayers.GROUND][i][j].pulse();
-                contents[WorldLayers.ABOVE_GROUND][i][j].pulse();
+        for (int i = 0; i < contents[WorldLayer.GROUND].length; i++) {
+            for (int j = 0; j < contents[WorldLayer.GROUND][i].length; j++) {
+                contents[WorldLayer.GROUND][i][j].pulse();
+                contents[WorldLayer.ABOVE_GROUND][i][j].pulse();
             }
         }
     }

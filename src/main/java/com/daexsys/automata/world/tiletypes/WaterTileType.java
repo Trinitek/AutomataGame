@@ -2,7 +2,7 @@ package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.TileCoordinate;
-import com.daexsys.automata.world.WorldLayers;
+import com.daexsys.automata.world.WorldLayer;
 
 import java.awt.image.BufferedImage;
 
@@ -23,7 +23,7 @@ public class WaterTileType extends TileType {
 
             try {//
                 if (tile.getWorld().getTileAt(
-                        WorldLayers.ABOVE_GROUND,
+                        WorldLayer.ABOVE_GROUND,
                         tile.getCoordinate().x + offsetX,
                         tile.getCoordinate().y + offsetY)
                         .getType() == TileType.AIR

@@ -7,9 +7,8 @@ import com.daexsys.automata.gui.listeners.MouseMotionHandler;
 import com.daexsys.automata.gui.listeners.ScrollManager;
 import com.daexsys.automata.gui.util.ImageUtil;
 import com.daexsys.automata.world.World;
-import com.daexsys.automata.world.WorldLayers;
+import com.daexsys.automata.world.WorldLayer;
 import com.daexsys.automata.world.structures.Structure;
-import com.daexsys.automata.world.structures.Structures;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +33,7 @@ public class GUI {
     private int lastFPS = 0;
     private int fps = 0;
 
-    public int layerBuildingOn = WorldLayers.GROUND;
+    public int layerBuildingOn = WorldLayer.GROUND;
 
     public GUI(Game game) {
         this.game = game;

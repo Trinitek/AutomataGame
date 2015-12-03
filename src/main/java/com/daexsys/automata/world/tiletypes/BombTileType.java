@@ -2,7 +2,7 @@ package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.World;
-import com.daexsys.automata.world.WorldLayers;
+import com.daexsys.automata.world.WorldLayer;
 
 import java.awt.image.BufferedImage;
 
@@ -30,8 +30,8 @@ public class BombTileType extends TileType {
                     int y = k - lakeY;
 
                     if((x * x + y * y) < lakeSize * lakeSize) {
-                        world.setTileTypeAt(WorldLayers.GROUND, j, k, TileType.DIRT);
-                        world.setTileTypeAt(WorldLayers.ABOVE_GROUND, j, k, TileType.SMOKE);
+                        world.setTileTypeAt(WorldLayer.GROUND, j, k, TileType.DIRT);
+                        world.setTileTypeAt(WorldLayer.ABOVE_GROUND, j, k, TileType.SMOKE);
                     }
                 }
             }

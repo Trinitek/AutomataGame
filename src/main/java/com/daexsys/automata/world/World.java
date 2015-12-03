@@ -127,7 +127,7 @@ public final class World implements Pulsable {
 
     public void queueChangeAt(int layer, int x, int y, TileType tileType) {
         ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
-        Tile newTile = new Tile(new TileCoordinate(WorldLayers.GROUND, this, x, y), tileType);
+        Tile newTile = new Tile(new TileCoordinate(WorldLayer.GROUND, this, x, y), tileType);
         Chunk chunk =
                 getChunkManager().getChunk(chunkCoordinate);
 
@@ -136,22 +136,22 @@ public final class World implements Pulsable {
 
     public void queueChangeAt(int x, int y, TileType tileType) {
         ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
-        Tile newTile = new Tile(new TileCoordinate(WorldLayers.GROUND, this, x, y), tileType);
+        Tile newTile = new Tile(new TileCoordinate(WorldLayer.GROUND, this, x, y), tileType);
         Chunk chunk =
                 getChunkManager().getChunk(chunkCoordinate);
 
-        chunk.queueChangeAt(WorldLayers.GROUND, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), newTile);
+        chunk.queueChangeAt(WorldLayer.GROUND, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), newTile);
     }
 
     public void queueChangeAt(int x, int y, TileType tileType, int newEnergy) {
         ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
-        Tile newTile = new Tile(new TileCoordinate(WorldLayers.GROUND, this, x, y), tileType);
+        Tile newTile = new Tile(new TileCoordinate(WorldLayer.GROUND, this, x, y), tileType);
         newTile.setEnergy(newEnergy);
 
         Chunk chunk =
                 getChunkManager().getChunk(chunkCoordinate);
 
-        chunk.queueChangeAt(WorldLayers.GROUND,
+        chunk.queueChangeAt(WorldLayer.GROUND,
                 chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), newTile);
     }
 

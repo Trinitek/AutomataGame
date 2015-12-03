@@ -2,7 +2,7 @@ package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.gui.util.ImageUtil;
-import com.daexsys.automata.world.WorldLayers;
+import com.daexsys.automata.world.WorldLayer;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -98,7 +98,7 @@ public class TileType {
     }
 
     public void pulse(Tile tile) {
-        Optional<List<Tile>> neighborOptional = tile.getNeighbors(WorldLayers.GROUND);
+        Optional<List<Tile>> neighborOptional = tile.getNeighbors(WorldLayer.GROUND);
         int number = 0;
         if(neighborOptional.isPresent()) {
             List<Tile> tiles = neighborOptional.get();

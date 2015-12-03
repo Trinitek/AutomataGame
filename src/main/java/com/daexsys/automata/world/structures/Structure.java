@@ -1,7 +1,7 @@
 package com.daexsys.automata.world.structures;
 
 import com.daexsys.automata.world.World;
-import com.daexsys.automata.world.WorldLayers;
+import com.daexsys.automata.world.WorldLayer;
 import com.daexsys.automata.world.tiletypes.TileType;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class Structure {
 
     public void placeInWorldAt(World world, int x, int y) {
         for(StructureElement structureElement : structureElements) {
-            world.setTileTypeAt(WorldLayers.GROUND,
+            world.setTileTypeAt(WorldLayer.GROUND,
                     x + structureElement.getX(),
                     y + structureElement.getY(),
                     structureElement.getType()
