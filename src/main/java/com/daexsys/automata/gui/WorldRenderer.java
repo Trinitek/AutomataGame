@@ -2,7 +2,7 @@ package com.daexsys.automata.gui;
 
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.Chunk;
-import com.daexsys.automata.world.ChunkCoordinate;
+import com.daexsys.automata.world.ChunkCoord;
 import com.daexsys.automata.world.ChunkManager;
 import com.daexsys.automata.world.structures.Structure;
 import com.daexsys.automata.world.structures.StructureElement;
@@ -35,7 +35,7 @@ public class WorldRenderer implements Renderable {
 
         List<Chunk> toRender = getChunksToRender(chunkManager);
         for(Chunk chunk : toRender) {
-            ChunkCoordinate chunkCoordinate = chunk.getChunkCoordinate();
+            ChunkCoord chunkCoordinate = chunk.getChunkCoordinate();
 
             for (int x = 0; x < Chunk.DEFAULT_CHUNK_SIZE; x++) {
                 for (int y = 0; y < Chunk.DEFAULT_CHUNK_SIZE; y++) {

@@ -62,7 +62,7 @@ public final class TileCoord {
 
     public Chunk getChunk() {
         if(chunk == null) {
-            chunk = ChunkCoordinate.forWorldCoords(this).getChunk();
+            chunk = ChunkCoord.forWorldCoords(this).getChunk();
         }
 
         return chunk;

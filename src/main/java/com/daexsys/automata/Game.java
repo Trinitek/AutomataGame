@@ -21,8 +21,10 @@ public class Game {
 
     public Game() {
         worldModel = new World();
+
         tileRegistry = new TileRegistry();
         structures = new StructureRegistry();
+
         playerState = new PlayerState(this);
 
         Thread worldPule = new Thread(new Runnable() {

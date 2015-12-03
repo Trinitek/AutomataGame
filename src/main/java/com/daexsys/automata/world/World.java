@@ -79,7 +79,7 @@ public final class World implements Pulsable {
         Chunk chunk = getChunkManager().getChunk(
                 x / Chunk.DEFAULT_CHUNK_SIZE, y / Chunk.DEFAULT_CHUNK_SIZE);
 
-        ChunkCoordinate chunkCoordinate = chunk.getChunkCoordinate();
+        ChunkCoord chunkCoordinate = chunk.getChunkCoordinate();
 
         return chunk.getTile(layer, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y));
     }
@@ -123,7 +123,7 @@ public final class World implements Pulsable {
      * @return whether or not the block was successfully set
      */
     public boolean setTileTypeAt(int layer, int x, int y, TileType tileType) {
-        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
+        ChunkCoord chunkCoordinate = ChunkCoord.forWorldCoords(this, x, y);
 
         if((layer == 0 || layer == 1)) {
             Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
@@ -141,7 +141,7 @@ public final class World implements Pulsable {
     }
 
     public boolean setTileTypeAt(int layer, TileCoord coord, TileType tileType) {
-        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, coord.x, coord.y);
+        ChunkCoord chunkCoordinate = ChunkCoord.forWorldCoords(this, coord.x, coord.y);
 
         Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
         chunk.flashWithNewType(layer, chunkCoordinate.localifyX(coord.x), chunkCoordinate.localifyY(coord.y), tileType);
@@ -149,7 +149,7 @@ public final class World implements Pulsable {
     }
 
     public boolean isObstructionAt(int x, int y) {
-        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
+        ChunkCoord chunkCoordinate = ChunkCoord.forWorldCoords(this, x, y);
         Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
 
         if(chunk != null) {
@@ -163,7 +163,7 @@ public final class World implements Pulsable {
     }
 
     public void queueChangeAt(TileCoord tileCoord, TileType tileType) {
-        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(tileCoord);
+        ChunkCoord chunkCoordinate = ChunkCoord.forWorldCoords(tileCoord);
         Tile newTile = new Tile(tileCoord, tileType);
 
         Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
@@ -171,7 +171,7 @@ public final class World implements Pulsable {
     }
 
     public void queueChangeAt(TileCoord coord, TileType tileType, int newEnergy) {
-        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, coord.x, coord.y);
+        ChunkCoord chunkCoordinate = ChunkCoord.forWorldCoords(this, coord.x, coord.y);
         Tile newTile = new Tile(coord, tileType);
         newTile.setEnergy(newEnergy);
 

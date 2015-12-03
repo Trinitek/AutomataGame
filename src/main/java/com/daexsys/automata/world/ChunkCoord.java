@@ -7,28 +7,28 @@ package com.daexsys.automata.world;
  * 1. they have very different meanings
  * 2. they will likely diverge in the future
  */
-public final class ChunkCoordinate {
+public final class ChunkCoord {
 
-    public static ChunkCoordinate of(World world, int x, int y) {
-        return new ChunkCoordinate(world, x, y);
+    public static ChunkCoord of(World world, int x, int y) {
+        return new ChunkCoord(world, x, y);
     }
 
-    public static ChunkCoordinate forWorldCoords(TileCoord tileCoord) {
+    public static ChunkCoord forWorldCoords(TileCoord tileCoord) {
         return forWorldCoords(tileCoord.world, tileCoord.x, tileCoord.y);
     }
 
-    public static ChunkCoordinate forWorldCoords(World world, int x, int y) {
+    public static ChunkCoord forWorldCoords(World world, int x, int y) {
         int rx = x / Chunk.DEFAULT_CHUNK_SIZE;
         int ry = y / Chunk.DEFAULT_CHUNK_SIZE;
 
-        return new ChunkCoordinate(world, rx, ry);
+        return new ChunkCoord(world, rx, ry);
     }
 
     public final World world;
     public final int x;
     public final int y;
 
-    private ChunkCoordinate(World world, int x, int y) {
+    private ChunkCoord(World world, int x, int y) {
         this.world = world;
         this.x = x;
         this.y = y;
@@ -60,8 +60,8 @@ public final class ChunkCoordinate {
                 localifyY(y));
     }
 
-    public ChunkCoordinate add(int x, int y) {
-        return new ChunkCoordinate(world, this.x + x, this.y + y);
+    public ChunkCoord add(int x, int y) {
+        return new ChunkCoord(world, this.x + x, this.y + y);
     }
 
     public boolean is(int x, int y) {
@@ -70,8 +70,8 @@ public final class ChunkCoordinate {
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof ChunkCoordinate) {
-            ChunkCoordinate chunkObject = (ChunkCoordinate) o;
+        if(o instanceof ChunkCoord) {
+            ChunkCoord chunkObject = (ChunkCoord) o;
             return chunkObject.world == world
                     && chunkObject.x == x
                     && chunkObject.y == y;

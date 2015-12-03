@@ -38,11 +38,11 @@ public class KeyboardHandler implements KeyListener {
             gui.getGame().getPlayerState().setInHand(TileType.GREEDY_VIRUS);
             gui.getGame().getPlayerState().setSelectedStructure(null);
         }
-
-        else if(e.getKeyCode() == KeyEvent.VK_3) {
-            gui.getGame().getPlayerState().setInHand(TileType.VM_256_BYTES);
-            gui.getGame().getPlayerState().setSelectedStructure(null);
-        }
+//
+//        else if(e.getKeyCode() == KeyEvent.VK_3) {
+//            gui.getGame().getPlayerState().setInHand(TileType.AMOEBA);
+//            gui.getGame().getPlayerState().setSelectedStructure(null);
+//        }
 
         else if(e.getKeyCode() == KeyEvent.VK_4) {
             gui.getGame().getPlayerState().setInHand(TileType.MINER);
@@ -93,22 +93,6 @@ public class KeyboardHandler implements KeyListener {
         else if(e.getKeyCode() == KeyEvent.VK_L) {
             gui.getGame().getPlayerState().setSelectedStructure(gui.getGame().getStructures().getStructureByName("cgol_lwss"));
         }
-//
-//        if(e.getKeyCode() == KeyEvent.VK_D) {
-//            gui.getOffsets().moveRight();
-//        }
-//
-//        if(e.getKeyCode() == KeyEvent.VK_A) {
-//            gui.getOffsets().moveLeft();
-//        }
-//
-//        if(e.getKeyCode() == KeyEvent.VK_W) {
-//            gui.getOffsets().moveUp();
-//        }
-//
-//        if(e.getKeyCode() == KeyEvent.VK_S) {
-//            gui.getOffsets().moveDown();
-//        }
 
         keysDown.put(e.getKeyCode(), true);
     }

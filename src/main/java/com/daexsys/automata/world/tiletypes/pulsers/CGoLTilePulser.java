@@ -1,6 +1,7 @@
 package com.daexsys.automata.world.tiletypes.pulsers;
 
 import com.daexsys.automata.Tile;
+import com.daexsys.automata.world.WorldLayer;
 import com.daexsys.automata.world.tiletypes.TilePulser;
 import com.daexsys.automata.world.tiletypes.TileType;
 
@@ -9,37 +10,41 @@ import java.util.List;
 
 public class CGoLTilePulser implements TilePulser {
 
+    private List<Integer> birthNums = new ArrayList<>();
+    private List<Integer> stayAliveNums = new ArrayList<>();
+
+    public CGoLTilePulser(List<Integer> birthNums, List<Integer> stayAliveNums) {
+        this.birthNums = birthNums;
+        this.stayAliveNums = stayAliveNums;
+    }
+
     @Override
     public void pulse(Tile tile) {
-        List<Tile> neighborOptional = new ArrayList<>(tile.getNeighbors(0));
+        List<Tile> neighbors = tile.getMooreNeighborhood(0);
         int number = 0;
 
-        for (Tile t : neighborOptional) {
-            if (t != null) {
-                if (t.getType() == TileType.CGOL) {
-                    number++;
-                }
-
-                else {
-                    List<Tile> neighborOptional2 = t.getNeighbors(0);
-                    int number2 = 0;
-
-                    for (Tile t2 : neighborOptional2) {
-                        if (t2 != null) {
-                            if (t2.getType() == TileType.CGOL) {
-                                number2++;
-                            }
-                        }
-                    }
-
-                    if(number2 == 3) {
-                        t.getCoordinate().queueChange(TileType.CGOL);
+        for (Tile iteratedTile : neighbors) {
+            if (iteratedTile.getType() == tile.getType()) {
+                number++;
+            } else {
+                int amount = iteratedTile.getMooreNeighborhoodEqualTo(WorldLayer.GROUND, tile.getType());
+//
+                for(Integer i : birthNums) {
+                    if(i == amount) {
+                        iteratedTile.getCoordinate().queueChange(tile.getType());
                     }
                 }
             }
         }
 
-        if(number != 2 && number != 3) {
+        boolean found = false;
+        for(Integer i : stayAliveNums) {
+            if(i == number) {
+                found = true;
+            }
+        }
+
+        if(!found) {
             tile.getCoordinate().queueChange(TileType.DIRT);
         }
     }

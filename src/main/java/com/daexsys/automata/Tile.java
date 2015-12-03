@@ -42,6 +42,52 @@ public class Tile implements Pulsable {
         }
     }
 
+    private List<Tile> neighbors = new ArrayList<>();
+    public List<Tile> getMooreNeighborhood(int layer) {
+        neighbors.clear();
+
+        World world = getWorld();
+        int x = coordinate.x;
+        int y = coordinate.y;
+//
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if(!(i == 0 && j == 0)) {
+                    Tile current = world.sampleTileAt(layer, x + i, y + j);
+
+                    if (current != null) {
+                        neighbors.add(current);
+                    }
+                }
+            }
+        }
+
+        return neighbors;
+    }
+
+    public int getMooreNeighborhoodEqualTo(int layer, TileType type) {
+        World world = getWorld();
+        int x = coordinate.x;
+        int y = coordinate.y;
+        int amount = 0;
+
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if(!(i == 0 && j == 0)) {
+                    Tile current = world.sampleTileAt(layer, x + i, y + j);
+
+                    if (current != null) {
+                        if(current.getType() == type) {
+                            amount++;
+                        }
+                    }
+                }
+            }
+        }
+
+        return amount;
+    }
+
     public int getEnergy() {
         return energy;
     }
@@ -58,11 +104,6 @@ public class Tile implements Pulsable {
         return tileData;
     }
 
-//    public void setType(TileType tileType) {
-//        this.tileType = tileType;
-//        energy = tileType.getDefaultEnergy();
-//    }
-
     public TileCoord getCoordinate() {
         return coordinate;
     }
@@ -72,90 +113,9 @@ public class Tile implements Pulsable {
     }
 
     public Chunk getChunk() {
-        return getWorld().getChunkManager().getChunk(getCoordinate().x / Chunk.DEFAULT_CHUNK_SIZE, getCoordinate().y / Chunk.DEFAULT_CHUNK_SIZE);
+        return getWorld().getChunkManager()
+                .getChunk(getCoordinate().x / Chunk.DEFAULT_CHUNK_SIZE, getCoordinate().y / Chunk.DEFAULT_CHUNK_SIZE);
     }
-//
-//    List<Tile> neighbors = new ArrayList<Tile>();
-//    public Optional<List<Tile>> getNeighbors(int layer) {
-//        neighbors.clear();
-//
-//        Tile up =   coordinate.add(0, -1).getTile().get();
-//        Tile down = coordinate.add(0, +1).getTile().get();
-//        Tile left = coordinate.add(-1, 0).getTile().get();
-//        Tile right = coordinate.add(+1, 0).getTile().get();
-//        Tile up_left = coordinate.add(-1, -1).getTile().get();
-//        Tile up_right = coordinate.add(+1, -1).getTile().get();
-//        Tile down_left = coordinate.add(+1, 1).getTile().get();
-//        Tile down_right = coordinate.add(+1, -1).getTile().get();
-//
-//        neighbors.add(up);
-//        neighbors.add(down);
-//        neighbors.add(left);
-//        neighbors.add(right);
-//        neighbors.add(up_left);
-//        neighbors.add(up_right);
-//        neighbors.add(down_left);
-//        neighbors.add(down_right);
-//
-//        return Optional.of(neighbors);
-//    }
-
-    List<Tile> neighbors = new ArrayList<>();
-
-    public List<Tile> getNeighbors(int layer) {
-        neighbors.clear();
-
-        World world = getWorld();
-        int x = coordinate.x;
-        int y = coordinate.y;
-
-        Tile up = world.sampleTileAt(layer, x, y - 1);
-        Tile down = world.sampleTileAt(layer, x, y + 1);
-        Tile left = world.sampleTileAt(layer, x - 1, y);
-        Tile right = world.sampleTileAt(layer, x + 1, y);
-        Tile up_left = world.sampleTileAt(layer, x - 1, y - 1);
-        Tile up_right = world.sampleTileAt(layer, x + 1, y - 1);
-        Tile down_left = world.sampleTileAt(layer, x - 1, y + 1);
-        Tile down_right = world.sampleTileAt(layer, x + 1, y + 1);
-
-        neighbors.add(up);
-        neighbors.add(down);
-        neighbors.add(left);
-        neighbors.add(right);
-        neighbors.add(up_left);
-        neighbors.add(up_right);
-        neighbors.add(down_left);
-        neighbors.add(down_right);
-
-        return neighbors;
-    }
-
-//
-//    private List<Optional<Tile>> storedTiles = new ArrayList<>();
-//    private List<Tile> neighbors = new ArrayList<>();
-//
-//    public com.google.common.base.Optional<List<Tile>> getNeighbors() {
-//        storedTiles.clear();
-//        neighbors.clear();
-//
-//        storedTiles.add(coordinate.add(0, +1).getTile());
-//        storedTiles.add(coordinate.add(0, -1).getTile());
-//        storedTiles.add(coordinate.add(+1, 0).getTile());
-//        storedTiles.add(coordinate.add(-1, 0).getTile());
-//
-//        storedTiles.add(coordinate.add(+1, +1).getTile());
-//        storedTiles.add(coordinate.add(-1, +1).getTile());
-//        storedTiles.add(coordinate.add(-1, -1).getTile());
-//        storedTiles.add(coordinate.add(+1, -1).getTile());
-//
-//        for(com.google.common.base.Optional<Tile> tiles : storedTiles) {
-//            if(tiles.isPresent()) {
-//                neighbors.add(tiles.get());
-//            }
-//        }
-//
-//        return com.google.common.base.Optional.of(neighbors);
-//    }
 
     public VM getTileVM() {
         return tileVM;
@@ -163,5 +123,10 @@ public class Tile implements Pulsable {
 
     public void setEnergy(int energy) {
         this.energy = energy;
+    }
+
+    @Override
+    public String toString() {
+        return "{tile " + getType() + " " + getCoordinate() + "}";
     }
 }

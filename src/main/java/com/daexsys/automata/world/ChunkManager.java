@@ -20,7 +20,7 @@ public class ChunkManager implements Pulsable {
         this.world = world;
     }
 
-    public Chunk getChunk(ChunkCoordinate chunkCoordinate) {
+    public Chunk getChunk(ChunkCoord chunkCoordinate) {
         return getChunk(chunkCoordinate.x, chunkCoordinate.y);
     }
 

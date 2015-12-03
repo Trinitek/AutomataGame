@@ -13,6 +13,12 @@ import java.util.List;
 
 public final class TileType {
 
+    private static List<TileType> types = new ArrayList<>(32);
+
+    public static TileType getTileFromId(byte id) {
+        return types.get(id);
+    }
+
     public static final TileType STONE =
             new TileType.Builder().setID((byte) 0).setName("stone").setImageLocation("images/stone.png")
                     .setEnergy(100).setDecayRate(0).build();
@@ -21,15 +27,24 @@ public final class TileType {
             new TileType.Builder().setID((byte) 1).setName("vm").setImageLocation("images/digital.png")
                     .setEnergy(5000).setDecayRate(0).build();
 
-    public static final TileType CGOL =
-            new TileType.Builder()
-                    .setID((byte) 2)
-                    .setName("CGoL")
-                    .setImageLocation("images/automata.png")
-                    .setEnergy(10)
-                    .setDecayRate(0)
-                    .setPulser(new CGoLTilePulser())
-                    .build();
+    public static final TileType CGOL;
+    static {
+        List<Integer> birthRules = new ArrayList<>();
+        birthRules.add(3);
+
+        List<Integer> stayAliveRules = new ArrayList<>();
+        stayAliveRules.add(2);
+        stayAliveRules.add(3);
+
+        CGOL = new TileType.Builder()
+                .setID((byte) 2)
+                .setName("CGoL")
+                .setImageLocation("images/automata.png")
+                .setEnergy(10)
+                .setDecayRate(0)
+                .setPulser(new CGoLTilePulser(birthRules, stayAliveRules))
+                .build();
+    }
 
     public static final TileType GRASS =
             new TileType.Builder().setID((byte) 3).setName("grass").setImageLocation("images/grass.png")
@@ -91,11 +106,31 @@ public final class TileType {
             new TileType.Builder().setID((byte) 17).setName("bot").setImageLocation("images/bot.png")
                     .setEnergy(Integer.MAX_VALUE).setDecayRate(0).setPulser(new BotTilePulser()).build();
 
-    private static List<TileType> types = new ArrayList<>(32);
+//    public static final TileType AMOEBA;
+//    static {
+//        List<Integer> birthRules = new ArrayList<>();
+//        birthRules.add(3);
+//        birthRules.add(5);
+//        birthRules.add(6);
+//        birthRules.add(7);
+//        birthRules.add(8);
+//
+//        List<Integer> stayAliveRules = new ArrayList<>();
+//        stayAliveRules.add(5);
+//        stayAliveRules.add(6);
+//        stayAliveRules.add(7);
+//        stayAliveRules.add(8);
+//
+//        AMOEBA = new TileType.Builder()
+//                .setID((byte) 18)
+//                .setName("amoeba")
+//                .setImageLocation("images/automata.png")
+//                .setEnergy(10)
+//                .setDecayRate(0)
+//                .setPulser(new CGoLTilePulser(birthRules, stayAliveRules))
+//                .build();
+//    }
 
-    public static TileType getTileFromId(byte id) {
-        return types.get(id);
-    }
 
     private byte id;
     private String blockName;
@@ -144,7 +179,14 @@ public final class TileType {
     }
 
     public static class Builder {
+        private TileRegistry tileRegistry;
         private TileType tileType = new TileType();
+
+        public Builder() {}
+
+        public Builder(TileRegistry tileRegistry) {
+            this.tileRegistry = tileRegistry;
+        }
 
         public Builder setID(byte id) {
             tileType.id = id;
@@ -192,7 +234,12 @@ public final class TileType {
         }
 
         public TileType build() {
-//            types.set(tileType.getID(), tileType);
+            if(tileRegistry != null) {
+                tileRegistry.registerType(tileType);
+            }
+
+            types.add(tileType);
+
             return tileType;
         }
     }
