@@ -1,8 +1,10 @@
-package com.daexsys.automata.world.tiletypes;
+package com.daexsys.automata.world.tiletypes.pulsers;
 
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.TileCoord;
 import com.daexsys.automata.world.WorldLayer;
+import com.daexsys.automata.world.tiletypes.TilePulser;
+import com.daexsys.automata.world.tiletypes.TileType;
 
 public class ViralPulser implements TilePulser {
 

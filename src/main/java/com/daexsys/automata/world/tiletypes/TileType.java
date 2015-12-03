@@ -2,6 +2,7 @@ package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.gui.util.ImageUtil;
+import com.daexsys.automata.world.tiletypes.pulsers.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -16,7 +17,7 @@ public final class TileType {
             new TileType.Builder().setID((byte) 0).setName("stone").setImageLocation("images/stone.png")
                     .setEnergy(100).setDecayRate(0).build();
 
-    public static final TileType VM_256 =
+    public static final TileType VM_256_BYTES =
             new TileType.Builder().setID((byte) 1).setName("vm").setImageLocation("images/digital.png")
                     .setEnergy(5000).setDecayRate(0).build();
 
@@ -46,7 +47,6 @@ public final class TileType {
             new TileType.Builder().setID((byte) 6).setName("greedy virus").setImageLocation("images/virus.png")
                     .setEnergy(2000).setDecayRate(1).setPulser(new ViralPulser()).build();
 
-    // TODO: rename
     public static final TileType ENERGY_ORE =
             new TileType.Builder().setID((byte) 7).setName("energy ore").setImageLocation("images/energy_ore.png")
                     .setEnergy(100).setDecayRate(0).build();
@@ -63,50 +63,55 @@ public final class TileType {
             new TileType.Builder().setID((byte) 10).setName("miner test").setImageLocation("images/miner.png")
                     .setEnergy(50).setDecayRate(0).build();
 
-    //new ShockwaveVirusTileType((byte) 11, "shockwave virus", "images/shockwave.png", 50, 0);
     public static final TileType SHOCKWAVE_VIRUS =
             new TileType.Builder().setID((byte) 11).setName("shockwave virus").setImageLocation("images/shockwave.png")
                     .setEnergy(50).setDecayRate(0).setPulser(new ShockwaveVirusPulser()).build();
 
-    //new TileType((byte) 12, "wood", "images/wood.png", 50, 0);
     public static final TileType WOOD =
             new TileType.Builder().setID((byte) 12).setName("wood").setImageLocation("images/wood.png")
                     .setEnergy(50).setDecayRate(0).build();
 
-    //new TileType((byte) 13, "leaves", "images/leaves.png", 50, 0);
     public static final TileType LEAVES =
             new TileType.Builder().setID((byte) 13).setName("leaves").setImageLocation("images/leaves.png")
                     .setEnergy(50).setDecayRate(0).build();
 
-    //new TileType((byte) 14, "sand", "images/sand.png", 50, 0);leaves
     public static final TileType SAND =
             new TileType.Builder().setID((byte) 14).setName("sand").setImageLocation("images/sand.png")
                     .setEnergy(50).setDecayRate(0).build();
 
-    //new BombTileType((byte) 15, "bomb", "images/bomb_block.png", 50, 10);
     public static final TileType BOMB =
             new TileType.Builder().setID((byte) 15).setName("bomb").setImageLocation("images/bomb_block.png")
                     .setEnergy(50).setDecayRate(10).setPulser(new BombTilePulser()).build();
 
-    //new SmokeTileType((byte) 16, "steam", "images/steam.png", 50, 5);
     public static final TileType SMOKE =
             new TileType.Builder().setID((byte) 16).setName("smoke").setImageLocation("images/steam.png")
                     .setEnergy(50).setDecayRate(5).setPulser(new SmokeTilePulser()).build();
 
-    //new BotTileType((byte) 17, "bot", "images/bot.png", Integer.MAX_VALUE, 0)
     public static final TileType BOT =
             new TileType.Builder().setID((byte) 17).setName("bot").setImageLocation("images/bot.png")
                     .setEnergy(Integer.MAX_VALUE).setDecayRate(0).setPulser(new BotTilePulser()).build();
 
+    private static List<TileType> types = new ArrayList<>(32);
+
+    public static TileType getTileFromId(byte id) {
+        return types.get(id);
+    }
+
     private byte id;
     private String blockName;
-    private BufferedImage image;
     private byte[] defaultProgram;
-
     private TilePulser tilePulser;
-
     private int defaultDecayRate = 1;
     private int defaultEnergy = 10;
+    private BufferedImage image;
+
+    public void pulse(Tile tile) {
+        tilePulser.pulse(tile);
+    }
+
+    public void destruct(Tile tile) {
+        tile.getCoordinate().queueChange(TileType.DIRT);
+    }
 
     public int getDefaultDecayRate() {
         return defaultDecayRate;
@@ -130,14 +135,6 @@ public final class TileType {
 
     public byte[] getProgram() {
         return defaultProgram;
-    }
-
-    public void pulse(Tile tile) {
-        tilePulser.pulse(tile);
-    }
-
-    public void destruct(Tile tile) {
-        tile.getCoordinate().queueChange(TileType.DIRT);
     }
 
     static class Builder {
@@ -192,11 +189,5 @@ public final class TileType {
 //            types.set(tileType.getID(), tileType);
             return tileType;
         }
-    }
-
-    private static List<TileType> types = new ArrayList<>(32);
-
-    public static TileType getTileFromId(byte id) {
-        return types.get(id);
     }
 }

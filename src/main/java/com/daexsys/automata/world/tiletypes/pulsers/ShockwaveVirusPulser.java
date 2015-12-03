@@ -1,7 +1,9 @@
-package com.daexsys.automata.world.tiletypes;
+package com.daexsys.automata.world.tiletypes.pulsers;
 
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.TileCoord;
+import com.daexsys.automata.world.tiletypes.TilePulser;
+import com.daexsys.automata.world.tiletypes.TileType;
 import com.google.common.base.Optional;
 
 import java.awt.image.BufferedImage;
@@ -14,7 +16,7 @@ import java.awt.image.BufferedImage;
  * this is but it likely has something to do with the tile.getEnergy() / 2 operation
  * and the initial energy level of the tile.
  */
-public class ShockwaveVirusPulser implements TilePulser{
+public class ShockwaveVirusPulser implements TilePulser {
 
     @Override
     public void pulse(Tile tile) {

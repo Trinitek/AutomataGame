@@ -9,7 +9,7 @@ public class Main {
 
         System.setProperty("game-name", "IDK");
 
-//        TileType.getTileFromId((byte) 0);
+//        TileType.getTileFromID((byte) 0);
 
         Game game = new Game();
 
