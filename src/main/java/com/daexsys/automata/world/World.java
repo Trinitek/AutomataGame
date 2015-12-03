@@ -9,7 +9,6 @@ import com.daexsys.automata.world.tiletypes.TileType;
 
 import java.util.Random;
 
-// TODO: Need logging framework.
 public final class World implements Pulsable {
 
     private long seed;

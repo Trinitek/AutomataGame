@@ -1,6 +1,6 @@
 package com.daexsys.automata.world.terrain.climate;
 
-public class Climate {
+public final class Climate {
 
     public static final Climate ANTARCTICA = new Climate("antarctica", 0, 0, 10);
     public static final Climate WINTER_FOREST = new Climate("winter forest", 18, 50, 25);
@@ -17,7 +17,7 @@ public class Climate {
     private int humidity;
     private int percentDaytime;
 
-    public Climate(String name, int temperature, int humidity, int percentDaytime) {
+    private Climate(String name, int temperature, int humidity, int percentDaytime) {
         this.name = name;
         this.temperature = temperature;
         this.humidity = humidity;

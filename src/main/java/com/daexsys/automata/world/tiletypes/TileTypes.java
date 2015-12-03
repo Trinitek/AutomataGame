@@ -39,7 +39,7 @@ public class TileTypes {
             new MinerTileType((byte) 10, "miner test", ImageUtil.loadImage("images/miner.png"), 50, 0);
 
     public static final TileType SHOCKWAVE_VIRUS =
-            new EqualVirusTileType((byte) 11, "shockwave virus", ImageUtil.loadImage("images/shockwave.png"), 50, 0);
+            new ShockwaveVirusTileType((byte) 11, "shockwave virus", ImageUtil.loadImage("images/shockwave.png"), 50, 0);
 
     public static final TileType WOOD =
             new TileType((byte) 12, "wood", ImageUtil.loadImage("images/wood.png"), 50, 0);
