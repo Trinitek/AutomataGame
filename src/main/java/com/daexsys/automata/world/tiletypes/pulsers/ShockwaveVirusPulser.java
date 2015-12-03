@@ -21,7 +21,7 @@ public class ShockwaveVirusPulser implements TilePulser {
     @Override
     public void pulse(Tile tile) {
         // Speed of light of the shockwave virus
-        int c = 1;
+        /*int c = 1;
 
         for (int x = -c; x <= c; x++) {
             for (int y = -c; y <= c; y++) {
@@ -34,6 +34,7 @@ public class ShockwaveVirusPulser implements TilePulser {
                     }
                 }
             }
-        }
+        }*/
+        tile.getTileVM().step();
     }
 }
