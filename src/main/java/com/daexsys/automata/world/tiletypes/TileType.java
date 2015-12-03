@@ -68,7 +68,7 @@ public class TileType {
     private int defaultDecayRate = 1;
     private int defaultEnergy = 10;
 
-    private static ArrayList<TileType> types = new ArrayList<>();
+    private static List<TileType> types = new ArrayList<>();
 
     public TileType(byte id, String blockName, String imageUrl, int defaultEnergy, int defaultDecayRate) {
         this.id = id;
@@ -76,7 +76,7 @@ public class TileType {
         this.image = ImageUtil.loadImage(imageUrl);
         this.defaultEnergy = defaultEnergy;
         this.defaultDecayRate = defaultDecayRate;
-//        types.add(this);
+        types.add(this);
     }
 
     public int getDefaultDecayRate() {
