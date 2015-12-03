@@ -41,6 +41,12 @@ public class TileVM implements VM, Pulsable {
     public TileVM(Tile tile) {
         this.tile = tile;
 
+        initialize();
+
+        this.hardware = new VMHardware();
+    }
+
+    public void initialize() {
         this.regA = this.regB = this.regX = this.regF = this.regP = 0;
         this.regS = 0xFF;
 
@@ -54,8 +60,6 @@ public class TileVM implements VM, Pulsable {
                     0,
                     (tile.getTileData().length <= 256) ? tile.getTileData().length : 256);
         }
-
-        this.hardware = new VMHardware();
     }
 
     private void clearRam() {

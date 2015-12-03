@@ -68,6 +68,8 @@ public final class Chunk implements Pulsable {
             if (x >= 0 && y >= 0)
                 contents[layer][x][y] = tile;
         }
+
+        tile.getTileVM().initialize();
     }
 
     public void flashWithNewType(int layer, int x, int y, TileType tileType) {

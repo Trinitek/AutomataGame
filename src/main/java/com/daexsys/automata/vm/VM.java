@@ -1,7 +1,9 @@
 package com.daexsys.automata.vm;
 
-@FunctionalInterface
 public interface VM {
 
+    void initialize();
     byte[] getRam();
+    void step();
+    String regsToString();
 }

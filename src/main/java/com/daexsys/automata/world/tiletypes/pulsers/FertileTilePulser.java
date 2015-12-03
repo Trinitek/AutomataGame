@@ -11,6 +11,10 @@ public class FertileTilePulser implements TilePulser {
         /* Get energy from the sun to grow */
         tile.setEnergy(tile.getEnergy() + 2);
 
+        if (tile.getEnergy() > 1) {
+            tile.getTileVM().step();
+        }
+
         if(tile.getType() == TileType.DIRT && tile.getEnergy() > 500) {
             tile.getCoordinate().queueChange(TileType.GRASS);
         }
