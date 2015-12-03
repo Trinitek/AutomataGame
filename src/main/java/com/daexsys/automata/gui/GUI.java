@@ -96,15 +96,18 @@ public class GUI {
                     graphics2D.drawString("Active chunks: " + getGame().getWorld().getChunkManager().getChunks().size(), 40, 200);
                     graphics2D.drawString("FPS: " + getFPS(), 40, 240);
 
-                    boolean goodTPS = false;
-                    if(getGame().getTPS() > 1000 / getGame().getTickDelayRate() - 1) {
-                        goodTPS = true;
+                    if(getGame().getTickDelayRate() != 0) {
+                        boolean goodTPS = false;
+                        if (getGame().getTPS() > 1000 / getGame().getTickDelayRate() - 1) {
+                            goodTPS = true;
+                        }
+                        if (goodTPS) {
+                            graphics2D.setColor(Color.GREEN);
+                        } else {
+                            graphics2D.setColor(Color.RED);
+                        }
                     }
-                    if(goodTPS) {
-                        graphics2D.setColor(Color.GREEN);
-                    } else {
-                        graphics2D.setColor(Color.RED);
-                    }
+
                     graphics2D.drawString("TPS: " + getGame().getTPS(), 40, 280);
 
                     graphics2D.setColor(Color.WHITE);
@@ -147,8 +150,8 @@ public class GUI {
                     }
 
                     int newValue = scrollManager.retrieveScrollQueue() + getZoomLevel();
-                    if(newValue < 7)
-                        newValue = 7;
+                    if(newValue < 4)
+                        newValue = 4;
                     else if(newValue > 21)
                         newValue = 21;
                     setZoomLevel(newValue);

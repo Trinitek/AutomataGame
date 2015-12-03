@@ -76,7 +76,7 @@ public class TileType {
         this.image = ImageUtil.loadImage(imageUrl);
         this.defaultEnergy = defaultEnergy;
         this.defaultDecayRate = defaultDecayRate;
-        types.add(this);
+//        types.add(this);
     }
 
     public int getDefaultDecayRate() {

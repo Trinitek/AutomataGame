@@ -21,7 +21,7 @@ public class CGoLTileType extends TileType {
                 if (t.getType() == TileType.CGOL) {
                     number++;
                 }
-//
+
                 else {
                     List<Tile> neighborOptional2 = t.getNeighbors(0);
                     int number2 = 0;
@@ -41,9 +41,7 @@ public class CGoLTileType extends TileType {
             }
         }
 
-        if (number < 2) {
-            tile.getCoordinate().queueChange(TileType.DIRT);
-        } else if (number > 3) {
+        if(number != 2 && number != 3) {
             tile.getCoordinate().queueChange(TileType.DIRT);
         }
     }
