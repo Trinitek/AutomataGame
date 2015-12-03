@@ -4,7 +4,7 @@ include "atm8.inc"
 mov a, 11       ; shockwave virus tile ID
 
 start:
-mov x, 0x02     ; tile ports begin are between 0x02 and 0x0A inclusive
+mov x, 0x02     ; tile ports are between 0x02 and 0x0A inclusive
 
 nextTile:
 in b, x         ; is this tile a virus?
