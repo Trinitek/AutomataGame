@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 public class MinerTileType extends TileType {
 
-    public MinerTileType(byte id, String blockName, BufferedImage image, int defaultEnergy, int defaultDecayRate) {
+    public MinerTileType(byte id, String blockName, String image, int defaultEnergy, int defaultDecayRate) {
         super(id, blockName, image, defaultEnergy, defaultDecayRate);
     }
 

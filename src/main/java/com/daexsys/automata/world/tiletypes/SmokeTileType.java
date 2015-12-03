@@ -9,7 +9,7 @@ public class SmokeTileType extends TileType {
     public SmokeTileType(
             byte id,
             String blockName,
-            BufferedImage image,
+            String image,
             int defaultEnergy,
             int defaultDecayRate
     ) {

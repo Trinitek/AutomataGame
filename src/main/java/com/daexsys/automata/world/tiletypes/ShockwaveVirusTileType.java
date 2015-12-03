@@ -19,7 +19,7 @@ public class ShockwaveVirusTileType extends TileType {
     public ShockwaveVirusTileType(
             byte id,
             String blockName,
-            BufferedImage image,
+            String image,
             int defaultEnergy,
             int defaultDecayRate
     ) {
