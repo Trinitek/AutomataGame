@@ -11,7 +11,7 @@ public class ImageUtil {
         try {
             return ImageIO.read(new File(location));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Can't find image file '" + location + "'");
         }
 
         return null;
