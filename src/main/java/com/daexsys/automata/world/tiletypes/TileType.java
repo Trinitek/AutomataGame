@@ -6,6 +6,7 @@ import com.daexsys.automata.world.WorldLayer;
 import com.google.common.base.Optional;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TileType {
@@ -69,12 +70,15 @@ public class TileType {
     private int defaultDecayRate = 1;
     private int defaultEnergy = 10;
 
+    private static ArrayList<TileType> types = new ArrayList<>();
+
     public TileType(byte id, String blockName, BufferedImage image, int defaultEnergy, int defaultDecayRate) {
         this.id = id;
         this.blockName = blockName;
         this.image = image;
         this.defaultEnergy = defaultEnergy;
         this.defaultDecayRate = defaultDecayRate;
+        types.add(this);
     }
 
     public int getDefaultDecayRate() {
@@ -95,6 +99,10 @@ public class TileType {
 
     public byte getId() {
         return id;
+    }
+
+    public TileType getTileFromId(byte id) {
+        return types.get(id);
     }
 
     public void pulse(Tile tile) {
