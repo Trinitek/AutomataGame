@@ -15,7 +15,8 @@ import java.util.concurrent.Executors;
 public class ChunkManager implements Pulsable {
 
     private World world;
-    private List<Chunk> chunks = new ArrayList<Chunk>();
+    private List<Chunk> chunks = new ArrayList<>();
+    private Chunk[][] chunkArray = new Chunk[15][15];
 
     public ChunkManager(World world) {
         this.world = world;
@@ -26,23 +27,33 @@ public class ChunkManager implements Pulsable {
     }
 
     public Chunk getChunk(int x, int y) {
-        for(Chunk chunk : new ArrayList<>(chunks)) {
-            if(chunk.getChunkCoordinate().is(x, y)) {
-                return chunk;
+        if(x < 15 && y < 15 && x >= 0 && y >= 0) {
+            Chunk c = chunkArray[x][y];
+
+            if (c == null) {
+                return generateChunk(x, y);
+            } else {
+                return c;
             }
-        }
+        } return null;
+//        for(Chunk chunk : new ArrayList<>(chunks)) {
+//            if(chunk.getChunkCoordinate().is(x, y)) {
+//                return chunk;
+//            }
+//        }
 
         /*
             If we have gotten this far, then the chunk hasn't been generated yet.
             But we need it! It must be generated.
          */
-        return generateChunk(x, y);
+//        return generateChunk(x, y);
     }
 
     private Chunk generateChunk(int x, int y) {
         Chunk chunk = new Chunk(world, x, y);
         world.getTerrainGenerator().generate(chunk);
         addChunk(chunk);
+        chunkArray[x][y] = chunk;
 
         return chunk;
     }
@@ -59,33 +70,10 @@ public class ChunkManager implements Pulsable {
         return world;
     }
 
+    private List<Chunk> chunks2 = new ArrayList<>(chunks);
     public void pulse() {
-//        int coreCount = Runtime.getRuntime().availableProcessors();
-//        coreCount--;
-//        ExecutorService executorService = Executors.newFixedThreadPool(coreCount);
-//
-//        for (int i = 0; i < coreCount; i++) {
-//            final int segment = chunks.size() / coreCount;
-//            final int ii = i;
-//
-//            Runnable thread = new Runnable() {
-//                @Override
-//                public void run() {
-//                    final List<Chunk> chunks2 = new ArrayList<>(chunks.subList(segment * ii, segment * (ii + 1)));
-//
-//                    for(Chunk chunk : chunks2) {
-//                        chunk.pulse();
-//                    }
-//
-//                    for(Chunk chunk : chunks2) {
-//                        chunk.depositQueue();
-//                    }
-//                }
-//            };
-//            executorService.execute(thread);
-//        }
-
-        final List<Chunk> chunks2 = new ArrayList<>(chunks);
+        chunks2.clear();
+        chunks2.addAll(chunks);
 
         for(Chunk chunk : chunks2) {
             chunk.pulse();
@@ -94,6 +82,16 @@ public class ChunkManager implements Pulsable {
         for(Chunk chunk : chunks2) {
             chunk.depositQueue();
         }
+    }
+
+    public boolean doesChunkExist(int x, int y) {
+        for(Chunk c : getChunks()) {
+            if(c.getChunkCoordinate().is(x, y)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public Collection<Chunk> getChunks() {

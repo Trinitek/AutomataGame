@@ -29,7 +29,7 @@ public final class World implements Pulsable {
 
         // pre-generate world sections
         for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+            for (int j = 0; j < 3; j++) {
                 chunkManager.getChunk(i, j);
             }
         }
@@ -75,24 +75,47 @@ public final class World implements Pulsable {
     }
 
     public Tile getTileAt(int layer, int x, int y) {
-        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
+        Chunk chunk = getChunkManager().getChunk(
+                x / Chunk.DEFAULT_CHUNK_SIZE, y / Chunk.DEFAULT_CHUNK_SIZE);
 
-        Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
+        ChunkCoordinate chunkCoordinate = chunk.getChunkCoordinate();
 
-        TileCoord tileCoordinate = chunkCoordinate.localifyCoordinates(x, y);
-        return chunk.getTile(layer, tileCoordinate.x, tileCoordinate.y);
+        return chunk.getTile(layer, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y));
     }
 
+    /*
+        Yes, this method is optimization hell. But the huge TPS boost is worth it from
+        not instantiating 1-2 object per tile per tick for the entire map!
+     */
+    private Chunk lastSampledChunk;
     public Tile sampleTileAt(int layer, int x, int y) {
-        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, x, y);
+        int chunkCoordX = x / Chunk.DEFAULT_CHUNK_SIZE;
+        int chunkCoordY = y / Chunk.DEFAULT_CHUNK_SIZE;
 
-        if(doesChunkExist(chunkCoordinate.x, chunkCoordinate.y)) {
-            Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
+        Chunk chunk = null;
 
-            return chunk.getTile(layer, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y));
+        if(lastSampledChunk != null) {
+            if(lastSampledChunk.getChunkCoordinate().is(chunkCoordX, chunkCoordY)) {
+                chunk = lastSampledChunk;
+            } else {
+                if(getChunkManager().doesChunkExist(chunkCoordX, chunkCoordY)) {
+                    chunk = getChunkManager().getChunk(chunkCoordX, chunkCoordY);
+                }
+            }
+        } else {
+            if(getChunkManager().doesChunkExist(chunkCoordX, chunkCoordY)) {
+                chunk = getChunkManager().getChunk(chunkCoordX, chunkCoordY);
+            }
         }
+        lastSampledChunk = chunk;
 
-        return null;
+        if(chunk == null) return null;
+
+        return chunk.getTile(
+                layer,
+                chunk.getChunkCoordinate().localifyX(x),
+                chunk.getChunkCoordinate().localifyY(y)
+        );
     }
 
     /**
@@ -131,11 +154,10 @@ public final class World implements Pulsable {
     }
 
     public void queueChangeAt(TileCoord tileCoord, TileType tileType) {
-        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(this, tileCoord.x, tileCoord.y);
+        ChunkCoordinate chunkCoordinate = ChunkCoordinate.forWorldCoords(tileCoord);
         Tile newTile = new Tile(tileCoord, tileType);
-        Chunk chunk =
-                getChunkManager().getChunk(chunkCoordinate);
 
+        Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
         chunk.queueChangeAt(tileCoord.layer, chunkCoordinate.localifyX(tileCoord.x), chunkCoordinate.localifyY(tileCoord.y), newTile);
     }
 
@@ -144,8 +166,7 @@ public final class World implements Pulsable {
         Tile newTile = new Tile(coord, tileType);
         newTile.setEnergy(newEnergy);
 
-        Chunk chunk =
-                getChunkManager().getChunk(chunkCoordinate);
+        Chunk chunk = chunkCoordinate.getChunk();
 
         chunk.queueChangeAt(
                 coord.layer,
@@ -161,16 +182,6 @@ public final class World implements Pulsable {
 
     public ChunkManager getChunkManager() {
         return chunkManager;
-    }
-
-    public boolean doesChunkExist(int x, int y) {
-        for(Chunk c : chunkManager.getChunks()) {
-            if(c.getChunkCoordinate().is(x, y)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public long getSeed() {

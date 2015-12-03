@@ -4,7 +4,6 @@ import com.daexsys.automata.vm.TileVM;
 import com.daexsys.automata.vm.VM;
 import com.daexsys.automata.world.*;
 import com.daexsys.automata.world.tiletypes.TileType;
-import com.google.common.base.Optional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +12,10 @@ public class Tile implements Pulsable {
 
     private static final int RAM_AMOUNT = 256; // 256 bytes
 
-    private VM tileVM = new TileVM(this);
-
     private final TileCoord coordinate;
     private TileType tileType;
+
+    private VM tileVM = new TileVM(this);
 
     private int energy;
     private byte[] tileData;
@@ -31,9 +30,8 @@ public class Tile implements Pulsable {
         if(getType() == TileType.AIR)
             return;
 
-        tileType.pulse(this);
-
-        ((Pulsable) tileVM).pulse();
+        if(getCoordinate().layer == WorldLayer.GROUND)
+            tileType.pulse(this);
 
         /* Randomly lose energy to entropy. */
         if(getWorld().getRandom().nextBoolean())
@@ -61,12 +59,13 @@ public class Tile implements Pulsable {
         return tileData;
     }
 
+//    public void setType(TileType tileType) {
+//        this.tileType = tileType;
+//        energy = tileType.getDefaultEnergy();
+//    }
+
     public TileCoord getCoordinate() {
         return coordinate;
-    }
-
-    public TileCoord getWorldCoordinate() {
-        return getChunk().getChunkCoordinate().localifyCoordinates(getCoordinate().x, getCoordinate().y);
     }
 
     public World getWorld() {
@@ -106,6 +105,7 @@ public class Tile implements Pulsable {
 
     public List<Tile> getNeighbors(int layer) {
         neighbors.clear();
+
         World world = getWorld();
         int x = coordinate.x;
         int y = coordinate.y;

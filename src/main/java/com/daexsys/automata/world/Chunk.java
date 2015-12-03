@@ -94,7 +94,11 @@ public final class Chunk implements Pulsable {
 
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
-                world.getChunkManager().getChunk(getChunkCoordinate().x + i, getChunkCoordinate().y + j);
+                ChunkCoordinate shiftedCoordinate = getChunkCoordinate().add(i, j);
+
+                if(shiftedCoordinate.x >= 0 && shiftedCoordinate.y >= 0) {
+                    world.getChunkManager().getChunk(shiftedCoordinate);
+                }
             }
         }
     }

@@ -70,7 +70,11 @@ public class KeyboardHandler implements KeyListener {
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_E) {
-            gui.getGame().setTickDelayRate(gui.getGame().getTickDelayRate() - 10);
+            if(gui.getGame().getTickDelayRate() <= 10) {
+                gui.getGame().setTickDelayRate(gui.getGame().getTickDelayRate() - 1);
+            } else {
+                gui.getGame().setTickDelayRate(gui.getGame().getTickDelayRate() - 10);
+            }
         }
 
         else if(e.getKeyCode() == KeyEvent.VK_Q) {
