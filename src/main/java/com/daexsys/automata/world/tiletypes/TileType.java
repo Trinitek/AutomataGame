@@ -106,24 +106,42 @@ public class TileType {
     }
 
     public void pulse(Tile tile) {
-        List<Tile> neighborOptional = tile.getNeighbors(0);
-        int number = 0;
 
-        for (Tile t : neighborOptional) {
-            if(t != null) {
-                if (t.getType() == TileType.CGOL) {
-                    number++;
+        if(this == TileType.CGOL) {
+            List<Tile> neighborOptional = new ArrayList<>(tile.getNeighbors(0));
+            int number = 0;
+
+            for (Tile t : neighborOptional) {
+                if (t != null) {
+                    if (t.getType() == TileType.CGOL) {
+                        number++;
+                    }
+//
+                    else {
+                        List<Tile> neighborOptional2 = t.getNeighbors(0);
+                        int number2 = 0;
+
+                        for (Tile t2 : neighborOptional2) {
+                            if (t2 != null) {
+                                if (t2.getType() == TileType.CGOL) {
+                                    number2++;
+                                }
+                            }
+                        }
+
+                        if(number2 == 3) {
+                            t.getCoordinate().queueChange(TileType.CGOL);
+                        }
+                    }
                 }
             }
-        }
-        if(this == TileType.CGOL) {
-            if (number < 2) {
-                tile.getCoordinate().queueChange(TileType.DIRT);
-            }
-            else if (number > 3) { tile.getCoordinate().queueChange(TileType.DIRT); }
-        } else if (number == 3) {
-            if(this != TileType.WATER) {
-                tile.getCoordinate().queueChange(TileType.CGOL);
+
+            if (this == TileType.CGOL) {
+                if (number < 2) {
+                    tile.getCoordinate().queueChange(TileType.DIRT);
+                } else if (number > 3) {
+                    tile.getCoordinate().queueChange(TileType.DIRT);
+                }
             }
         }
     }

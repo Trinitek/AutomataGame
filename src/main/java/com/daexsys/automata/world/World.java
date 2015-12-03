@@ -126,7 +126,13 @@ public final class World implements Pulsable {
 
         if((layer == 0 || layer == 1)) {
             Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
-            chunk.flashWithNewType(layer, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), tileType);
+
+            if(chunk != null) {
+                chunk.flashWithNewType(layer, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), tileType);
+            } else {
+                return false;
+            }
+
             return true;
         }
 
