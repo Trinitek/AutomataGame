@@ -14,23 +14,10 @@ import java.awt.image.BufferedImage;
  * this is but it likely has something to do with the tile.getEnergy() / 2 operation
  * and the initial energy level of the tile.
  */
-public class ShockwaveVirusTileType extends TileType {
-
-    public ShockwaveVirusTileType(
-            byte id,
-            String blockName,
-            String imageUrl,
-            String programUrl,
-            int defaultEnergy,
-            int defaultDecayRate
-    ) {
-        super(id, blockName, imageUrl, programUrl, defaultEnergy, defaultDecayRate);
-    }
+public class ShockwaveVirusPulser implements TilePulser{
 
     @Override
     public void pulse(Tile tile) {
-        super.pulse(tile);
-
         // Speed of light of the shockwave virus
         int c = 1;
 

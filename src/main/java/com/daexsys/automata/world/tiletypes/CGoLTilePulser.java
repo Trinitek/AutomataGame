@@ -5,11 +5,7 @@ import com.daexsys.automata.Tile;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CGoLTileType extends TileType {
-
-    public CGoLTileType(byte id, String blockName, String imageUrl, String programUrl, int defaultEnergy, int defaultDecayRate) {
-        super(id, blockName, imageUrl, programUrl, defaultEnergy, defaultDecayRate);
-    }
+public class CGoLTilePulser implements TilePulser {
 
     @Override
     public void pulse(Tile tile) {

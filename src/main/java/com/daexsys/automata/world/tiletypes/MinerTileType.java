@@ -3,18 +3,10 @@ package com.daexsys.automata.world.tiletypes;
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.*;
 
-import java.awt.image.BufferedImage;
-
-public class MinerTileType extends TileType {
-
-    public MinerTileType(byte id, String blockName, String imageUrl, String programUrl, int defaultEnergy, int defaultDecayRate) {
-        super(id, blockName, imageUrl, programUrl, defaultEnergy, defaultDecayRate);
-    }
+public class MinerTileType implements TilePulser {
 
     @Override
     public void pulse(Tile tile) {
-        super.pulse(tile);
-
         byte direction = tile.getTileData()[0];
         TileCoord target;
 
@@ -27,10 +19,10 @@ public class MinerTileType extends TileType {
         if(tile.getWorld().isObstructionAt(target.x, target.y)) {
             final int breakRate = 3;
 
-            Tile tileToWeaken = null;
-            tileToWeaken = tile.getWorld().getTileAt(WorldLayer.ABOVE_GROUND, target.x, target.y);
+            Tile tileToWeaken = tile.getWorld().getTileAt(WorldLayer.ABOVE_GROUND, target.x, target.y);
             tileToWeaken.setEnergy(tileToWeaken.getEnergy() - breakRate);
 
+            System.out.println(tileToWeaken.getEnergy());
             if(tileToWeaken.getEnergy() <= 0) {
                 tile.getWorld().setTileTypeAt(WorldLayer.GROUND, tile.getCoordinate(), TileType.DIRT);
                 tileToWeaken.getWorld().setTileTypeAt(WorldLayer.ABOVE_GROUND, target, TileType.AIR);

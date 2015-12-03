@@ -156,16 +156,16 @@ public class TileVM implements VM, Pulsable {
                 return y;
             case 0x02:          // get ID of above tile
                 tTemp = world.sampleTileAt(hardware.viewingLayer, x, y - 1);
-                return tTemp != null ? tTemp.getType().getId() : 0xFF;
+                return tTemp != null ? tTemp.getType().getID() : 0xFF;
             case 0x03:          // get ID of right tile
                 tTemp = world.sampleTileAt(hardware.viewingLayer, x + 1, y);
-                return tTemp != null ? tTemp.getType().getId() : 0xFF;
+                return tTemp != null ? tTemp.getType().getID() : 0xFF;
             case 0x04:          // get ID of bottom tile
                 tTemp = world.sampleTileAt(hardware.viewingLayer, x, y + 1);
-                return tTemp != null ? tTemp.getType().getId() : 0xFF;
+                return tTemp != null ? tTemp.getType().getID() : 0xFF;
             case 0x05:          // get ID of left tile
                 tTemp = world.sampleTileAt(hardware.viewingLayer, x - 1, y);
-                return tTemp != null ? tTemp.getType().getId() : 0xFF;
+                return tTemp != null ? tTemp.getType().getID() : 0xFF;
             case 0x06:          // get viewing layer
                 return this.hardware.viewingLayer;
             default:
@@ -738,7 +738,7 @@ public class TileVM implements VM, Pulsable {
 
     public static void main(String[] args) {
         Tile tile = new Tile(new TileCoord(WorldLayer.GROUND, null, 0, 0),
-                new TileType((byte) 0, "", null, null, 100, 1));
+                TileType.BOMB);
         TileVM tileVM = new TileVM(tile);
 
         if (args.length == 0) {

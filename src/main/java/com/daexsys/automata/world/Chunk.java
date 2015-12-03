@@ -58,8 +58,15 @@ public final class Chunk implements Pulsable {
 
         homogenous = false;
 
-        if(x >= 0 && y >= 0)
-            contents[layer][x][y] = tile;
+        if(layer == WorldLayer.GROUND) {
+            if(contents[WorldLayer.ABOVE_GROUND][x][y].getType() == TileType.AIR) {
+                if (x >= 0 && y >= 0)
+                    contents[layer][x][y] = tile;
+            }
+        } else {
+            if (x >= 0 && y >= 0)
+                contents[layer][x][y] = tile;
+        }
     }
 
     public void flashWithNewType(int layer, int x, int y, TileType tileType) {

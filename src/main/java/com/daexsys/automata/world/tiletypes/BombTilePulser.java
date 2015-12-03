@@ -4,15 +4,8 @@ import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.WorldLayer;
 
-import java.awt.image.BufferedImage;
+public class BombTilePulser implements TilePulser {
 
-public class BombTileType extends TileType {
-
-    public BombTileType(byte id, String blockName, String imageUrl, String programUrl, int defaultEnergy, int defaultDecayRate) {
-        super(id, blockName, imageUrl, programUrl, defaultEnergy, defaultDecayRate);
-    }
-
-    @Override
     public void destruct(Tile tile) {
         World world = tile.getWorld();
 
@@ -35,5 +28,10 @@ public class BombTileType extends TileType {
                 }
             }
         }
+    }
+
+    @Override
+    public void pulse(Tile t) {
+
     }
 }

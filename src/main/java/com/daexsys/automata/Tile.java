@@ -16,7 +16,6 @@ public class Tile implements Pulsable {
     private TileType tileType;
 
     private VM tileVM = new TileVM(this);
-
     private int energy;
     private byte[] tileData;
 
@@ -31,8 +30,7 @@ public class Tile implements Pulsable {
         if(getType() == TileType.AIR)
             return;
 
-        if(getCoordinate().layer == WorldLayer.GROUND)
-            tileType.pulse(this);
+        tileType.pulse(this);
 
         /* Randomly lose energy to entropy. */
         if(getWorld().getRandom().nextBoolean())

@@ -111,7 +111,7 @@ public class GUI {
                     graphics2D.drawString("TPS: " + getGame().getTPS(), 40, 280);
 
                     graphics2D.setColor(Color.WHITE);
-                    graphics2D.drawString("Item in-hand: " + getGame().getPlayerState().getInHand().getTileName(), 40, 320);
+                    graphics2D.drawString("Item in-hand: " + getGame().getPlayerState().getInHand().getName(), 40, 320);
                     graphics2D.drawString("X: " + getOffsets().getOffsetX() * -1, 40, 360);
                     graphics2D.drawString("Y: " + getOffsets().getOffsetY() * -1, 40, 400);
 
