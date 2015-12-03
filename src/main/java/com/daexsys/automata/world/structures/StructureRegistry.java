@@ -5,11 +5,11 @@ import com.daexsys.automata.world.tiletypes.TileType;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Structures {
+public class StructureRegistry {
 
     private Map<String, Structure> structureMap = new HashMap<>();
 
-    public Structures() {
+    public StructureRegistry() {
         /* Add default structures */
 
         structureMap.put("cgol_glider", new Structure(3, new int[] {

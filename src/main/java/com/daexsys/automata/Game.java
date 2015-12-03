@@ -1,15 +1,18 @@
 package com.daexsys.automata;
 
-import com.daexsys.automata.world.structures.Structures;
+import com.daexsys.automata.world.structures.StructureRegistry;
 import com.daexsys.automata.world.World;
+import com.daexsys.automata.world.tiletypes.TileRegistry;
 
 public class Game {
 
     private boolean isPaused = false;
     private World worldModel;
-    private Structures structures;
-    private PlayerState playerState;
 
+    private TileRegistry tileRegistry;
+    private StructureRegistry structures;
+
+    private PlayerState playerState;
     private volatile int tickDelayRate = 250; // 500 default
 
     private int lastTPS = 0;
@@ -18,7 +21,8 @@ public class Game {
 
     public Game() {
         worldModel = new World();
-        structures = new Structures();
+        tileRegistry = new TileRegistry();
+        structures = new StructureRegistry();
         playerState = new PlayerState(this);
 
         Thread worldPule = new Thread(new Runnable() {
@@ -68,7 +72,11 @@ public class Game {
         return playerState;
     }
 
-    public Structures getStructures() {
+    public TileRegistry getTileRegistry() {
+        return tileRegistry;
+    }
+
+    public StructureRegistry getStructures() {
         return structures;
     }
 

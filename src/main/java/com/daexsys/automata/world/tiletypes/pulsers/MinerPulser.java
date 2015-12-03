@@ -1,9 +1,11 @@
-package com.daexsys.automata.world.tiletypes;
+package com.daexsys.automata.world.tiletypes.pulsers;
 
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.*;
+import com.daexsys.automata.world.tiletypes.TilePulser;
+import com.daexsys.automata.world.tiletypes.TileType;
 
-public class MinerTileType implements TilePulser {
+public class MinerPulser implements TilePulser {
 
     @Override
     public void pulse(Tile tile) {

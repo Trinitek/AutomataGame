@@ -5,8 +5,6 @@ import com.daexsys.automata.Pulsable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Worth noting this class is going to get a LOT more complex.
