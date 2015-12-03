@@ -20,14 +20,14 @@ public class CGoLTilePulser implements TilePulser {
 
     @Override
     public void pulse(Tile tile) {
-        List<Tile> neighbors = tile.getMooreNeighborhood(0);
+        List<Tile> neighbors = tile.getMooreNeighborhood(tile.getCoordinate().layer);
         int number = 0;
 
         for (Tile iteratedTile : neighbors) {
             if (iteratedTile.getType() == tile.getType()) {
                 number++;
             } else {
-                int amount = iteratedTile.getMooreNeighborhoodEqualTo(WorldLayer.GROUND, tile.getType());
+                int amount = iteratedTile.getMooreNeighborhoodEqualTo(tile.getCoordinate().layer, tile.getType());
 //
                 for(Integer i : birthNums) {
                     if(i == amount) {

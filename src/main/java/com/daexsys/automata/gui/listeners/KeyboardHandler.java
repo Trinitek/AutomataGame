@@ -40,7 +40,7 @@ public class KeyboardHandler implements KeyListener {
         }
 //
         else if(e.getKeyCode() == KeyEvent.VK_3) {
-            gui.getGame().getPlayerState().setInHand(TileType.AMOEBA);
+            gui.getGame().getPlayerState().setInHand(TileType.HIGH_LIFE);
             gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 

@@ -124,7 +124,27 @@ public final class TileType {
         AMOEBA = new TileType.Builder()
                 .setID((byte) 18)
                 .setName("amoeba")
-                .setImageLocation("images/automata.png")
+                .setImageLocation("images/amoeba.png")
+                .setEnergy(10)
+                .setDecayRate(0)
+                .setPulser(new CGoLTilePulser(birthRules, stayAliveRules))
+                .build();
+    }
+
+    public static final TileType HIGH_LIFE;
+    static {
+        List<Integer> birthRules = new ArrayList<>();
+        birthRules.add(3);
+        birthRules.add(6);
+
+        List<Integer> stayAliveRules = new ArrayList<>();
+        stayAliveRules.add(2);
+        stayAliveRules.add(3);
+
+        HIGH_LIFE = new TileType.Builder()
+                .setID((byte) 19)
+                .setName("highlife")
+                .setImageLocation("images/cottencandy.png")
                 .setEnergy(10)
                 .setDecayRate(0)
                 .setPulser(new CGoLTilePulser(birthRules, stayAliveRules))

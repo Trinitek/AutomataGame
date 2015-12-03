@@ -52,27 +52,27 @@ public final class World implements Pulsable {
 //                }
 //            }
 //        }
-
-        for (int i = 0; i < size / 5; i++) {
-            int lakeX = random.nextInt(size);
-            int lakeY = random.nextInt(size);
-            int lakeSize = random.nextInt(15) + 3;
-
-            for (int j = lakeX - lakeSize; j < lakeX + lakeSize; j++) {
-                for (int k = lakeY - lakeSize; k < lakeY + lakeSize; k++) {
-                    int x = j - lakeX;
-                    int y = k - lakeY;
-
-                    if((x * x + y * y) < lakeSize * lakeSize) {
-                        if(random.nextBoolean()) {
-                            setTileTypeAt(WorldLayer.ABOVE_GROUND, j, k, TileType.STONE);
-                        } else {
-                            setTileTypeAt(WorldLayer.ABOVE_GROUND, j, k, TileType.ENERGY_ORE);
-                        }
-                    }
-                }
-            }
-        }
+//
+//        for (int i = 0; i < size / 5; i++) {
+//            int lakeX = random.nextInt(size);
+//            int lakeY = random.nextInt(size);
+//            int lakeSize = random.nextInt(15) + 3;
+//
+//            for (int j = lakeX - lakeSize; j < lakeX + lakeSize; j++) {
+//                for (int k = lakeY - lakeSize; k < lakeY + lakeSize; k++) {
+//                    int x = j - lakeX;
+//                    int y = k - lakeY;
+//
+//                    if((x * x + y * y) < lakeSize * lakeSize) {
+//                        if(random.nextBoolean()) {
+//                            setTileTypeAt(WorldLayer.ABOVE_GROUND, j, k, TileType.STONE);
+//                        } else {
+//                            setTileTypeAt(WorldLayer.ABOVE_GROUND, j, k, TileType.ENERGY_ORE);
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     public Tile getTileAt(int layer, int x, int y) {
