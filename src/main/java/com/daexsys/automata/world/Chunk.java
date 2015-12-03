@@ -26,6 +26,9 @@ public final class Chunk implements Pulsable {
 
         contents = new Tile[2][DEFAULT_CHUNK_SIZE][DEFAULT_CHUNK_SIZE];
         queuedTileChangeStack = new Stack<>();
+
+        fillLayerWith(0, TileType.AIR);
+        fillLayerWith(1, TileType.AIR);
     }
 
     public void pulse() {
@@ -126,5 +129,23 @@ public final class Chunk implements Pulsable {
 
     public Tile[][][] getContents() {
         return contents;
+    }
+
+    @Override
+    public String toString() {
+        String buildUp = "";
+
+        for (int j = 0; j < Chunk.DEFAULT_CHUNK_SIZE; j++) {
+            String currentRow = "";
+
+            for (int i = 0; i < Chunk.DEFAULT_CHUNK_SIZE; i++) {
+                Tile tile = getTile(0, i, j);
+                currentRow += tile.getType().getID() + ", ";
+            }
+
+            buildUp += currentRow + "\n";
+        }
+
+        return buildUp;
     }
 }

@@ -1,6 +1,5 @@
 package com.daexsys.automata;
 
-import com.daexsys.automata.gui.chat.ChatMessage;
 import com.daexsys.automata.world.structures.StructureRegistry;
 import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.tiletypes.TileRegistry;
@@ -8,7 +7,7 @@ import com.daexsys.automata.world.tiletypes.TileRegistry;
 public class Game {
 
     private boolean isPaused = false;
-    private World worldModel;
+    private World world;
 
     private TileRegistry tileRegistry;
     private StructureRegistry structures;
@@ -23,7 +22,7 @@ public class Game {
     private int tps = 0;
 
     public Game() {
-        worldModel = new World(this);
+        world = new World(this);
 
         tileRegistry = new TileRegistry();
         structures = new StructureRegistry();
@@ -43,7 +42,7 @@ public class Game {
                 }
 
                 if(!isPaused) {
-                    worldModel.pulse();
+                    world.pulse();
                     tps++;
 
                     if(System.currentTimeMillis() > lastTPSTime + 1000) {
@@ -59,12 +58,24 @@ public class Game {
         worldPule.start();
     }
 
+    /**
+     * Client constructor
+     */
+    public Game(boolean t) {
+        world = new World(this);
+
+        tileRegistry = new TileRegistry();
+        structures = new StructureRegistry();
+        chatManager = new ChatManager(this);
+        playerState = new PlayerState(this);
+    }
+
     public int getTPS() {
         return lastTPS;
     }
 
     public World getWorld() {
-        return worldModel;
+        return world;
     }
 
     public boolean isPaused() {
