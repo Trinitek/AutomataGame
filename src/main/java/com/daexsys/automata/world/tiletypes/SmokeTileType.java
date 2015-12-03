@@ -9,11 +9,11 @@ public class SmokeTileType extends TileType {
     public SmokeTileType(
             byte id,
             String blockName,
-            BufferedImage image,
+            String imageUrl,
             int defaultEnergy,
             int defaultDecayRate
     ) {
-        super(id, blockName, image, defaultEnergy, defaultDecayRate);
+        super(id, blockName, imageUrl, defaultEnergy, defaultDecayRate);
     }
 
     @Override
