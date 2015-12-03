@@ -181,22 +181,22 @@ public class TileVM implements VM, Pulsable {
             case 0x02:          // place tile above
                 world.queueChangeAt(
                         new TileCoord(hardware.viewingLayer, world, x, y - 1),
-                        TileType.getTileFromId((byte) data));
+                        TileType.getTileFromID((byte) data));
                 break;
             case 0x03:          // place tile to the right
                 world.queueChangeAt(
                         new TileCoord(hardware.viewingLayer, world, x + 1, y),
-                        TileType.getTileFromId((byte) data));
+                        TileType.getTileFromID((byte) data));
                 break;
             case 0x04:          // place tile below
                 world.queueChangeAt(
                         new TileCoord(hardware.viewingLayer, world, x, y + 1),
-                        TileType.getTileFromId((byte) data));
+                        TileType.getTileFromID((byte) data));
                 break;
             case 0x05:          // place tile to the left
                 world.queueChangeAt(
                         new TileCoord(hardware.viewingLayer, world, x - 1, y),
-                        TileType.getTileFromId((byte) data));
+                        TileType.getTileFromID((byte) data));
                 break;
             case 0x06:          // set viewing layer
                 hardware.viewingLayer = data;

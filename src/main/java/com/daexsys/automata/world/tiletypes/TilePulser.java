@@ -4,5 +4,9 @@ import com.daexsys.automata.Tile;
 
 public interface TilePulser {
 
-    public void pulse(Tile t);
+    void pulse(Tile t);
+
+    default void destruct(Tile tile) {
+        tile.getCoordinate().queueChange(TileType.DIRT);
+    }
 }
