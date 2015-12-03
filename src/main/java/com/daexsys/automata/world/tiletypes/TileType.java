@@ -80,7 +80,7 @@ public final class TileType {
 
     public static final TileType SHOCKWAVE_VIRUS =
             new TileType.Builder().setID((byte) 11).setName("shockwave virus").setImageLocation("images/shockwave.png")
-                    .setEnergy(50).setDecayRate(0).setPulser(new ShockwaveVirusPulser()).build();
+                    .setVMProgram("vmexec/shockwave.vme").setEnergy(50).setDecayRate(0).setPulser(new ShockwaveVirusPulser()).build();
 
     public static final TileType WOOD =
             new TileType.Builder().setID((byte) 12).setName("wood").setImageLocation("images/wood.png")
