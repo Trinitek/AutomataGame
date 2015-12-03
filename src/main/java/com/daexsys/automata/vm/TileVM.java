@@ -44,6 +44,7 @@ public class TileVM implements VM, Pulsable {
         this.regA = this.regB = this.regX = this.regF = this.regP = 0;
         this.regS = 0xFF;
 
+        this.ram = new byte[256];
         clearRam();
         if (tile.getTileData() != null) {
             System.arraycopy(

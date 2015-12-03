@@ -14,10 +14,10 @@ import java.util.List;
 public class TileType {
 
     public static final TileType STONE =
-            new TileType((byte) 0, "stone", "images/stone.png", "vmexec/stone.vme", 50, 0);
+            TileTypeBuilder((byte) 0, "stone", "images/stone.png", "vmexec/stone.vme", 50, 0);
 
     public static final TileType VM_255_BYTE_RAM =
-            new TileType((byte) 1, "virtual machine", "images/digital.png", null, 1000, 5);
+            TileTypeBuilder((byte) 1, "virtual machine", "images/digital.png", null, 1000, 5);
 
     public static final TileType CGOL =
             new CGoLTileType((byte) 2, "CGoL", "images/automata.png", "vmexec/cgol.vme", 10, 0);
@@ -36,13 +36,13 @@ public class TileType {
 
     // TODO: rename
     public static final TileType ENERGY_ORE =
-            new TileType((byte) 7, "energy ore", "images/energy_ore.png", "vmexec/energy_ore.vme", 100, 0);
+            TileTypeBuilder((byte) 7, "energy ore", "images/energy_ore.png", "vmexec/energy_ore.vme", 100, 0);
 
     public static final TileType TALL_GRASS =
             new FertileTileType((byte) 8, "tall grass", "images/tall_grass.png", "vmexec/tall_grass.vme", 100, 1);
 
     public static final TileType AIR =
-            new TileType((byte) 9, "air", "images/stone.png", "vmexec/air.vme", 50, 0);
+            TileTypeBuilder((byte) 9, "air", "images/stone.png", "vmexec/air.vme", 50, 0);
 
     public static final TileType MINER =
             new MinerTileType((byte) 10, "miner test", "images/miner.png", "vmexec/miner.vme", 50, 0);
@@ -51,13 +51,13 @@ public class TileType {
             new ShockwaveVirusTileType((byte) 11, "shockwave virus", "images/shockwave.png", "vmexec/shockwave.vme", 50, 0);
 
     public static final TileType WOOD =
-            new TileType((byte) 12, "wood", "images/wood.png", "vmexec/wood.vme", 50, 0);
+            TileTypeBuilder((byte) 12, "wood", "images/wood.png", "vmexec/wood.vme", 50, 0);
 
     public static final TileType LEAVES =
-            new TileType((byte) 13, "leaves", "images/leaves.png", "vmexec/leaves.vme", 50, 0);
+            TileTypeBuilder((byte) 13, "leaves", "images/leaves.png", "vmexec/leaves.vme", 50, 0);
 
     public static final TileType SAND =
-            new TileType((byte) 14, "sand", "images/sand.png", "vmexec/sand.vme", 50, 0);
+            TileTypeBuilder((byte) 14, "sand", "images/sand.png", "vmexec/sand.vme", 50, 0);
 
     public static final TileType BOMB =
             new BombTileType((byte) 15, "bomb", "images/bomb_block.png", "vmexec/bomb.vme", 50, 10);
@@ -75,7 +75,7 @@ public class TileType {
 
     private static List<TileType> types = new ArrayList<>();
 
-    public TileType(byte id, String blockName, String imageUrl, String programUrl, int defaultEnergy, int defaultDecayRate) {
+    private TileType(byte id, String blockName, String imageUrl, String programUrl, int defaultEnergy, int defaultDecayRate) {
         this.id = id;
         this.blockName = blockName;
         this.image = ImageUtil.loadImage(imageUrl);
@@ -83,16 +83,22 @@ public class TileType {
         this.defaultDecayRate = defaultDecayRate;
 
         FileInputStream programStream;
-        try {
-            programStream = new FileInputStream(new File(programUrl));
-            //noinspection ResultOfMethodCallIgnored
-            programStream.read(this.defaultProgram);
-            programStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (programUrl != null) {
+            try {
+                programStream = new FileInputStream(new File(programUrl));
+                //noinspection ResultOfMethodCallIgnored
+                programStream.read(this.defaultProgram);
+                programStream.close();
+            } catch (IOException e) {
+                System.err.println("Can't find VME file '" + programUrl + "'");
+            }
         }
+    }
 
-        types.add(this);
+    public static TileType TileTypeBuilder(byte id, String blockName, String imageUrl, String programUrl, int defaultEnergy, int defaultDecayRate) {
+        TileType tileType = new TileType(id, blockName, imageUrl, programUrl, defaultEnergy, defaultDecayRate);
+        types.add(tileType);
+        return tileType;
     }
 
     public int getDefaultDecayRate() {
