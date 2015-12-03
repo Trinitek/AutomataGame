@@ -61,7 +61,7 @@ public final class TileType {
 
     public static final TileType MINER =
             new TileType.Builder().setID((byte) 10).setName("miner test").setImageLocation("images/miner.png")
-                    .setEnergy(50).setDecayRate(0).build();
+                    .setEnergy(50).setDecayRate(0).setPulser(new MinerPulser()).build();
 
     public static final TileType SHOCKWAVE_VIRUS =
             new TileType.Builder().setID((byte) 11).setName("shockwave virus").setImageLocation("images/shockwave.png")
@@ -106,11 +106,17 @@ public final class TileType {
     private BufferedImage image;
 
     public void pulse(Tile tile) {
-        tilePulser.pulse(tile);
+        if(tilePulser != null) {
+            tilePulser.pulse(tile);
+        }
     }
 
     public void destruct(Tile tile) {
-        tile.getCoordinate().queueChange(TileType.DIRT);
+        if(tilePulser != null) {
+            tilePulser.destruct(tile);
+        } else {
+            tile.getCoordinate().queueChange(TileType.DIRT);
+        }
     }
 
     public int getDefaultDecayRate() {
