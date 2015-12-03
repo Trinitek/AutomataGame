@@ -7,11 +7,16 @@ public class PlayerState {
 
     private Game game;
     private Structure selectedStructure = null;
-    private TileType inHand = TileType.CGOL;
+    private PlayerInventory inventory;
 
     public PlayerState(Game game) {
         this.game = game;
+        inventory = new PlayerInventory(0);
         selectedStructure = game.getStructures().getStructureByName("vanilla:cotton_candy");
+    }
+
+    public PlayerInventory getInventory() {
+        return inventory;
     }
 
     public Game getGame() {
@@ -19,11 +24,7 @@ public class PlayerState {
     }
 
     public TileType getInHand() {
-        return inHand;
-    }
-
-    public void setInHand(TileType inHand) {
-        this.inHand = inHand;
+        return getInventory().getInHand();
     }
 
     public Structure getSelectedStructure() {
