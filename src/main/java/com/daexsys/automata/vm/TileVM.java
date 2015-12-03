@@ -3,6 +3,7 @@ package com.daexsys.automata.vm;
 import com.daexsys.automata.Pulsable;
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.world.TileCoord;
+import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.WorldLayer;
 import com.daexsys.automata.world.tiletypes.TileType;
 
@@ -131,35 +132,26 @@ public class TileVM implements VM, Pulsable {
     }
 
     private int readPort(int port) {
+        World world = this.tile.getWorld();
+        int x = this.tile.getCoordinate().x;
+        int y = this.tile.getCoordinate().y;
         Tile tTemp;
         switch (port) {
             case 0x00:          // get tile's X position
-                return this.tile.getCoordinate().x;
+                return x;
             case 0x01:          // get tile's Y position
-                return this.tile.getCoordinate().y;
+                return y;
             case 0x02:          // get ID of above tile
-                tTemp = this.tile.getWorld().sampleTileAt(
-                        hardware.viewingLayer,
-                        this.tile.getCoordinate().x,
-                        this.tile.getCoordinate().y - 1);
+                tTemp = world.sampleTileAt(hardware.viewingLayer, x, y - 1);
                 return tTemp != null ? tTemp.getType().getId() : 0xFF;
             case 0x03:          // get ID of right tile
-                tTemp = this.tile.getWorld().sampleTileAt(
-                        hardware.viewingLayer,
-                        this.tile.getCoordinate().x + 1,
-                        this.tile.getCoordinate().y);
+                tTemp = world.sampleTileAt(hardware.viewingLayer, x + 1, y);
                 return tTemp != null ? tTemp.getType().getId() : 0xFF;
             case 0x04:          // get ID of bottom tile
-                tTemp = this.tile.getWorld().sampleTileAt(
-                        hardware.viewingLayer,
-                        this.tile.getCoordinate().x,
-                        this.tile.getCoordinate().y + 1);
+                tTemp = world.sampleTileAt(hardware.viewingLayer, x, y + 1);
                 return tTemp != null ? tTemp.getType().getId() : 0xFF;
             case 0x05:          // get ID of left tile
-                tTemp = this.tile.getWorld().sampleTileAt(
-                        hardware.viewingLayer,
-                        this.tile.getCoordinate().x - 1,
-                        this.tile.getCoordinate().y);
+                tTemp = world.sampleTileAt(hardware.viewingLayer, x - 1, y);
                 return tTemp != null ? tTemp.getType().getId() : 0xFF;
             case 0x06:          // get viewing layer
                 return this.hardware.viewingLayer;
@@ -168,10 +160,33 @@ public class TileVM implements VM, Pulsable {
         }
     }
 
-    private void writePort(int port, int x) {
+    private void writePort(int port, int data) {
+        World world = this.tile.getWorld();
+        int x = this.tile.getCoordinate().x;
+        int y = this.tile.getCoordinate().y;
         switch (port) {
+            case 0x02:          // place tile above
+                world.queueChangeAt(
+                        new TileCoord(hardware.viewingLayer, world, x, y - 1),
+                        TileType.getTileFromId((byte) data));
+                break;
+            case 0x03:          // place tile to the right
+                world.queueChangeAt(
+                        new TileCoord(hardware.viewingLayer, world, x + 1, y),
+                        TileType.getTileFromId((byte) data));
+                break;
+            case 0x04:          // place tile below
+                world.queueChangeAt(
+                        new TileCoord(hardware.viewingLayer, world, x, y + 1),
+                        TileType.getTileFromId((byte) data));
+                break;
+            case 0x05:          // place tile to the left
+                world.queueChangeAt(
+                        new TileCoord(hardware.viewingLayer, world, x - 1, y),
+                        TileType.getTileFromId((byte) data));
+                break;
             case 0x06:          // set viewing layer
-                hardware.viewingLayer = x;
+                hardware.viewingLayer = data;
                 break;
         }
     }
