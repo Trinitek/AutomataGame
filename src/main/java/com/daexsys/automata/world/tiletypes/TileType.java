@@ -101,7 +101,7 @@ public class TileType {
         return id;
     }
 
-    public TileType getTileFromId(byte id) {
+    public static TileType getTileFromId(byte id) {
         return types.get(id);
     }
 
