@@ -26,10 +26,10 @@ public class ShockwaveVirusPulser implements TilePulser {
         for (int x = -c; x <= c; x++) {
             for (int y = -c; y <= c; y++) {
                 TileCoord shiftedCoord = tile.getCoordinate().add(x, y);
-                Optional<Tile> residentTile = shiftedCoord.getTile();
+                Tile residentTile = tile.getWorld().getTileAt(shiftedCoord.layer, shiftedCoord.x, shiftedCoord.y);
 
-                if (residentTile.isPresent()) {
-                    if (residentTile.get().getType() != TileType.SHOCKWAVE_VIRUS){
+                if (residentTile != null) {
+                    if (residentTile.getType() != TileType.SHOCKWAVE_VIRUS){
                         shiftedCoord.queueChange(TileType.SHOCKWAVE_VIRUS, tile.getEnergy() / 2);
                     }
                 }
