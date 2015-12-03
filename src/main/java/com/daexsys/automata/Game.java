@@ -77,7 +77,7 @@ public class Game {
     }
 
     public void setTickDelayRate(int tickDelayRate) {
-        if(tickDelayRate > 0) {
+        if(tickDelayRate >= 0) {
             this.tickDelayRate = tickDelayRate;
         }
     }
