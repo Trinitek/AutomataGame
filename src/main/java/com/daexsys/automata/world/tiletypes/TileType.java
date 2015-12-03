@@ -4,6 +4,9 @@ import com.daexsys.automata.Tile;
 import com.daexsys.automata.gui.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,6 +101,7 @@ public final class TileType {
     private byte id;
     private String blockName;
     private BufferedImage image;
+    private byte[] defaultProgram;
 
     private TilePulser tilePulser;
 
@@ -124,6 +128,10 @@ public final class TileType {
         return id;
     }
 
+    public byte[] getProgram() {
+        return defaultProgram;
+    }
+
     public void pulse(Tile tile) {
         tilePulser.pulse(tile);
     }
@@ -140,8 +148,18 @@ public final class TileType {
             return this;
         }
 
-        public Builder setVMExecutableLocation(String location) {
-            // todo: do vm things here
+        public Builder setVMProgram(String location) {
+            FileInputStream programStream;
+            if (location != null) {
+                try {
+                    programStream = new FileInputStream(new File(location));
+                    //noinspection ResultOfMethodCallIgnored
+                    programStream.read(tileType.defaultProgram);
+                    programStream.close();
+                } catch (IOException e) {
+                    System.err.println("Can't find VME file '" + location + "'");
+                }
+            }
             return this;
         }
 
