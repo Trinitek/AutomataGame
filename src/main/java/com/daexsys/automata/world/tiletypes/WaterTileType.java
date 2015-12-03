@@ -8,8 +8,8 @@ import java.awt.image.BufferedImage;
 
 public class WaterTileType extends TileType {
 
-    public WaterTileType(byte id, String blockName, String imageUrl, int defaultEnergy, int defaultDecayRate) {
-        super(id, blockName, imageUrl, defaultEnergy, defaultDecayRate);
+    public WaterTileType(byte id, String blockName, String imageUrl, String programUrl, int defaultEnergy, int defaultDecayRate) {
+        super(id, blockName, imageUrl, programUrl, defaultEnergy, defaultDecayRate);
     }
 
     @Override

@@ -725,7 +725,7 @@ public class TileVM implements VM, Pulsable {
 
     public static void main(String[] args) {
         Tile tile = new Tile(new TileCoord(WorldLayer.GROUND, null, 0, 0),
-                new TileType((byte) 0, "", null, 100, 1));
+                new TileType((byte) 0, "", null, null, 100, 1));
         TileVM tileVM = new TileVM(tile);
 
         if (args.length == 0) {

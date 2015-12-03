@@ -20,10 +20,11 @@ public class ShockwaveVirusTileType extends TileType {
             byte id,
             String blockName,
             String imageUrl,
+            String programUrl,
             int defaultEnergy,
             int defaultDecayRate
     ) {
-        super(id, blockName, imageUrl, defaultEnergy, defaultDecayRate);
+        super(id, blockName, imageUrl, programUrl, defaultEnergy, defaultDecayRate);
     }
 
     @Override

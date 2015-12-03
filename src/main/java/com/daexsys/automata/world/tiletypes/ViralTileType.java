@@ -8,8 +8,8 @@ import java.awt.image.BufferedImage;
 
 public class ViralTileType extends TileType {
 
-    public ViralTileType(byte id, String blockName, String imageUrl, int defaultEnergy, int defaultDecayRate) {
-        super(id, blockName, imageUrl, defaultEnergy, defaultDecayRate);
+    public ViralTileType(byte id, String blockName, String imageUrl, String programUrl, int defaultEnergy, int defaultDecayRate) {
+        super(id, blockName, imageUrl, programUrl, defaultEnergy, defaultDecayRate);
     }
 
     @Override
