@@ -11,7 +11,7 @@ public class PlayerState {
 
     public PlayerState(Game game) {
         this.game = game;
-        selectedStructure = game.getStructures().getStructureByName("cgol_glider");
+        selectedStructure = game.getStructures().getStructureByName("vanilla:cotton_candy");
     }
 
     public Game getGame() {

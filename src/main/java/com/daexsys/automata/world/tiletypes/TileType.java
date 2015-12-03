@@ -143,7 +143,7 @@ public final class TileType {
         return defaultProgram;
     }
 
-    static class Builder {
+    public static class Builder {
         private TileType tileType = new TileType();
 
         public Builder setID(byte id) {
@@ -195,5 +195,10 @@ public final class TileType {
 //            types.set(tileType.getID(), tileType);
             return tileType;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "{tile: " + getName() + " (id:" + getID() + ")}";
     }
 }
