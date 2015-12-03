@@ -106,31 +106,30 @@ public final class TileType {
             new TileType.Builder().setID((byte) 17).setName("bot").setImageLocation("images/bot.png")
                     .setEnergy(Integer.MAX_VALUE).setDecayRate(0).setPulser(new BotTilePulser()).build();
 
-//    public static final TileType AMOEBA;
-//    static {
-//        List<Integer> birthRules = new ArrayList<>();
-//        birthRules.add(3);
-//        birthRules.add(5);
-//        birthRules.add(6);
-//        birthRules.add(7);
-//        birthRules.add(8);
-//
-//        List<Integer> stayAliveRules = new ArrayList<>();
-//        stayAliveRules.add(5);
-//        stayAliveRules.add(6);
-//        stayAliveRules.add(7);
-//        stayAliveRules.add(8);
-//
-//        AMOEBA = new TileType.Builder()
-//                .setID((byte) 18)
-//                .setName("amoeba")
-//                .setImageLocation("images/automata.png")
-//                .setEnergy(10)
-//                .setDecayRate(0)
-//                .setPulser(new CGoLTilePulser(birthRules, stayAliveRules))
-//                .build();
-//    }
+    public static final TileType AMOEBA;
+    static {
+        List<Integer> birthRules = new ArrayList<>();
+        birthRules.add(3);
+        birthRules.add(5);
+        birthRules.add(6);
+        birthRules.add(7);
+        birthRules.add(8);
 
+        List<Integer> stayAliveRules = new ArrayList<>();
+        stayAliveRules.add(5);
+        stayAliveRules.add(6);
+        stayAliveRules.add(7);
+        stayAliveRules.add(8);
+
+        AMOEBA = new TileType.Builder()
+                .setID((byte) 18)
+                .setName("amoeba")
+                .setImageLocation("images/automata.png")
+                .setEnergy(10)
+                .setDecayRate(0)
+                .setPulser(new CGoLTilePulser(birthRules, stayAliveRules))
+                .build();
+    }
 
     private byte id;
     private String blockName;

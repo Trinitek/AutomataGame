@@ -39,10 +39,10 @@ public class KeyboardHandler implements KeyListener {
             gui.getGame().getPlayerState().setSelectedStructure(null);
         }
 //
-//        else if(e.getKeyCode() == KeyEvent.VK_3) {
-//            gui.getGame().getPlayerState().setInHand(TileType.AMOEBA);
-//            gui.getGame().getPlayerState().setSelectedStructure(null);
-//        }
+        else if(e.getKeyCode() == KeyEvent.VK_3) {
+            gui.getGame().getPlayerState().setInHand(TileType.AMOEBA);
+            gui.getGame().getPlayerState().setSelectedStructure(null);
+        }
 
         else if(e.getKeyCode() == KeyEvent.VK_4) {
             gui.getGame().getPlayerState().setInHand(TileType.MINER);
