@@ -21,7 +21,7 @@ public final class TileType {
 
     public static final TileType STONE =
             new TileType.Builder().setID((byte) 0).setName("stone").setImageLocation("images/stone.png")
-                    .setVMProgram("vmexec/stone.vme").setEnergy(100).setDecayRate(0).build();
+                    .setEnergy(100).setDecayRate(0).build();
 
     public static final TileType VM_256 =
             new TileType.Builder().setID((byte) 1).setName("vm").setImageLocation("images/digital.png")
@@ -52,7 +52,7 @@ public final class TileType {
 
     public static final TileType DIRT =
             new TileType.Builder().setID((byte) 4).setName("dirt").setImageLocation("images/dirt.png")
-                    .setEnergy(45).setDecayRate(1).setPulser(new FertileTilePulser()).build();
+                    .setVMProgram("vmexec/dirt.vme").setEnergy(45).setDecayRate(1).setPulser(new FertileTilePulser()).build();
 
     public static final TileType WATER =
             new TileType.Builder().setID((byte) 5).setName("water").setImageLocation("images/water.png")
