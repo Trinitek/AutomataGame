@@ -23,7 +23,7 @@ public final class TileType {
             new TileType.Builder().setID((byte) 0).setName("stone").setImageLocation("images/stone.png")
                     .setEnergy(100).setDecayRate(0).build();
 
-    public static final TileType VM_256_BYTES =
+    public static final TileType VM_256 =
             new TileType.Builder().setID((byte) 1).setName("vm").setImageLocation("images/digital.png")
                     .setEnergy(5000).setDecayRate(0).build();
 
