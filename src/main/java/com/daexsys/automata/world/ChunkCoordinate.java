@@ -13,6 +13,10 @@ public final class ChunkCoordinate {
         return new ChunkCoordinate(world, x, y);
     }
 
+    public static ChunkCoordinate forWorldCoords(TileCoord tileCoord) {
+        return forWorldCoords(tileCoord.world, tileCoord.x, tileCoord.y);
+    }
+
     public static ChunkCoordinate forWorldCoords(World world, int x, int y) {
         int rx = x / Chunk.DEFAULT_CHUNK_SIZE;
         int ry = y / Chunk.DEFAULT_CHUNK_SIZE;
@@ -51,9 +55,13 @@ public final class ChunkCoordinate {
     }
 
     public TileCoord localifyCoordinates(int x, int y) {
-        return new TileCoord(WorldLayer.GROUND, world,
+        return TileCoord.of(WorldLayer.GROUND, world,
                 localifyX(x),
                 localifyY(y));
+    }
+
+    public ChunkCoordinate add(int x, int y) {
+        return new ChunkCoordinate(world, this.x + x, this.y + y);
     }
 
     public boolean is(int x, int y) {
@@ -70,6 +78,10 @@ public final class ChunkCoordinate {
         }
 
         return false;
+    }
+
+    public boolean chunkExists() {
+        return world.getChunkManager().getChunk(x, y) != null;
     }
 
     @Override

@@ -5,8 +5,7 @@ import com.daexsys.automata.world.tiletypes.TileType;
 import com.google.common.base.Optional;
 
 /**
- * TileCoordinate represents a location in a world where a tile can be placed.
- * No information regarding the layer is given, and must be provided seperately.
+ * TileCoord represents a location in a world where a tile can be placed.
  */
 public final class TileCoord {
 
@@ -30,6 +29,13 @@ public final class TileCoord {
         this.x = x;
         this.y = y;
         this.chunk = chunk;
+    }
+
+    /**
+     * Might sometimes be faster than constructing a whole new one.
+     */
+    public static TileCoord of(int layer, World world, int x, int y) {
+        return world.getTileAt(layer, x, y).getCoordinate();
     }
 
     public TileCoord add(int x, int y) {
@@ -56,7 +62,7 @@ public final class TileCoord {
 
     public Chunk getChunk() {
         if(chunk == null) {
-            chunk = ChunkCoordinate.forWorldCoords(world, x, y).getChunk();
+            chunk = ChunkCoordinate.forWorldCoords(this).getChunk();
         }
 
         return chunk;
