@@ -1,6 +1,7 @@
 package com.daexsys.automata.gui.listeners;
 
 import com.daexsys.automata.PlayerState;
+import com.daexsys.automata.event.chat.ChatMessageEvent;
 import com.daexsys.automata.gui.GUI;
 import com.daexsys.automata.gui.chat.ChatMessage;
 
@@ -37,8 +38,10 @@ public class KeyboardHandler implements KeyListener {
         if(gui.getChatRenderer().typingState) {
 
             if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-                cache = cache.substring(0, cache.length() - 1);
-            } else {
+                if(cache.length() > 0) {
+                    cache = cache.substring(0, cache.length() - 1);
+                }
+            } else if(e.getKeyCode() != KeyEvent.VK_SHIFT) {
                 cache += e.getKeyChar();
             }
         } else {
@@ -50,9 +53,7 @@ public class KeyboardHandler implements KeyListener {
             } else if (e.getKeyCode() == KeyEvent.VK_2) {
                 playerState.getInventory().selectSlot(2);
                 gui.getGame().getPlayerState().setSelectedStructure(null);
-            }
-//
-            else if (e.getKeyCode() == KeyEvent.VK_3) {
+            } else if (e.getKeyCode() == KeyEvent.VK_3) {
                 playerState.getInventory().selectSlot(3);
                 gui.getGame().getPlayerState().setSelectedStructure(null);
             } else if (e.getKeyCode() == KeyEvent.VK_4) {
@@ -92,7 +93,7 @@ public class KeyboardHandler implements KeyListener {
             gui.getChatRenderer().typingState = !gui.getChatRenderer().typingState;
 
             if(!gui.getChatRenderer().typingState && !cache.equals("")) {
-                gui.getGame().getChatManager().addChatMessage(new ChatMessage("Player: " + cache, Color.WHITE));
+                gui.getGame().fireEvent(new ChatMessageEvent(new ChatMessage(cache, Color.WHITE)));
                 cache = "";
             }
         }

@@ -17,8 +17,6 @@ public class PlayerInventory {
 
     public void selectSlot(int slotNum) {
         selectedSlot = slotNum;
-        playerState.getGame().getChatManager()
-                .addChatMessage(new ChatMessage("Selected slot: " + slotNum + ": " + getInHand(), Color.WHITE));
     }
 
     public TileType getInHand() {

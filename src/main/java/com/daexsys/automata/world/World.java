@@ -3,6 +3,7 @@ package com.daexsys.automata.world;
 import com.daexsys.automata.Game;
 import com.daexsys.automata.Pulsable;
 import com.daexsys.automata.Tile;
+import com.daexsys.automata.event.tile.TileAlterCause;
 import com.daexsys.automata.world.terrain.DesertTerrain;
 import com.daexsys.automata.world.terrain.TemperateTerrain;
 import com.daexsys.automata.world.terrain.TerrainGenerator;
@@ -31,11 +32,6 @@ public final class World implements Pulsable {
         chunkManager = new ChunkManager(this);
 
         // pre-generate world sections
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
-                chunkManager.getChunk(i, j);
-            }
-        }
 
         int size = 200;
 ////        /* Add lakes */
@@ -126,17 +122,21 @@ public final class World implements Pulsable {
         );
     }
 
+    public boolean setTileTypeAt(int layer, int x, int y, TileType tileType) {
+        return setTileTypeAt(layer, x, y, tileType, TileAlterCause.AUTOMATA_SPREAD);
+    }
+
     /**
      * @return whether or not the block was successfully set
      */
-    public boolean setTileTypeAt(int layer, int x, int y, TileType tileType) {
+    public boolean setTileTypeAt(int layer, int x, int y, TileType tileType, TileAlterCause tileAlterCause) {
         ChunkCoord chunkCoordinate = ChunkCoord.forWorldCoords(this, x, y);
 
         if((layer == 0 || layer == 1)) {
             Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
 
             if(chunk != null) {
-                chunk.flashWithNewType(layer, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), tileType);
+                chunk.flashWithNewType(layer, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), tileType, tileAlterCause);
             } else {
                 return false;
             }
@@ -151,7 +151,15 @@ public final class World implements Pulsable {
         ChunkCoord chunkCoordinate = ChunkCoord.forWorldCoords(this, coord.x, coord.y);
 
         Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
-        chunk.flashWithNewType(layer, chunkCoordinate.localifyX(coord.x), chunkCoordinate.localifyY(coord.y), tileType);
+        chunk.flashWithNewType(layer, chunkCoordinate.localifyX(coord.x), chunkCoordinate.localifyY(coord.y), tileType, TileAlterCause.AUTOMATA_SPREAD);
+        return true;
+    }
+
+    public boolean setTileTypeAt(int layer, TileCoord coord, TileType tileType, TileAlterCause tileAlterCause) {
+        ChunkCoord chunkCoordinate = ChunkCoord.forWorldCoords(this, coord.x, coord.y);
+
+        Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
+        chunk.flashWithNewType(layer, chunkCoordinate.localifyX(coord.x), chunkCoordinate.localifyY(coord.y), tileType, tileAlterCause);
         return true;
     }
 
@@ -174,7 +182,9 @@ public final class World implements Pulsable {
         Tile newTile = new Tile(tileCoord, tileType);
 
         Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
-        chunk.queueChangeAt(tileCoord.layer, chunkCoordinate.localifyX(tileCoord.x), chunkCoordinate.localifyY(tileCoord.y), newTile);
+        try {
+            chunk.queueChangeAt(tileCoord.layer, chunkCoordinate.localifyX(tileCoord.x), chunkCoordinate.localifyY(tileCoord.y), newTile);
+        } catch (Exception e) {}
     }
 
     public void queueChangeAt(TileCoord coord, TileType tileType, int newEnergy) {

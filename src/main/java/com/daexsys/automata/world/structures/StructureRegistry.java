@@ -53,15 +53,15 @@ public class StructureRegistry {
                 0, 0, 2, 0, 0
         }, TileType.LEAVES, TileType.WOOD));
 
-        TileType cottonCandy = new TileType.Builder().setID((byte) 245).setName("cotton candy")
-                .setEnergy(5000).setDecayRate(2).setImageLocation("images/cottencandy.png").build();
-        structureMap.put("vanilla:cotton_candy", new Structure(5, new int[] {
-                0, 0, 1, 0, 0,
-                0, 1, 1, 1, 1,
-                0, 1, 1, 1, 0,
-                1, 1, 1, 1, 0,
-                0, 0, 1, 0, 0
-        }, cottonCandy));
+//        TileType cottonCandy = new TileType.Builder().setID((byte) 245).setName("cotton candy")
+//                .setEnergy(5000).setDecayRate(2).setImageLocation("images/cottencandy.png").build();
+//        structureMap.put("vanilla:cotton_candy", new Structure(5, new int[] {
+//                0, 0, 1, 0, 0,
+//                0, 1, 1, 1, 1,
+//                0, 1, 1, 1, 0,
+//                1, 1, 1, 1, 0,
+//                0, 0, 1, 0, 0
+//        }, cottonCandy));
     }
 
     public Structure getStructureByName(String name) {

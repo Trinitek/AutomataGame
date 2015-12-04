@@ -56,6 +56,11 @@ public class ChunkManager implements Pulsable {
         return chunk;
     }
 
+    public void putChunk(int x, int y, Chunk chunk) {
+        chunkArray[x][y] = chunk;
+        addChunk(chunk);
+    }
+
     private void addChunk(Chunk chunk) {
         chunks.add(chunk);
     }
