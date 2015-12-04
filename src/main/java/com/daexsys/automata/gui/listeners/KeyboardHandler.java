@@ -53,9 +53,7 @@ public class KeyboardHandler implements KeyListener {
             } else if (e.getKeyCode() == KeyEvent.VK_2) {
                 playerState.getInventory().selectSlot(2);
                 gui.getGame().getPlayerState().setSelectedStructure(null);
-            }
-//
-            else if (e.getKeyCode() == KeyEvent.VK_3) {
+            } else if (e.getKeyCode() == KeyEvent.VK_3) {
                 playerState.getInventory().selectSlot(3);
                 gui.getGame().getPlayerState().setSelectedStructure(null);
             } else if (e.getKeyCode() == KeyEvent.VK_4) {

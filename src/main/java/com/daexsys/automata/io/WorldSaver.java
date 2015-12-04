@@ -2,7 +2,6 @@ package com.daexsys.automata.io;
 
 import com.daexsys.automata.world.Chunk;
 import com.daexsys.automata.world.World;
-import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileOutputStream;

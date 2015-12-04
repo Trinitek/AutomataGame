@@ -43,7 +43,7 @@ public class WorldServer {
 
         /* Chat listener */
         game.addListener((ChatMessageListener) chatMessageEvent -> {
-            String chatMessage = "GLOBAL: " + chatMessageEvent.getChatMessage().getMessage();
+            String chatMessage = chatMessageEvent.getChatMessage().getMessage();
 
             ByteBuffer packetBuffer = ByteBuffer.allocate(5 + chatMessage.length());
             packetBuffer.put((byte) 0x06);

@@ -182,7 +182,9 @@ public final class World implements Pulsable {
         Tile newTile = new Tile(tileCoord, tileType);
 
         Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
-        chunk.queueChangeAt(tileCoord.layer, chunkCoordinate.localifyX(tileCoord.x), chunkCoordinate.localifyY(tileCoord.y), newTile);
+        try {
+            chunk.queueChangeAt(tileCoord.layer, chunkCoordinate.localifyX(tileCoord.x), chunkCoordinate.localifyY(tileCoord.y), newTile);
+        } catch (Exception e) {}
     }
 
     public void queueChangeAt(TileCoord coord, TileType tileType, int newEnergy) {

@@ -31,8 +31,8 @@ public class WorldClient {
      */
     public static void main(String[] args) {
         if(args.length == 0) {
-//            new WorldClient(NameGenerator.getName(), "104.196.35.63");
-            new WorldClient(NameGenerator.getName(), "127.0.0.1");
+            new WorldClient(NameGenerator.getName(), "104.196.35.63");
+//            new WorldClient(NameGenerator.getName(), "127.0.0.1");
         } else {
             new WorldClient(args[0], args[1]);
         }
