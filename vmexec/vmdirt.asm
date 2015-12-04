@@ -6,11 +6,11 @@ include "vm.asm"
 define id 4         ; tile ID for dirt
 
 start:
-    inc x           ; [1] = tile ID
+    dec x           ; [-1] = tile ID
     rept id {
         inc [x]
     }
-    dec x
+    inc x
     
     rept 3 {        ; read/write tile to right side (port 0x03)
         inc a
@@ -25,9 +25,9 @@ main:
     jxz main        ; otherwise, loop
     
 putTile:
-    inc x           ; place tile ID specified by [1]
+    dec x           ; place tile ID specified by [-1]
     out
-    dec x
+    inc x
     jxnz main       ; return to main loop
     jxz main
     
