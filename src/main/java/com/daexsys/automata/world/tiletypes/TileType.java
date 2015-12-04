@@ -52,7 +52,7 @@ public final class TileType {
 
     public static final TileType DIRT =
             new TileType.Builder().setID((byte) 4).setName("dirt").setImageLocation("images/dirt.png")
-                    .setVMProgram("vmexec/dirt.vme").setEnergy(45).setDecayRate(1).setPulser(new FertileTilePulser()).build();
+                    .setEnergy(45).setDecayRate(1).setPulser(new FertileTilePulser()).build();
 
     public static final TileType WATER =
             new TileType.Builder().setID((byte) 5).setName("water").setImageLocation("images/water.png")
@@ -151,6 +151,9 @@ public final class TileType {
                 .build();
     }
 
+    public static final TileType SMART_DIRT =
+            new TileType.Builder().setID((byte) 20).setName("smart dirt").setImageLocation("images/dirt.png")
+                    .setVMProgram("vmexec/dirt.vme").setEnergy(45).setDecayRate(1).setPulser(new FertileTilePulser()).build();
     private byte id;
     private String blockName;
     private byte[] defaultProgram;
