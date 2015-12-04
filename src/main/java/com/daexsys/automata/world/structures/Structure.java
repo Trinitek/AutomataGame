@@ -1,5 +1,6 @@
 package com.daexsys.automata.world.structures;
 
+import com.daexsys.automata.event.tile.TileAlterCause;
 import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.WorldLayer;
 import com.daexsys.automata.world.tiletypes.TileType;
@@ -38,7 +39,8 @@ public class Structure {
             world.setTileTypeAt(WorldLayer.GROUND,
                     x + structureElement.getX(),
                     y + structureElement.getY(),
-                    structureElement.getType()
+                    structureElement.getType(),
+                    TileAlterCause.PLAYER_EDIT
             );
         }
     }

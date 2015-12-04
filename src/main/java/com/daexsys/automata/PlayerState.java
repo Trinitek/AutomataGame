@@ -12,7 +12,7 @@ public class PlayerState {
     public PlayerState(Game game) {
         this.game = game;
         inventory = new PlayerInventory(this, 0);
-        selectedStructure = game.getStructures().getStructureByName("vanilla:cotton_candy");
+        selectedStructure = game.getStructures().getStructureByName("vanilla:stone_pointer");
     }
 
     public PlayerInventory getInventory() {

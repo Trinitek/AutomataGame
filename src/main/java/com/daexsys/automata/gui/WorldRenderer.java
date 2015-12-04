@@ -18,11 +18,11 @@ import java.util.List;
 public class WorldRenderer implements Renderable {
 
     private GUI gui;
-    private World worldModel;
+    private World world;
 
     public WorldRenderer(GUI gui) {
         this.gui = gui;
-        this.worldModel = gui.getGame().getWorld();
+        this.world = gui.getGame().getWorld();
     }
 
     public GUI getGUI() {
@@ -31,7 +31,7 @@ public class WorldRenderer implements Renderable {
 
     @Override
     public void render(Graphics graphics) {
-        ChunkManager chunkManager = worldModel.getChunkManager();
+        ChunkManager chunkManager = world.getChunkManager();
 
         List<Chunk> toRender = getChunksToRender(chunkManager);
         for(Chunk chunk : toRender) {

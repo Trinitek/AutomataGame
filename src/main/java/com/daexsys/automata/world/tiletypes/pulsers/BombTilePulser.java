@@ -1,7 +1,6 @@
 package com.daexsys.automata.world.tiletypes.pulsers;
 
 import com.daexsys.automata.Tile;
-import com.daexsys.automata.gui.GUI;
 import com.daexsys.automata.gui.chat.ChatMessage;
 import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.WorldLayer;
@@ -12,6 +11,12 @@ import java.awt.*;
 
 public class BombTilePulser implements TilePulser {
 
+    @Override
+    public void pulse(Tile t) {
+
+    }
+
+    @Override
     public void destruct(Tile tile) {
         World world = tile.getWorld();
 
@@ -36,10 +41,5 @@ public class BombTilePulser implements TilePulser {
         }
 
         tile.getWorld().getGame().getChatManager().addChatMessage(new ChatMessage("Pop goes the weasel @ " + tile.getCoordinate(), Color.RED));
-    }
-
-    @Override
-    public void pulse(Tile t) {
-
     }
 }
