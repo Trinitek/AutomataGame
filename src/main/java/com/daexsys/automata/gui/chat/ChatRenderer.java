@@ -26,6 +26,8 @@ public class ChatRenderer implements Renderable {
         int i = 0;
         Collections.reverse(newList);
         for(ChatMessage chatMessage : newList) {
+            graphics.setColor(new Color(50, 50, 50, 100));
+            graphics.fillRect(110, 800 - i * 40 - 15, chatMessage.getMessage().length() * 10, 25);
             graphics.setColor(chatMessage.getColor());
             graphics.drawString(chatMessage.getMessage(), 120, 800 - i * 40);
             i++;

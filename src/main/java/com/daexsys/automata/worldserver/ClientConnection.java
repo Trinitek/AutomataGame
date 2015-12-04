@@ -68,7 +68,8 @@ public class ClientConnection {
                                 b[i] = dataInputStream.readByte();
                             }
                             String chat = new String(b);
-                            worldServer.getGame().fireEvent(new ChatMessageEvent(new ChatMessage(chat, Color.WHITE)));
+                            String message = "<" + username + "> " + chat;
+                            worldServer.getGame().fireEvent(new ChatMessageEvent(new ChatMessage(message, Color.WHITE)));
                         }
                     }
                 }catch (Exception e) {

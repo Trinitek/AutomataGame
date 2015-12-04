@@ -95,7 +95,7 @@ public class KeyboardHandler implements KeyListener {
             gui.getChatRenderer().typingState = !gui.getChatRenderer().typingState;
 
             if(!gui.getChatRenderer().typingState && !cache.equals("")) {
-                gui.getGame().fireEvent(new ChatMessageEvent(new ChatMessage("Player: " + cache, Color.WHITE)));
+                gui.getGame().fireEvent(new ChatMessageEvent(new ChatMessage(cache, Color.WHITE)));
                 cache = "";
             }
         }

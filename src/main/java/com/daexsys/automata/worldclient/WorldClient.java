@@ -30,11 +30,11 @@ public class WorldClient {
      * @param args
      */
     public static void main(String[] args) {
-        new WorldClient(args[0]);
+        new WorldClient(args[0], args[1]);
     }
 
     private List<ByteBuffer> toSend = new ArrayList<ByteBuffer>();
-    public WorldClient(String address) {
+    public WorldClient(String username, String address) {
         game = new Game(true);
 
         GUI gameGUI = new GUI(game);
@@ -48,7 +48,7 @@ public class WorldClient {
                     DataInputStream dataInputStream = new DataInputStream(inputStream);
                     DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
-                    String playerName = "MangoViolin";
+                    String playerName = username;
                     ByteBuffer byteBuffer = ByteBuffer.allocate(2 + playerName.length());
                     byteBuffer.put((byte) 0x00);
                     byteBuffer.put((byte) playerName.length());
