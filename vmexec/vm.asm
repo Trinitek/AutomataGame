@@ -16,8 +16,8 @@
 ; in            05          input value into X from port A
 ; jxz imm       06 imm      goto label if value at X is zero
 ; jxnz imm      07 imm      goto label if value at X is not zero
-; inc a         08          increment A register
-; dec a         09          decrement A register
+; inc a         08          increment A vm_register
+; dec a         09          decrement A vm_register
 ;
 
 include "atm8.inc"
@@ -29,16 +29,16 @@ vm_start:
 ;
 ; Main loop
 ;
-    
+
 vm_doForever:
-    mov x, regP
+    mov x, vm_regP
     mov a, [x]
     cmp a, 0x00     ; inc x
-    jz vm_incX         
+    jz vm_incX
     cmp a, 0x01     ; dec x
-    jz vm_decX         
+    jz vm_decX
     cmp a, 0x02     ; inc [x]
-    jz vm_incXval      
+    jz vm_incXval
     cmp a, 0x03     ; dec [x]
     jz vm_decXval
     cmp a, 0x04     ; out [x], a
@@ -54,89 +54,89 @@ vm_doForever:
     cmp a, 0x09     ; dec a
     jz vm_decA
 
-vm_incX:               ; regX++
-    mov x, regX
+vm_incX:            ; vm_regX++
+    mov x, vm_regX
     inc [x]
-    jmp nextP
+    jmp vm_nextP
 
-vm_decX:               ; regX--
-    mov x, regX
+vm_decX:            ; vm_regX--
+    mov x, vm_regX
     dec [x]
-    jmp nextP
+    jmp vm_nextP
 
-vm_incXval:            ; [regX]++
-    mov x, regX
+vm_incXval:         ; [vm_regX]++
+    mov x, vm_regX
     mov x, [x]
     inc [x]
-    jmp nextP
+    jmp vm_nextP
 
-vm_decXval:            ; [regX]--
-    mov x, regX
+vm_decXval:         ; [vm_regX]--
+    mov x, vm_regX
     mov x, [x]
     dec [x]
-    jmp nextP
+    jmp vm_nextP
 
-vm_outX:               ; outport(regA, [regX])
-    mov x, regA
+vm_outX:            ; outport(vm_regA, [vm_regX])
+    mov x, vm_regA
     mov a, [x]
-    mov x, regX
+    mov x, vm_regX
     mov x, [x]
     out [x], a
-    jmp nextP
+    jmp vm_nextP
 
-vm_inX:                ; [regX] = inport(regA)
-    mov x, regA
+vm_inX:             ; [vm_regX] = inport(vm_regA)
+    mov x, vm_regA
     mov a, [x]
     in b, a
-    mov x, regX
+    mov x, vm_regX
     mov x, [x]
     mov [x], b
-    jmp nextP
+    jmp vm_nextP
 
-vm_doJxz:              ; if ([regX] == 0) goto imm
-    mov x, regX
+vm_doJxz:           ; if ([vm_regX] == 0) goto imm
+    mov x, vm_regX
     mov x, [x]
     mov a, [x]
     cmp a, 0
-    jz doImmJump
-    mov x, regP
+    jz vm_doImmJump
+    mov x, vm_regP
     add [x], 2
     or [x], 0xC0
     jmp vm_doForever
 
-vm_doJxnz:             ; if ([regX] != 0) goto imm
-    mov x, regX
+vm_doJxnz:          ; if ([vm_regX] != 0) goto imm
+    mov x, vm_regX
     mov x, [x]
     mov a, [x]
     cmp a, 0
     jz .continue
-    jmp doImmJump
+    jmp vm_doImmJump
     .continue:
-    mov x, regP
+    mov x, vm_regP
     add [x], 2
     or [x], 0xC0
     jmp vm_doForever
 
-doImmJump:          ; regP = [regP + 1]
-    mov x, regP
+vm_doImmJump:       ; vm_regP = [vm_regP + 1]
+    mov x, vm_regP
     inc x
     mov a, [x]
-    mov x, regP
+    mov x, vm_regP
     mov [x], a
     jmp vm_doForever
 
-vm_incA:               ; regA--
-    mov x, regA
+vm_incA:            ; vm_regA--
+    mov x, vm_regA
     inc [x]
-    jmp nextP
+    jmp vm_nextP
 
-vm_decA:               ; regA--
-    mov x, regA
+vm_decA:            ; vm_regA--
+    mov x, vm_regA
     dec [x]
-    jmp nextP
+    jmp vm_nextP
 
-nextP:              ; regP = (regP + 1) | 0xC0
-    mov x, regP
+vm_nextP:           ; vm_regP = (vm_regP + 1) | 0xC0
+    mov x, vm_regP
     inc [x]
     or [x], 0xC0
     jmp vm_doForever
@@ -145,26 +145,26 @@ nextP:              ; regP = (regP + 1) | 0xC0
 ; EOF data and alignment
 ;
 
-    regA db 0
-    regX db 0
-    regP db 0x80
-    
+    vm_regA db 0
+    vm_regX db 0
+    vm_regP db 0x80
+
     virtual
         align 0x10
-        _buf = $-$$
+        vm_buf = $-$$
     end virtual
-    db _buf dup 0
+    db vm_buf dup 0
 
 ;
 ; Macroinstructions for the VM emulator
 ;
 
-macro _inc reg* {
-    if reg in <x>
+macro inc vm_reg* {
+    if vm_reg in <x>
         db 0x00
-    else if reg in <[x]>
+    else if vm_reg in <[x]>
         db 0x02
-    else if reg in <a>
+    else if vm_reg in <a>
         db 0x08
     else
         display '!!! Bad operands'
@@ -172,12 +172,12 @@ macro _inc reg* {
     end if
 }
 
-macro _dec reg* {
-    if reg in <x>
+macro dec vm_reg* {
+    if vm_reg in <x>
         db 0x01
-    else if reg in <[x]>
+    else if vm_reg in <[x]>
         db 0x03
-    else if reg in <a>
+    else if vm_reg in <a>
         db 0x09
     else
         display '!!! Bad operands'
@@ -185,20 +185,20 @@ macro _dec reg* {
     end if
 }
 
-macro _out {
+macro out {
     db 0x04
 }
 
-macro _in {
+macro in {
     db 0x05
 }
 
-macro _jxz imm* {
+macro jxz vm_imm* {
     db 0x06
-    db imm
+    db vm_imm
 }
 
-macro _jxnz imm* {
+macro jxnz vm_imm* {
     db 0x07
-    db imm
+    db vm_imm
 }
