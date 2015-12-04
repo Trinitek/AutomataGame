@@ -156,6 +156,8 @@ public class ClientConnection {
         byteBuffer.put((byte) username.length());
         byteBuffer.put(username.getBytes());
         worldServer.broadcastPacket(byteBuffer);
+
+        worldServer.getClientConnectionList().remove(this);
     }
 
     public String getUsername() {

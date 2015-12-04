@@ -137,7 +137,7 @@ public class GUI {
 
                         int i = 1;
                         for(String s : playersOnline) {
-                            graphics2D.drawString(s, (int) windowSize.getWidth() - 200, 80 + (i + 30));
+                            graphics2D.drawString(s, (int) windowSize.getWidth() - 200, 80 + (i * 30));
                             i++;
                         }
                     }

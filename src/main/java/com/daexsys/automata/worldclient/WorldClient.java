@@ -30,7 +30,11 @@ public class WorldClient {
      * @param args
      */
     public static void main(String[] args) {
-        new WorldClient(args[0], args[1]);
+        if(args.length == 0) {
+            new WorldClient(NameGenerator.getName(), "104.196.35.63");
+        } else {
+            new WorldClient(args[0], args[1]);
+        }
     }
 
     private List<ByteBuffer> toSend = new ArrayList<ByteBuffer>();
