@@ -16,7 +16,7 @@ public class FertileTilePulser implements TilePulser {
         }
 
         if(tile.getType() == TileType.DIRT && tile.getEnergy() > 500) {
-            tile.getCoordinate().queueChange(TileType.GRASS);
+            //tile.getCoordinate().queueChange(TileType.GRASS);
         }
 
         else if(tile.getType() == TileType.GRASS && tile.getEnergy() > 1000) {

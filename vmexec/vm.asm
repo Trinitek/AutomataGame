@@ -39,11 +39,17 @@ vm_doForever:
     out [x], 0x00
     mov x, vm_regP  ; write regP to stdout
     out [x], 0x00
+    mov x, [x]      ; write [regP] to stdout
+    out [x], 0x00
+    pushf           ; write F to stdout
+    pop a
+    out a, 0x00
     out a, 0x01     ; newline
 
 ;jmp vm_doForever
     
     mov x, vm_regP
+    mov x, [x]
     mov a, [x]
     cmp a, 0x00     ; inc x
     jz vm_incX
@@ -65,6 +71,8 @@ vm_doForever:
     jz vm_incA
     cmp a, 0x09     ; dec a
     jz vm_decA
+    
+    jmp vm_nextP
 
 vm_incX:            ; vm_regX++
     mov x, vm_regX
@@ -133,6 +141,7 @@ vm_doJxnz:          ; if ([vm_regX] != 0) goto imm
 
 vm_doImmJump:       ; vm_regP = [vm_regP + 1]
     mov x, vm_regP
+    mov x, [x]
     inc x
     mov a, [x]
     mov x, vm_regP
@@ -160,7 +169,7 @@ vm_nextP:           ; vm_regP = (vm_regP + 1) | 0xC0
 ;
 
     vm_regA db 0
-    vm_regX db 0xC0
+    vm_regX db 0xFF
     vm_regP db 0xC0
 
     times 0xC0-$ db 0

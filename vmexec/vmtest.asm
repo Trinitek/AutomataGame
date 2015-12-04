@@ -29,3 +29,5 @@ putTile:
     out
     dec x
     jxnz main       ; return to main loop
+    jxz main
+    
