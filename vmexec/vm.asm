@@ -31,19 +31,16 @@ vm_start:
 ;
 
 vm_doForever:
-    mov a, ' '
-    mov x, vm_regX
+    mov x, vm_regA  ; write regA to stdout
     out [x], 0x00
-    out a, 0x01
-    mov x, vm_regA
+    mov x, vm_regX  ; write regX to stdout
     out [x], 0x00
-    out a, 0x01
-    mov x, vm_regP
+    mov x, vm_regP  ; write regP to stdout
     out [x], 0x00
-    out a, 0x01
-    mov a, 0x0D
-    out a, 0x01
+    out a, 0x01     ; newline
 
+jmp vm_doForever
+    
     mov x, vm_regP
     mov a, [x]
     cmp a, 0x00     ; inc x
@@ -160,13 +157,9 @@ vm_nextP:           ; vm_regP = (vm_regP + 1) | 0xC0
 
     vm_regA db 0
     vm_regX db 0
-    vm_regP db 0x80
+    vm_regP db 0xC0
 
-    virtual
-        align 0x10
-        vm_buf = $-$$
-    end virtual
-    db vm_buf dup 0
+    times 0xC0-$ db 0
 
 ;
 ; Macroinstructions for the VM emulator
