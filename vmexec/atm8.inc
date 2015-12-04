@@ -132,9 +132,9 @@ macro mov dest*, src* {
         db ((_i and 0x0F) shr 2) or 0x60
         db src
     else if src in <s> & dest in <a>
-        db 0xDA
-    else if src in <a> & dest in <s>
         db 0xD9
+    else if src in <a> & dest in <s>
+        db 0xDA
     else
         db _i
     end if
