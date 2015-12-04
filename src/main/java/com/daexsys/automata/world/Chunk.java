@@ -2,6 +2,8 @@ package com.daexsys.automata.world;
 
 import com.daexsys.automata.Pulsable;
 import com.daexsys.automata.Tile;
+import com.daexsys.automata.event.tile.TileAlterCause;
+import com.daexsys.automata.event.tile.TileAlterEvent;
 import com.daexsys.automata.world.tiletypes.TileType;
 
 import java.util.Stack;
@@ -26,6 +28,9 @@ public final class Chunk implements Pulsable {
 
         contents = new Tile[2][DEFAULT_CHUNK_SIZE][DEFAULT_CHUNK_SIZE];
         queuedTileChangeStack = new Stack<>();
+
+        fillLayerWith(0, TileType.AIR);
+        fillLayerWith(1, TileType.AIR);
     }
 
     public void pulse() {
@@ -42,7 +47,7 @@ public final class Chunk implements Pulsable {
         while(!queuedTileChangeStack.isEmpty()) {
             QueuedTileChange queuedTileChange = queuedTileChangeStack.pop();
 
-            setTile(queuedTileChange.layer, queuedTileChange.x, queuedTileChange.y, queuedTileChange.t);
+            setTile(queuedTileChange.layer, queuedTileChange.x, queuedTileChange.y, queuedTileChange.t, TileAlterCause.AUTOMATA_SPREAD);
         }
     }
 
@@ -53,7 +58,7 @@ public final class Chunk implements Pulsable {
         return null;
     }
 
-    public void setTile(int layer, int x, int y, Tile tile) {
+    public void setTile(int layer, int x, int y, Tile tile, TileAlterCause tileAlterCause) {
         if(homogenous)
             pingNearby();
 
@@ -62,17 +67,24 @@ public final class Chunk implements Pulsable {
         if(layer == WorldLayer.GROUND) {
             if(contents[WorldLayer.ABOVE_GROUND][x][y].getType() == TileType.AIR) {
                 if (x >= 0 && y >= 0)
-                    contents[layer][x][y] = tile;
+                    alterTile(layer, x, y, tile, tileAlterCause);
             }
         } else {
             if (x >= 0 && y >= 0)
-                contents[layer][x][y] = tile;
+                alterTile(layer, x, y, tile, tileAlterCause);
         }
 
         tile.getTileVM().initialize();
     }
 
-    public void flashWithNewType(int layer, int x, int y, TileType tileType) {
+    private void alterTile(int layer, int x, int y, Tile tile, TileAlterCause tileAlterCause) {
+        contents[layer][x][y] = tile;
+
+        TileAlterEvent tileAlterEvent = new TileAlterEvent(tile, tileAlterCause);
+        tile.getWorld().getGame().fireEvent(tileAlterEvent);
+    }
+
+    public void flashWithNewType(int layer, int x, int y, TileType tileType, TileAlterCause tileAlterCause) {
         if(homogenous)
             pingNearby();
 
@@ -83,10 +95,9 @@ public final class Chunk implements Pulsable {
                 getChunkCoordinate().amplifyLocalY(y)
         );
 
-        Tile newTile;
         if(x >= 0 && y >= 0) {
-            newTile = new Tile(coordinate, tileType);
-            contents[layer][x][y] = newTile;
+            Tile newTile = new Tile(coordinate, tileType);
+            alterTile(layer, x, y, newTile, tileAlterCause);
             newTile.getTileVM().initialize();
         }
     }
@@ -94,7 +105,7 @@ public final class Chunk implements Pulsable {
     public void fillLayerWith(int layer, TileType tileType) {
         for (int i = 0; i < DEFAULT_CHUNK_SIZE; i++) {
             for (int j = 0; j < DEFAULT_CHUNK_SIZE; j++) {
-                flashWithNewType(layer, i, j, tileType);
+                flashWithNewType(layer, i, j, tileType, TileAlterCause.GENERATION);
             }
         }
     }
@@ -130,5 +141,23 @@ public final class Chunk implements Pulsable {
 
     public Tile[][][] getContents() {
         return contents;
+    }
+
+    @Override
+    public String toString() {
+        String buildUp = "";
+
+        for (int j = 0; j < Chunk.DEFAULT_CHUNK_SIZE; j++) {
+            String currentRow = "";
+
+            for (int i = 0; i < Chunk.DEFAULT_CHUNK_SIZE; i++) {
+                Tile tile = getTile(0, i, j);
+                currentRow += tile.getType().getID() + ", ";
+            }
+
+            buildUp += currentRow + "\n";
+        }
+
+        return buildUp;
     }
 }
