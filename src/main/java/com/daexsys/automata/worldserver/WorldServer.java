@@ -34,8 +34,8 @@ public class WorldServer {
             ByteBuffer packetBuffer = ByteBuffer.allocate(10);
 
             packetBuffer.put((byte) 0x04);
-            packetBuffer.putInt(tileAlterEvent.getTile().getCoordinate().x);
-            packetBuffer.putInt(tileAlterEvent.getTile().getCoordinate().y);
+            packetBuffer.putShort((short) tileAlterEvent.getTile().getCoordinate().x);
+            packetBuffer.putShort((short) tileAlterEvent.getTile().getCoordinate().y);
             packetBuffer.put(tileAlterEvent.getTile().getType().getID());
 
             broadcastPacket(packetBuffer);
@@ -50,18 +50,18 @@ public class WorldServer {
             packetBuffer.put((byte) chatMessage.length());
             packetBuffer.put(chatMessage.getBytes());
 
-            broadcastPacket(packetBuffer);
+            broadcastUrgentPacket(packetBuffer);
         });
 
-        /* Tick listener */
-        game.addListener((TickListener) tickEvent -> {
-            ByteBuffer byteBuffer = ByteBuffer.allocate(3);
-            byteBuffer.put((byte) 0x01);
-            byteBuffer.putShort((short) game.getTPS());
-            System.out.println(game.getTPS());
-
-            broadcastPacket(byteBuffer);
-        });
+//        /* Tick listener */
+//        game.addListener((TickListener) tickEvent -> {
+//            ByteBuffer byteBuffer = ByteBuffer.allocate(3);
+//            byteBuffer.put((byte) 0x01);
+//            byteBuffer.putShort((short) game.getTPS());
+//            System.out.println(game.getTPS());
+//
+//            broadcastPacket(byteBuffer);
+//        });
 
         final WorldServer theServer = this;
         Thread thread = new Thread(() -> {
@@ -90,6 +90,11 @@ public class WorldServer {
         }
     }
 
+    public void broadcastUrgentPacket(ByteBuffer byteBuffer) {
+        for(ClientConnection clientConnection : clientConnectionList) {
+            clientConnection.getUrgentBuffer(byteBuffer);
+        }
+    }
     public Game getGame() {
         return game;
     }

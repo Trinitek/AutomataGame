@@ -21,6 +21,7 @@ public class ClientConnection {
     private String username;
 
     private List<ByteBuffer> packetsToSend = new ArrayList<>();
+    private List<ByteBuffer> urgentPackets = new ArrayList<>();
 
     public ClientConnection(WorldServer worldServer, Socket socket) {
         this.worldServer = worldServer;
@@ -158,6 +159,18 @@ public class ClientConnection {
                         }
                     }
 
+                    if(!urgentPackets.isEmpty()) {
+                        ByteBuffer a = urgentPackets.remove(0);
+
+                        try {
+                            dataOutputStream.write(a.array());
+                        } catch (IOException e) {
+                            disconnect();
+                            return;
+                        }
+
+                    }
+
                     try {
                         Thread.sleep(1);
                     } catch (InterruptedException e) {
@@ -171,6 +184,9 @@ public class ClientConnection {
 
     public void giveByteBuffer(ByteBuffer byteBuffer) {
         packetsToSend.add(byteBuffer);
+    }
+    public void getUrgentBuffer(ByteBuffer byteBuffer) {
+        urgentPackets.add(byteBuffer);
     }
 
     public void disconnect() {

@@ -31,8 +31,8 @@ public class WorldClient {
      */
     public static void main(String[] args) {
         if(args.length == 0) {
-            new WorldClient(NameGenerator.getName(), "104.196.35.63");
-//            new WorldClient(NameGenerator.getName(), "127.0.0.1");
+//            new WorldClient(NameGenerator.getName(), "104.196.35.63");
+            new WorldClient(NameGenerator.getName(), "127.0.0.1");
         } else {
             new WorldClient(args[0], args[1]);
         }
@@ -131,15 +131,15 @@ public class WorldClient {
                             gameGUI.setPlayerOnline(theString, false);
                         }
 
-                        // Chunk load packet
                         if(packetID == 0x04) {
-                            int x = dataInputStream.readInt();
-                            int y = dataInputStream.readInt();
+                            int x = dataInputStream.readShort();
+                            int y = dataInputStream.readShort();
                             byte b = (byte) inputStream.read();
 
                             game.getWorld().setTileTypeAt(0, x, y, TileType.getTileFromId(b));
                         }
 
+                        // Chunk load packet
                         if (packetID == 0x05) {
                             int x = dataInputStream.readInt();
                             int y = dataInputStream.readInt();
