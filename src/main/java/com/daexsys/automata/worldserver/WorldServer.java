@@ -2,6 +2,7 @@ package com.daexsys.automata.worldserver;
 
 import com.daexsys.automata.Game;
 import com.daexsys.automata.event.chat.ChatMessageListener;
+import com.daexsys.automata.event.game.TickListener;
 import com.daexsys.automata.event.tile.TileAlterListener;
 
 import java.net.ServerSocket;
@@ -50,6 +51,16 @@ public class WorldServer {
             packetBuffer.put(chatMessage.getBytes());
 
             broadcastPacket(packetBuffer);
+        });
+
+        /* Tick listener */
+        game.addListener((TickListener) tickEvent -> {
+            ByteBuffer byteBuffer = ByteBuffer.allocate(3);
+            byteBuffer.put((byte) 0x01);
+            byteBuffer.putShort((short) game.getTPS());
+            System.out.println(game.getTPS());
+
+            broadcastPacket(byteBuffer);
         });
 
         final WorldServer theServer = this;

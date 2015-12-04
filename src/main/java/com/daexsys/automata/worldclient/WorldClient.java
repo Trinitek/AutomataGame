@@ -103,6 +103,12 @@ public class WorldClient {
                     while (true) {
                         byte packetID = (byte) inputStream.read();
 
+                        if(packetID == 0x01) {
+                            short tps = dataInputStream.readShort();
+                            System.out.println("TPS: " + tps);
+                            gameGUI.tps = tps;
+                        }
+
                         if(packetID == 0x02) {
                             byte length = dataInputStream.readByte();
 

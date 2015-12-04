@@ -4,6 +4,8 @@ import com.daexsys.automata.event.Event;
 import com.daexsys.automata.event.Listener;
 import com.daexsys.automata.event.chat.ChatMessageEvent;
 import com.daexsys.automata.event.chat.ChatMessageListener;
+import com.daexsys.automata.event.game.TickEvent;
+import com.daexsys.automata.event.game.TickListener;
 import com.daexsys.automata.event.tile.TileAlterEvent;
 import com.daexsys.automata.event.tile.TileAlterListener;
 import com.daexsys.automata.world.structures.StructureRegistry;
@@ -40,9 +42,9 @@ public class Game {
 
         playerState = new PlayerState(this);
 
-        Thread worldPule = new Thread(new Runnable() {
-            @Override
-            public void run() {
+        final Game thisGame = this;
+
+        Thread worldPule = new Thread(() -> {
             while(true) {
                 try {
                     Thread.sleep(tickDelayRate);
@@ -52,6 +54,9 @@ public class Game {
 
                 if(!isPaused) {
                     world.pulse();
+
+                    TickEvent tickEvent = new TickEvent(thisGame);
+                    fireEvent(tickEvent);
                     tps++;
 
                     if(System.currentTimeMillis() > lastTPSTime + 1000) {
@@ -60,8 +65,6 @@ public class Game {
                         tps = 0;
                     }
                 }
-
-            }
             }
         });
         worldPule.start();
@@ -119,6 +122,7 @@ public class Game {
 
     private List<TileAlterListener> tileAlterListenerList = new ArrayList<>();
     private List<ChatMessageListener> chatMessageListenerList = new ArrayList<>();
+    private List<TickListener> tickListeners = new ArrayList<>();
     public void fireEvent(Event event) {
         if(event instanceof TileAlterEvent) {
             for(TileAlterListener tileAlterListener : tileAlterListenerList) {
@@ -128,6 +132,10 @@ public class Game {
             for(ChatMessageListener chatMessageListener : chatMessageListenerList) {
                 chatMessageListener.chatMessage((ChatMessageEvent) event);
             }
+        } else if(event instanceof TickEvent) {
+            for(TickListener tickListener : tickListeners) {
+                tickListener.tickOccur((TickEvent) event);
+            }
         }
     }
 
@@ -136,6 +144,8 @@ public class Game {
             tileAlterListenerList.add((TileAlterListener) listener);
         } else if(listener instanceof ChatMessageListener) {
             chatMessageListenerList.add((ChatMessageListener) listener);
+        } else if(listener instanceof TickListener) {
+            tickListeners.add((TickListener) listener);
         }
     }
 

@@ -48,7 +48,6 @@ public class ClientConnection {
             try {
                 while (true) {
                     byte packetID = dataInputStream.readByte();
-                    System.out.println("RECEIVED PACKET: " + packetID);
 
                     if(packetID == 0x00) {
                         byte length = dataInputStream.readByte();
@@ -84,8 +83,29 @@ public class ClientConnection {
                             b[i] = dataInputStream.readByte();
                         }
                         String chat = new String(b);
-                        String message = "<" + username + "> " + chat;
-                        worldServer.getGame().fireEvent(new ChatMessageEvent(new ChatMessage(message, Color.WHITE)));
+
+                        if(chat.charAt(0) == '/') {
+                            System.out.println("command!");
+
+                            String command = chat.substring(1, chat.length());
+                            String commandName = command.split("\\s+")[0];
+                            System.out.println(commandName);
+
+                            if(commandName.equalsIgnoreCase("pause")) {
+                                worldServer.getGame().setPaused(!worldServer.getGame().isPaused());
+                                worldServer.getGame().fireEvent(new ChatMessageEvent(new ChatMessage("Paused state: " +worldServer.getGame().isPaused(), Color.WHITE)));
+                            }
+                            else if(commandName.equalsIgnoreCase("tickrate")) {
+                                worldServer.getGame().setTickDelayRate(Integer.parseInt(command.split("\\s+")[1]));
+                            }
+                            else {
+                                worldServer.getGame().fireEvent(new ChatMessageEvent(new ChatMessage("Unknown command '" + commandName + "'", Color.WHITE)));
+                            }
+
+                        } else {
+                            String message = "<" + username + "> " + chat;
+                            worldServer.getGame().fireEvent(new ChatMessageEvent(new ChatMessage(message, Color.WHITE)));
+                        }
                     }
                 }
             }catch (Exception e) {

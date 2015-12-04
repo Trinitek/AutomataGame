@@ -33,6 +33,8 @@ public class GUI {
     private Game game;
     private BufferedImage paused = ImageUtil.loadImage("images/paused.png");
 
+    public int tps;
+
     private Set<String> playersOnline = new HashSet<>();
 
     private Dimension windowSize;
@@ -122,7 +124,7 @@ public class GUI {
                         }
                     }
 
-                    graphics2D.drawString("TPS: " + getGame().getTPS(), 40, 280);
+                    graphics2D.drawString("TPS: " + (getGame().getTPS() == 0 ? tps : game.getTPS()), 40, 280);
 
                     graphics2D.setColor(Color.WHITE);
                     graphics2D.drawString("Item in-hand: " + getGame().getPlayerState().getInHand().getName(), 40, 320);
