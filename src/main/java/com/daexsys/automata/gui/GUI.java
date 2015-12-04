@@ -49,8 +49,10 @@ public class GUI {
         this.game = game;
     }
 
+    private JFrame jFrame;
+
     public void spawnWindow() {
-        final JFrame jFrame = new JFrame(System.getProperty("game-name"));
+        jFrame = new JFrame(System.getProperty("game-name"));
         windowSize = new Dimension(1600, 900);
         jFrame.setSize(windowSize);
         jFrame.setLocationRelativeTo(null);
@@ -212,7 +214,7 @@ public class GUI {
     }
 
     public Dimension getWindowSize() {
-        return windowSize;
+        return jFrame.getSize();
     }
 
     public void playerPlaceTile(int screenX, int screenY, GUI gui) {

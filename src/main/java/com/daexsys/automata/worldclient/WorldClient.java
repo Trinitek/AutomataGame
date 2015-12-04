@@ -31,7 +31,8 @@ public class WorldClient {
      */
     public static void main(String[] args) {
         if(args.length == 0) {
-            new WorldClient(NameGenerator.getName(), "104.196.35.63");
+//            new WorldClient(NameGenerator.getName(), "104.196.35.63");
+            new WorldClient(NameGenerator.getName(), "127.0.0.1");
         } else {
             new WorldClient(args[0], args[1]);
         }
@@ -83,7 +84,6 @@ public class WorldClient {
                         while(true) {
                             if(!toSend.isEmpty()) {
                                 ByteBuffer packetBuffer = toSend.remove(0);
-                                System.out.println("sending packet " + packetBuffer.array()[0]);
                                 try {
                                     dataOutputStream.write(packetBuffer.array());
                                 } catch (IOException e) {

@@ -59,7 +59,7 @@ public class ClientConnection {
                         }
                         username = new String(b);
                         System.out.println(username + " has connected");
-                        worldServer.getGame().fireEvent(new ChatMessageEvent(new ChatMessage(username, Color.YELLOW)));
+                        worldServer.getGame().fireEvent(new ChatMessageEvent(new ChatMessage(username + " has joined the server", Color.YELLOW)));
 
                         ByteBuffer byteBuffer = ByteBuffer.allocate(length + 2);
                         byteBuffer.put((byte) 0x02);

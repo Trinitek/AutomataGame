@@ -41,7 +41,7 @@ public class KeyboardHandler implements KeyListener {
                 if(cache.length() > 0) {
                     cache = cache.substring(0, cache.length() - 1);
                 }
-            } else {
+            } else if(e.getKeyCode() != KeyEvent.VK_SHIFT) {
                 cache += e.getKeyChar();
             }
         } else {

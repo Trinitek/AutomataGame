@@ -21,15 +21,16 @@ public class ChatRenderer implements Renderable {
     public void render(Graphics graphics) {
         graphics.setFont(new Font("Tahoma", Font.BOLD, 16));
 
+        Dimension windowSize = gui.getWindowSize();
         List<ChatMessage> newList =  gui.getGame().getChatManager().getChatMessages();
 
         int i = 0;
         Collections.reverse(newList);
         for(ChatMessage chatMessage : newList) {
             graphics.setColor(new Color(50, 50, 50, 100));
-            graphics.fillRect(110, 800 - i * 40 - 15, chatMessage.getMessage().length() * 10, 25);
+            graphics.fillRect(110, (int) windowSize.getHeight() - 100 - i * 40 - 15, chatMessage.getMessage().length() * 10, 25);
             graphics.setColor(chatMessage.getColor());
-            graphics.drawString(chatMessage.getMessage(), 120, 800 - i * 40);
+            graphics.drawString(chatMessage.getMessage(), 120, (int) windowSize.getHeight() - 100 - i * 40);
             i++;
             if(i > 5) break;
         }
@@ -37,10 +38,10 @@ public class ChatRenderer implements Renderable {
 
         if(typingState) {
             graphics.setColor(Color.GRAY);
-            graphics.fillRect(120, 820, 600, 50);
+            graphics.fillRect(120, (int) windowSize.getHeight() - 80, 600, 50);
 
             graphics.setColor(Color.WHITE);
-            graphics.drawString(gui.getKeyboardHandler().getCache(), 145, 840);
+            graphics.drawString(gui.getKeyboardHandler().getCache(), 145, (int) windowSize.getHeight() - 60);
         }
     }
 

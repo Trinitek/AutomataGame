@@ -21,9 +21,6 @@ public class ChatManager {
     }
 
     private List<ChatMessage> chatMessages = new ArrayList<>();
-    {
-        chatMessages.add(new ChatMessage("Welcome to this game", Color.WHITE));
-    }
 
     public void addChatMessage(ChatMessage chatMessage) {
 
