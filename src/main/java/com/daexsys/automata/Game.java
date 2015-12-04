@@ -26,7 +26,7 @@ public class Game {
     private ChatManager chatManager;
 
     private PlayerState playerState;
-    private volatile int tickDelayRate = 250; // 500 default
+    private volatile int tickDelayRate = 1000; // 500 default
 
     private int lastTPS = 0;
     private long lastTPSTime = System.currentTimeMillis();

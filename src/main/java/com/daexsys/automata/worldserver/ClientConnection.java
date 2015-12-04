@@ -3,6 +3,7 @@ package com.daexsys.automata.worldserver;
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.event.chat.ChatMessageEvent;
 import com.daexsys.automata.gui.chat.ChatMessage;
+import com.daexsys.automata.io.WorldSaver;
 import com.daexsys.automata.world.Chunk;
 import com.daexsys.automata.world.tiletypes.TileType;
 
@@ -97,6 +98,10 @@ public class ClientConnection {
                             }
                             else if(commandName.equalsIgnoreCase("tickrate")) {
                                 worldServer.getGame().setTickDelayRate(Integer.parseInt(command.split("\\s+")[1]));
+                            }
+
+                            else if(commandName.equalsIgnoreCase("save")) {
+                                WorldSaver.save("serverworld", worldServer.getGame().getWorld());
                             }
                             else {
                                 worldServer.getGame().fireEvent(new ChatMessageEvent(new ChatMessage("Unknown command '" + commandName + "'", Color.WHITE)));
