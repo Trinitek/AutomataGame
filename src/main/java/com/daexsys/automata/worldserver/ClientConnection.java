@@ -38,6 +38,7 @@ public class ClientConnection {
                 try {
                     while (true) {
                         byte packetID = dataInputStream.readByte();
+                        System.out.println("RECEIVED PACKET: " + packetID);
 
                         if(packetID == 0x00) {
                             byte length = dataInputStream.readByte();
@@ -104,22 +105,24 @@ public class ClientConnection {
 
         Thread sendPackets = new Thread(() -> {
             while(true) {
-                if(!packetsToSend.isEmpty()) {
-                    ByteBuffer a = packetsToSend.remove(0);
+                try {
+                    if (!packetsToSend.isEmpty()) {
+                        ByteBuffer a = packetsToSend.remove(0);
+
+                        try {
+                            dataOutputStream.write(a.array());
+                        } catch (IOException e) {
+                            System.out.println(username + " has disconnected");
+                            return;
+                        }
+                    }
 
                     try {
-                        dataOutputStream.write(a.array());
-                    } catch (IOException e) {
-                        System.out.println(username + " has disconnected");
-                        return;
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                }
-
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                } catch (Exception e) {}
             }
         });
         sendPackets.start();

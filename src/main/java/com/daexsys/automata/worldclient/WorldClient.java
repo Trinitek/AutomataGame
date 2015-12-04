@@ -53,6 +53,7 @@ public class WorldClient {
                     byteBuffer.put((byte) 0x00);
                     byteBuffer.put((byte) playerName.length());
                     byteBuffer.put(playerName.getBytes());
+                    toSend.add(byteBuffer);
 
                     game.addListener((TileAlterListener) tileAlterEvent -> {
                         if(tileAlterEvent.getTileAlterCause() == TileAlterCause.PLAYER_EDIT) {
