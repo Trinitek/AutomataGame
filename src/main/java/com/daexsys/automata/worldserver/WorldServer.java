@@ -1,21 +1,19 @@
 package com.daexsys.automata.worldserver;
 
 import com.daexsys.automata.Game;
-import com.daexsys.automata.Tile;
-import com.daexsys.automata.world.Chunk;
-import com.sun.corba.se.spi.orbutil.fsm.Input;
+import com.daexsys.automata.event.chat.ChatMessageListener;
+import com.daexsys.automata.event.tile.TileAlterListener;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Collection;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WorldServer {
 
     private Game game;
+    private List<ClientConnection> clientConnectionList = new ArrayList<>();
 
     public WorldServer() {
         game = new Game();
@@ -27,8 +25,37 @@ public class WorldServer {
         }
     }
 
+    public void broadcastPacket(ByteBuffer byteBuffer) {
+        for(ClientConnection clientConnection : clientConnectionList) {
+            clientConnection.giveByteBuffer(byteBuffer);
+        }
+    }
+
     public void bindAndStart() {
 
+        game.addListener((TileAlterListener) tileAlterEvent -> {
+            ByteBuffer packetBuffer = ByteBuffer.allocate(10);
+
+            packetBuffer.put((byte) 0x04);
+            packetBuffer.putInt(tileAlterEvent.getTile().getCoordinate().x);
+            packetBuffer.putInt(tileAlterEvent.getTile().getCoordinate().y);
+            packetBuffer.put(tileAlterEvent.getTile().getType().getID());
+
+            broadcastPacket(packetBuffer);
+        });
+
+        game.addListener((ChatMessageListener) chatMessageEvent -> {
+            String chatMessage = "GLOBAL: " + chatMessageEvent.getChatMessage().getMessage();
+
+            ByteBuffer packetBuffer = ByteBuffer.allocate(5 + chatMessage.length());
+            packetBuffer.put((byte) 0x06);
+            packetBuffer.put((byte) chatMessage.length());
+            packetBuffer.put(chatMessage.getBytes());
+
+            broadcastPacket(packetBuffer);
+        });
+
+        final WorldServer theServer = this;
         try {
             Thread thread = new Thread(new Runnable() {
                 @Override
@@ -37,28 +64,13 @@ public class WorldServer {
                         ServerSocket serverSocket = new ServerSocket(33433);
                         System.out.println("Started server");
 
-                        Socket socket = serverSocket.accept();
-                        System.out.println("Someone connected");
+                        while(true) {
+                            Socket socket = serverSocket.accept();
+                            System.out.println("Someone connected");
 
-                        InputStream inputStream = socket.getInputStream();
-                        OutputStream outputStream = socket.getOutputStream();
-                        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-
-                        Collection<Chunk> chunks = game.getWorld().getChunkManager().getChunks();
-
-                        for (Chunk chunk : chunks) {
-                            outputStream.write(0x05);
-                            dataOutputStream.writeInt(chunk.getChunkCoordinate().x);
-                            dataOutputStream.writeInt(chunk.getChunkCoordinate().y);
-
-                            for (int i = 0; i < 16; i++) {
-                                for (int j = 0; j < 16; j++) {
-                                    Tile t = chunk.getTile(0, i, j);
-                                    outputStream.write(t.getType().getID());
-                                }
-                            }
-
-                            System.out.println("Sent chunk");
+                            ClientConnection clientConnection = new ClientConnection(theServer, socket);
+                            clientConnectionList.add(clientConnection);
+                            clientConnection.start();
                         }
                     } catch (Exception e) {
 
@@ -71,6 +83,10 @@ public class WorldServer {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     public static void main(String[] args) {

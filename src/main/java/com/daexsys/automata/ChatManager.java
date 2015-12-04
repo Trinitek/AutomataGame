@@ -1,5 +1,8 @@
 package com.daexsys.automata;
 
+import com.daexsys.automata.event.chat.ChatMessageEvent;
+import com.daexsys.automata.event.chat.ChatMessageListener;
+import com.daexsys.automata.event.tile.TileAlterCause;
 import com.daexsys.automata.gui.chat.ChatMessage;
 import com.daexsys.automata.world.Chunk;
 import com.daexsys.automata.world.tiletypes.TileType;
@@ -23,6 +26,7 @@ public class ChatManager {
     }
 
     public void addChatMessage(ChatMessage chatMessage) {
+
         if(chatMessage.getMessage().trim().equalsIgnoreCase("Player: /megaboom")) {
             chatMessages.add(new ChatMessage("BOOM", Color.RED));
 
@@ -35,7 +39,7 @@ public class ChatManager {
                         int rx = random.nextInt(16);
                         int ry = random.nextInt(16);
 
-                        chunk.flashWithNewType(0, rx, ry, TileType.BOMB);
+                        chunk.flashWithNewType(0, rx, ry, TileType.BOMB, TileAlterCause.PLAYER_EDIT);
                     }
                 }
             } catch (Exception e) {
