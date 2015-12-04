@@ -195,10 +195,10 @@ public class TileVM implements VM, Pulsable {
         int y = this.tile.getCoordinate().y;
         switch (port) {
             case 0x00:          // print to stdout
-                System.out.printf("%02X\n", data);
+                System.out.printf("%02X ", data);
                 break;
-            case 0x01:          // write raw data to stdout
-                System.out.println(data);
+            case 0x01:          // print newline to stdout
+                System.out.println();
                 break;
             case 0x02:          // place tile above
                 world.queueChangeAt(
@@ -808,22 +808,6 @@ public class TileVM implements VM, Pulsable {
             e.printStackTrace();
             System.exit(1);
         }
-//        byte[] program = {
-//                0x03, (byte) 0xA0,      /* 00 | add a, 0xA0 */
-//                0x13, (byte) 0x90,      /* 02 | sub a, 0x90 */
-//                0x54,                   /* 04 | mov b, a */
-//                0x53,                   /* 05 | mov a, x */
-//                0x03 | (0x02 << 2), (byte) 0xFE, /* 06 | mov x, 0xFE */
-//                0x03, 0x03,             /* 08 | add a, 0x03 */
-//                0x02,                   /* 0A | add a, x */
-//                (byte) 0xE0 | (0x02 << 2), /* 0B | and x, a */
-//                (byte) 0xF0 | (0x01 << 2), /* 0C | or b, a */
-//                (byte) 0xA3, 0x00,      /* 0D | cmp a, 0 */
-//                (byte) 0xA0,            /* 0F | cmp a, a */
-//                (byte) 0xA1,            /* 10 | cmp a, b */
-//                (byte) 0xBF, 0x11       /* 11 | jl 0x11 */
-//        };
-//        arraycopy(program, 0, newRam, 0, program.length);
         tileVM.setRam(newRam);
         System.out.println("@$## | " + tileVM.regsToString());
         while (tileVM.getP() < pSize) {
