@@ -31,23 +31,6 @@ vm_start:
 ;
 
 vm_doForever:
-    mov x, vm_regA  ; write regA to stdout
-    out [x], 0x00
-    mov x, vm_regX  ; write regX to stdout
-    out [x], 0x00
-    mov x, [x]      ; write [regX] to stdout
-    out [x], 0x00
-    mov x, vm_regP  ; write regP to stdout
-    out [x], 0x00
-    mov x, [x]      ; write [regP] to stdout
-    out [x], 0x00
-    pushf           ; write F to stdout
-    pop a
-    out a, 0x00
-    out a, 0x01     ; newline
-
-;jmp vm_doForever
-    
     mov x, vm_regP
     mov x, [x]
     mov a, [x]
