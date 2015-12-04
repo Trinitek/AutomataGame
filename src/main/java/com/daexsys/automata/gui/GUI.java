@@ -17,6 +17,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GUI {
 
@@ -30,6 +32,8 @@ public class GUI {
 
     private Game game;
     private BufferedImage paused = ImageUtil.loadImage("images/paused.png");
+
+    private Set<String> playersOnline = new HashSet<>();
 
     private Dimension windowSize;
 
@@ -125,6 +129,18 @@ public class GUI {
 
                     graphics2D.drawString("Cursor-Tile-X: " + getMouseMotionHandler().getTileX(), 40, 440);
                     graphics2D.drawString("Cursor-Tile-Y: " + getMouseMotionHandler().getTileY(), 40, 480);
+
+                    Dimension windowSize = getWindowSize();
+                    graphics2D.setFont(new Font("Tahoma", Font.BOLD, 14));
+                    if(!playersOnline.isEmpty()) {
+                        graphics2D.drawString("Players online: ", (int) windowSize.getWidth() - 200, 80);
+
+                        int i = 1;
+                        for(String s : playersOnline) {
+                            graphics2D.drawString(s, (int) windowSize.getWidth() - 200, 80 + (i + 30));
+                            i++;
+                        }
+                    }
 
                     jFrame.getBufferStrategy().show();
 
@@ -223,5 +239,13 @@ public class GUI {
 
     public int getFPS() {
         return lastFPS;
+    }
+
+    public void setPlayerOnline(String player, boolean state) {
+        if(state) {
+            playersOnline.add(player);
+        } else {
+            playersOnline.remove(player);
+        }
     }
 }

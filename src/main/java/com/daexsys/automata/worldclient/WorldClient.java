@@ -99,6 +99,28 @@ public class WorldClient {
                     while (true) {
                         byte packetID = (byte) inputStream.read();
 
+                        if(packetID == 0x02) {
+                            byte length = dataInputStream.readByte();
+
+                            byte[] str = new byte[length];
+                            for (int i = 0; i < length; i++) {
+                                str[i] = dataInputStream.readByte();
+                            }
+                            String theString = new String(str);
+                            gameGUI.setPlayerOnline(theString, true);
+                        }
+
+                        if(packetID == 0x03) {
+                            byte length = dataInputStream.readByte();
+
+                            byte[] str = new byte[length];
+                            for (int i = 0; i < length; i++) {
+                                str[i] = dataInputStream.readByte();
+                            }
+                            String theString = new String(str);
+                            gameGUI.setPlayerOnline(theString, false);
+                        }
+
                         // Chunk load packet
                         if(packetID == 0x04) {
                             int x = dataInputStream.readInt();

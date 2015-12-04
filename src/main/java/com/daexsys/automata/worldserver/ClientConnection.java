@@ -32,50 +32,65 @@ public class ClientConnection {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         DataInputStream dataInputStream = new DataInputStream(inputStream);
 
-        Thread theThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        byte packetID = dataInputStream.readByte();
-                        System.out.println("RECEIVED PACKET: " + packetID);
+        for(ClientConnection clientConnection : worldServer.getClientConnectionList()) {
+            if(clientConnection != this) {
+                String theirUsername = clientConnection.getUsername();
 
-                        if(packetID == 0x00) {
-                            byte length = dataInputStream.readByte();
-                            byte[] b = new byte[length];
+                ByteBuffer byteBuffer = ByteBuffer.allocate(theirUsername.length() + 2);
+                byteBuffer.put((byte) 0x02);
+                byteBuffer.put((byte) theirUsername.length());
+                byteBuffer.put(theirUsername.getBytes());
+                worldServer.broadcastPacket(byteBuffer);
+            }
+        }
 
-                            for (int i = 0; i < length; i++) {
-                                b[i] = dataInputStream.readByte();
-                            }
-                            username = new String(b);
-                            System.out.println(username + " has connected");
-                            worldServer.getGame().fireEvent(new ChatMessageEvent(new ChatMessage(username, Color.YELLOW)));
+        Thread theThread = new Thread(() -> {
+            try {
+                while (true) {
+                    byte packetID = dataInputStream.readByte();
+                    System.out.println("RECEIVED PACKET: " + packetID);
+
+                    if(packetID == 0x00) {
+                        byte length = dataInputStream.readByte();
+                        byte[] b = new byte[length];
+
+                        for (int i = 0; i < length; i++) {
+                            b[i] = dataInputStream.readByte();
                         }
+                        username = new String(b);
+                        System.out.println(username + " has connected");
+                        worldServer.getGame().fireEvent(new ChatMessageEvent(new ChatMessage(username, Color.YELLOW)));
 
-                        if(packetID == 0x04) {
-                            int x = dataInputStream.readInt();
-                            int y = dataInputStream.readInt();
-                            byte b = (byte) inputStream.read();
-
-                            worldServer.getGame().getWorld().setTileTypeAt(0, x, y, TileType.getTileFromId(b));
-                        }
-
-                        if(packetID == 0x06) {
-                            byte length = dataInputStream.readByte();
-                            byte[] b = new byte[length];
-
-                            for (int i = 0; i < length; i++) {
-                                b[i] = dataInputStream.readByte();
-                            }
-                            String chat = new String(b);
-                            String message = "<" + username + "> " + chat;
-                            worldServer.getGame().fireEvent(new ChatMessageEvent(new ChatMessage(message, Color.WHITE)));
-                        }
+                        ByteBuffer byteBuffer = ByteBuffer.allocate(length + 2);
+                        byteBuffer.put((byte) 0x02);
+                        byteBuffer.put(length);
+                        byteBuffer.put(b);
+                        worldServer.broadcastPacket(byteBuffer);
                     }
-                }catch (Exception e) {
-                    System.out.println(username + " has disconnected");
-                    return;
+
+                    if(packetID == 0x04) {
+                        int x = dataInputStream.readInt();
+                        int y = dataInputStream.readInt();
+                        byte b = (byte) inputStream.read();
+
+                        worldServer.getGame().getWorld().setTileTypeAt(0, x, y, TileType.getTileFromId(b));
+                    }
+
+                    if(packetID == 0x06) {
+                        byte length = dataInputStream.readByte();
+                        byte[] b = new byte[length];
+
+                        for (int i = 0; i < length; i++) {
+                            b[i] = dataInputStream.readByte();
+                        }
+                        String chat = new String(b);
+                        String message = "<" + username + "> " + chat;
+                        worldServer.getGame().fireEvent(new ChatMessageEvent(new ChatMessage(message, Color.WHITE)));
+                    }
                 }
+            }catch (Exception e) {
+                System.out.println(username + " has disconnected");
+                return;
             }
         });
         theThread.start();
@@ -113,7 +128,7 @@ public class ClientConnection {
                         try {
                             dataOutputStream.write(a.array());
                         } catch (IOException e) {
-                            System.out.println(username + " has disconnected");
+                            disconnect();
                             return;
                         }
                     }
@@ -131,6 +146,16 @@ public class ClientConnection {
 
     public void giveByteBuffer(ByteBuffer byteBuffer) {
         packetsToSend.add(byteBuffer);
+    }
+
+    public void disconnect() {
+        System.out.println(username + " has disconnected");
+
+        ByteBuffer byteBuffer = ByteBuffer.allocate(username.length() + 2);
+        byteBuffer.put((byte) 0x03);
+        byteBuffer.put((byte) username.length());
+        byteBuffer.put(username.getBytes());
+        worldServer.broadcastPacket(byteBuffer);
     }
 
     public String getUsername() {
