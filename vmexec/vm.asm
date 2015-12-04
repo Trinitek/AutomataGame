@@ -31,6 +31,19 @@ vm_start:
 ;
 
 vm_doForever:
+    mov a, ' '
+    mov x, vm_regX
+    out [x], 0x00
+    out a, 0x01
+    mov x, vm_regA
+    out [x], 0x00
+    out a, 0x01
+    mov x, vm_regP
+    out [x], 0x00
+    out a, 0x01
+    mov a, 0x0D
+    out a, 0x01
+
     mov x, vm_regP
     mov a, [x]
     cmp a, 0x00     ; inc x

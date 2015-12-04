@@ -194,6 +194,12 @@ public class TileVM implements VM, Pulsable {
         int x = this.tile.getCoordinate().x;
         int y = this.tile.getCoordinate().y;
         switch (port) {
+            case 0x00:          // print to stdout
+                System.out.printf("%02X\n", data);
+                break;
+            case 0x01:          // write raw data to stdout
+                System.out.println(data);
+                break;
             case 0x02:          // place tile above
                 world.queueChangeAt(
                         new TileCoord(hardware.viewingLayer, world, x, y - 1),
