@@ -52,7 +52,7 @@ public final class TileType {
 
     public static final TileType DIRT =
             new TileType.Builder().setID((byte) 4).setName("dirt").setImageLocation("images/dirt.png")
-                    .setVMProgram("vmexec/dirt.vme").setEnergy(45).setDecayRate(1).setPulser(new FertileTilePulser()).build();
+                    .setVMProgram("vmexec/vmtest.vme").setEnergy(45).setDecayRate(1).setPulser(new FertileTilePulser()).build();
 
     public static final TileType WATER =
             new TileType.Builder().setID((byte) 5).setName("water").setImageLocation("images/water.png")
