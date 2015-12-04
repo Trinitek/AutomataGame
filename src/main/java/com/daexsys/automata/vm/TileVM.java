@@ -770,7 +770,7 @@ public class TileVM implements VM, Pulsable {
                     setTS(this.ram[(getP() + 1) & 0xFF]);
                     return VMArg.IMM;
                 } else {
-                    setTS(this.ram[getX()]);
+                    setTD(this.ram[getX()]);
                     return VMArg.MEM;
                 }
             default:
