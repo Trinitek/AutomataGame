@@ -92,4 +92,8 @@ public class WorldServer {
     public static void main(String[] args) {
         new WorldServer().bindAndStart();
     }
+
+    public List<ClientConnection> getClientConnectionList() {
+        return clientConnectionList;
+    }
 }
