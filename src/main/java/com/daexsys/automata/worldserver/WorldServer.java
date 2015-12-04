@@ -18,21 +18,17 @@ public class WorldServer {
     public WorldServer() {
         game = new Game();
 
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
+        int worldSize = 15;
+        for (int i = 0; i < worldSize; i++) {
+            for (int j = 0; j < worldSize; j++) {
                 game.getWorld().getChunkManager().getChunk(i, j);
             }
         }
     }
 
-    public void broadcastPacket(ByteBuffer byteBuffer) {
-        for(ClientConnection clientConnection : clientConnectionList) {
-            clientConnection.giveByteBuffer(byteBuffer);
-        }
-    }
-
     public void bindAndStart() {
 
+        /* Block alter listener */
         game.addListener((TileAlterListener) tileAlterEvent -> {
             ByteBuffer packetBuffer = ByteBuffer.allocate(10);
 
@@ -44,6 +40,7 @@ public class WorldServer {
             broadcastPacket(packetBuffer);
         });
 
+        /* Chat listener */
         game.addListener((ChatMessageListener) chatMessageEvent -> {
             String chatMessage = "GLOBAL: " + chatMessageEvent.getChatMessage().getMessage();
 
@@ -56,32 +53,29 @@ public class WorldServer {
         });
 
         final WorldServer theServer = this;
-        try {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        ServerSocket serverSocket = new ServerSocket(33433);
-                        System.out.println("Started server");
+        Thread thread = new Thread(() -> {
+            try {
+                int port = 33433;
+                ServerSocket serverSocket = new ServerSocket(port);
+                System.out.println("Started server @" + port);
 
-                        while(true) {
-                            Socket socket = serverSocket.accept();
-                            System.out.println("Someone connected");
+                while(true) {
+                    Socket socket = serverSocket.accept();
 
-                            ClientConnection clientConnection = new ClientConnection(theServer, socket);
-                            clientConnectionList.add(clientConnection);
-                            clientConnection.start();
-                        }
-                    } catch (Exception e) {
-
-                    }
+                    ClientConnection clientConnection = new ClientConnection(theServer, socket);
+                    clientConnectionList.add(clientConnection);
+                    clientConnection.start();
                 }
-            });
-            thread.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
+    }
 
-
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void broadcastPacket(ByteBuffer byteBuffer) {
+        for(ClientConnection clientConnection : clientConnectionList) {
+            clientConnection.giveByteBuffer(byteBuffer);
         }
     }
 

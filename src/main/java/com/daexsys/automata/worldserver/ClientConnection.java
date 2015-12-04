@@ -4,9 +4,7 @@ import com.daexsys.automata.Tile;
 import com.daexsys.automata.event.chat.ChatMessageEvent;
 import com.daexsys.automata.gui.chat.ChatMessage;
 import com.daexsys.automata.world.Chunk;
-import com.daexsys.automata.world.structures.Structure;
 import com.daexsys.automata.world.tiletypes.TileType;
-import com.daexsys.automata.worldserver.WorldServer;
 
 import java.awt.*;
 import java.io.*;
@@ -49,6 +47,7 @@ public class ClientConnection {
                                 b[i] = dataInputStream.readByte();
                             }
                             username = new String(b);
+                            System.out.println(username + " has connected");
                             worldServer.getGame().fireEvent(new ChatMessageEvent(new ChatMessage(username, Color.YELLOW)));
                         }
 
@@ -72,7 +71,8 @@ public class ClientConnection {
                         }
                     }
                 }catch (Exception e) {
-
+                    System.out.println(username + " has disconnected");
+                    return;
                 }
             }
         });
@@ -101,16 +101,6 @@ public class ClientConnection {
         chatPacket.put((byte) chatMessage.length());
         chatPacket.put(chatMessage.getBytes());
         giveByteBuffer(chatPacket);
-//
-//        worldServer.getGame().getWorld().setTileTypeAt(0, 50, 50, TileType.GREEDY_VIRUS);
-//        worldServer.getGame().getWorld().setTileTypeAt(0, 25, 25, TileType.GREEDY_VIRUS);
-//
-//        Structure structure = worldServer.getGame().getStructures().getStructureByName("cgol_glider");
-//        for (int i = 0; i < 20; i++) {
-//            for (int j = 0; j < 20; j++) {
-//                structure.placeInWorldAt(worldServer.getGame().getWorld(), i * 10, j * 10);
-//            }
-//        }
 
         Thread sendPackets = new Thread(() -> {
             while(true) {
@@ -120,7 +110,8 @@ public class ClientConnection {
                     try {
                         dataOutputStream.write(a.array());
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        System.out.println(username + " has disconnected");
+                        return;
                     }
                 }
 

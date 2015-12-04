@@ -18,111 +18,129 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WorldClient {
 
     private Game game;
 
+    /**
+     * Gets IP address to connect to from args
+     * @param args
+     */
     public static void main(String[] args) {
-        new WorldClient();
+        new WorldClient(args[0]);
     }
 
-    public WorldClient() {
+    private List<ByteBuffer> toSend = new ArrayList<ByteBuffer>();
+    public WorldClient(String address) {
         game = new Game(true);
 
         GUI gameGUI = new GUI(game);
         gameGUI.spawnWindow();
 
         try {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Socket socket = new Socket("localhost", 33433);
-                        InputStream inputStream = socket.getInputStream();
-                        DataInputStream dataInputStream = new DataInputStream(inputStream);
-                        DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            Thread thread = new Thread(() -> {
+                try {
+                    Socket socket = new Socket(address, 33433);
+                    InputStream inputStream = socket.getInputStream();
+                    DataInputStream dataInputStream = new DataInputStream(inputStream);
+                    DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
-                        String playerName = "MangoViolin";
-                        socket.getOutputStream().write(0x00);
-                        socket.getOutputStream().write(playerName.length());
-                        dataOutputStream.writeBytes(playerName);
+                    String playerName = "MangoViolin";
+                    ByteBuffer byteBuffer = ByteBuffer.allocate(2 + playerName.length());
+                    byteBuffer.put((byte) 0x00);
+                    byteBuffer.put((byte) playerName.length());
+                    byteBuffer.put(playerName.getBytes());
 
-                        game.addListener((TileAlterListener) tileAlterEvent -> {
-                            if(tileAlterEvent.getTileAlterCause() == TileAlterCause.PLAYER_EDIT) {
+                    game.addListener((TileAlterListener) tileAlterEvent -> {
+                        if(tileAlterEvent.getTileAlterCause() == TileAlterCause.PLAYER_EDIT) {
+                            ByteBuffer packetBuffer = ByteBuffer.allocate(10);
+                            packetBuffer.put((byte) 0x04);
+                            packetBuffer.putInt(tileAlterEvent.getTile().getCoordinate().x);
+                            packetBuffer.putInt(tileAlterEvent.getTile().getCoordinate().y);
+                            packetBuffer.put(tileAlterEvent.getTile().getType().getID());
+                            toSend.add(packetBuffer);
+                        }
+                    });
+
+                    game.addListener((ChatMessageListener) chatMessageEvent -> {
+                        String s = chatMessageEvent.getChatMessage().getMessage();
+                        ByteBuffer packetBuffer = ByteBuffer.allocate(2 + s.length());
+                        packetBuffer.put((byte) 0x06);
+                        packetBuffer.put((byte) s.length());
+                        packetBuffer.put(s.getBytes());
+                        toSend.add(packetBuffer);
+                    });
+
+                    Thread sendThread = new Thread(() -> {
+                        while(true) {
+                            if(!toSend.isEmpty()) {
+                                ByteBuffer packetBuffer = toSend.remove(0);
+                                System.out.println("sending packet " + packetBuffer.array()[0]);
                                 try {
-                                    socket.getOutputStream().write(0x04);
-                                    dataOutputStream.writeInt(tileAlterEvent.getTile().getCoordinate().x);
-                                    dataOutputStream.writeInt(tileAlterEvent.getTile().getCoordinate().y);
-                                    socket.getOutputStream().write(tileAlterEvent.getTile().getType().getID());
+                                    dataOutputStream.write(packetBuffer.array());
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
                             }
-                        });
 
-                        game.addListener((ChatMessageListener) chatMessageEvent -> {
                             try {
-                                String s = chatMessageEvent.getChatMessage().getMessage();
-                                socket.getOutputStream().write(0x06);
-                                socket.getOutputStream().write(s.length());
-                                dataOutputStream.writeBytes(s);
-                            } catch (IOException e) {
+                                Thread.sleep(1);
+                            } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                        });
-
-                        while (true) {
-                            byte packetID = (byte) inputStream.read();
-
-
-                            // Chunk load packet
-                            if(packetID == 0x04) {
-                                int x = dataInputStream.readInt();
-                                int y = dataInputStream.readInt();
-                                byte b = (byte) inputStream.read();
-
-                                game.getWorld().setTileTypeAt(0, x, y, TileType.getTileFromId(b));
-                            }
-
-                            if (packetID == 0x05) {
-                                int x = dataInputStream.readInt();
-                                int y = dataInputStream.readInt();
-
-                                Chunk chunk = new Chunk(game.getWorld(), x, y);
-
-                                for (int i = 0; i < 16; i++) {
-                                    for (int j = 0; j < 16; j++) {
-                                        byte tileID = (byte) inputStream.read();
-                                        TileType tileType = TileType.getTileFromId(tileID);
-                                        chunk.flashWithNewType(0, i, j, tileType, TileAlterCause.GENERATION);
-                                    }
-                                }
-
-                                System.out.println("{" + x + ", " + y + "}");
-                                System.out.println(chunk.toString());
-
-                                game.getWorld().getChunkManager().putChunk(x, y, chunk);
-                            }
-
-                            if(packetID == 0x06) {
-                                byte length = dataInputStream.readByte();
-
-                                byte[] str = new byte[length];
-                                for (int i = 0; i < length; i++) {
-                                    str[i] = dataInputStream.readByte();
-                                }
-                                String theString = new String(str);
-                                System.out.println(theString);
-                                game.getChatManager().addChatMessage(new ChatMessage(theString, Color.WHITE));
-                            }
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    });
+                    sendThread.start();
+
+                    while (true) {
+                        byte packetID = (byte) inputStream.read();
+
+                        // Chunk load packet
+                        if(packetID == 0x04) {
+                            int x = dataInputStream.readInt();
+                            int y = dataInputStream.readInt();
+                            byte b = (byte) inputStream.read();
+
+                            game.getWorld().setTileTypeAt(0, x, y, TileType.getTileFromId(b));
+                        }
+
+                        if (packetID == 0x05) {
+                            int x = dataInputStream.readInt();
+                            int y = dataInputStream.readInt();
+
+                            Chunk chunk = new Chunk(game.getWorld(), x, y);
+
+                            for (int i = 0; i < 16; i++) {
+                                for (int j = 0; j < 16; j++) {
+                                    byte tileID = (byte) inputStream.read();
+                                    TileType tileType = TileType.getTileFromId(tileID);
+                                    chunk.flashWithNewType(0, i, j, tileType, TileAlterCause.GENERATION);
+                                }
+                            }
+
+                            game.getWorld().getChunkManager().putChunk(x, y, chunk);
+                        }
+
+                        if(packetID == 0x06) {
+                            byte length = dataInputStream.readByte();
+
+                            byte[] str = new byte[length];
+                            for (int i = 0; i < length; i++) {
+                                str[i] = dataInputStream.readByte();
+                            }
+                            String theString = new String(str);
+                            System.out.println(theString);
+                            game.getChatManager().addChatMessage(new ChatMessage(theString, Color.WHITE));
+                        }
                     }
-
-
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+
+
             });
             thread.start();
 
