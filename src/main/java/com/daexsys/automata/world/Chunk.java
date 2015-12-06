@@ -2,7 +2,7 @@ package com.daexsys.automata.world;
 
 import com.daexsys.automata.Pulsable;
 import com.daexsys.automata.Tile;
-import com.daexsys.automata.event.tile.TileAlterCause;
+import com.daexsys.automata.event.tile.TilePlacementReason;
 import com.daexsys.automata.event.tile.TileAlterEvent;
 import com.daexsys.automata.world.tiletypes.TileType;
 
@@ -55,7 +55,7 @@ public final class Chunk implements Pulsable {
         while(!queuedTileChangeStack.isEmpty()) {
             QueuedTileChange queuedTileChange = queuedTileChangeStack.pop();
 
-            setTile(queuedTileChange.layer, queuedTileChange.x, queuedTileChange.y, queuedTileChange.t, TileAlterCause.AUTOMATA_SPREAD);
+            setTile(queuedTileChange.layer, queuedTileChange.x, queuedTileChange.y, queuedTileChange.t, TilePlacementReason.AUTOMATA_SPREAD);
         }
     }
 
@@ -75,7 +75,7 @@ public final class Chunk implements Pulsable {
         }
     }
 
-    public void setTile(int layer, int x, int y, Tile tile, TileAlterCause tileAlterCause) {
+    public void setTile(int layer, int x, int y, Tile tile, TilePlacementReason tileAlterCause) {
         if(homogenous)
             pingNearby();
 
@@ -94,14 +94,14 @@ public final class Chunk implements Pulsable {
         tile.getTileVM().initialize();
     }
 
-    private void alterTile(int layer, int x, int y, Tile tile, TileAlterCause tileAlterCause) {
+    private void alterTile(int layer, int x, int y, Tile tile, TilePlacementReason tileAlterCause) {
         contents[layer][x][y] = tile;
 
         TileAlterEvent tileAlterEvent = new TileAlterEvent(tile, tileAlterCause);
         tile.getWorld().getGame().fireEvent(tileAlterEvent);
     }
 
-    public void flashWithNewType(int layer, int x, int y, TileType tileType, TileAlterCause tileAlterCause) {
+    public void flashWithNewType(int layer, int x, int y, TileType tileType, TilePlacementReason tileAlterCause) {
         if(homogenous)
             pingNearby();
 
@@ -122,7 +122,7 @@ public final class Chunk implements Pulsable {
     public void fillLayerWith(int layer, TileType tileType) {
         for (int i = 0; i < DEFAULT_CHUNK_SIZE; i++) {
             for (int j = 0; j < DEFAULT_CHUNK_SIZE; j++) {
-                flashWithNewType(layer, i, j, tileType, TileAlterCause.GENERATION);
+                flashWithNewType(layer, i, j, tileType, TilePlacementReason.GENERATION);
             }
         }
     }

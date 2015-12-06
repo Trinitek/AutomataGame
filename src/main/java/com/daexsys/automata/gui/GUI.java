@@ -1,8 +1,7 @@
 package com.daexsys.automata.gui;
 
 import com.daexsys.automata.Game;
-import com.daexsys.automata.event.tile.TileAlterCause;
-import com.daexsys.automata.gui.chat.ChatMessage;
+import com.daexsys.automata.event.tile.TilePlacementReason;
 import com.daexsys.automata.gui.chat.ChatRenderer;
 import com.daexsys.automata.gui.listeners.KeyboardHandler;
 import com.daexsys.automata.gui.listeners.MouseHandler;
@@ -224,7 +223,7 @@ public class GUI {
         int ty = (screenY - gui.getOffsets().getOffsetY()) / gui.getZoomLevel();
 
         if(playerStructure == null) {
-            worldModel.setTileTypeAt(layerBuildingOn, tx, ty, gui.getGame().getPlayerState().getInHand(), TileAlterCause.PLAYER_EDIT);
+            worldModel.setTileTypeAt(layerBuildingOn, tx, ty, gui.getGame().getPlayerState().getInHand(), TilePlacementReason.PLAYER_EDIT);
         } else {
             playerStructure.placeInWorldAt(worldModel, tx, ty);
         }

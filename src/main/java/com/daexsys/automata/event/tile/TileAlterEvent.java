@@ -6,9 +6,9 @@ import com.daexsys.automata.event.Event;
 public class TileAlterEvent implements Event {
 
     private Tile tile;
-    private TileAlterCause tileAlterCause;
+    private TilePlacementReason tileAlterCause;
 
-    public TileAlterEvent(Tile tile, TileAlterCause tileAlterCause) {
+    public TileAlterEvent(Tile tile, TilePlacementReason tileAlterCause) {
         this.tile = tile;
         this.tileAlterCause = tileAlterCause;
     }
@@ -17,7 +17,7 @@ public class TileAlterEvent implements Event {
         return tile;
     }
 
-    public TileAlterCause getTileAlterCause() {
+    public TilePlacementReason getTileAlterCause() {
         return tileAlterCause;
     }
 }

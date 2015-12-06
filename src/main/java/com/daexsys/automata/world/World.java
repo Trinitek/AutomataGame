@@ -4,14 +4,10 @@ import com.daexsys.automata.Game;
 import com.daexsys.automata.Pulsable;
 import com.daexsys.automata.RangedRandom;
 import com.daexsys.automata.Tile;
-import com.daexsys.automata.event.tile.TileAlterCause;
-import com.daexsys.automata.world.terrain.DesertTerrain;
+import com.daexsys.automata.event.tile.TilePlacementReason;
 import com.daexsys.automata.world.terrain.GenerationContext;
-import com.daexsys.automata.world.terrain.TemperateTerrain;
 import com.daexsys.automata.world.terrain.TerrainGenerator;
 import com.daexsys.automata.world.tiletypes.TileType;
-
-import java.util.Random;
 
 public final class World implements Pulsable {
 
@@ -127,13 +123,13 @@ public final class World implements Pulsable {
     }
 
     public boolean setTileTypeAt(int layer, int x, int y, TileType tileType) {
-        return setTileTypeAt(layer, x, y, tileType, TileAlterCause.AUTOMATA_SPREAD);
+        return setTileTypeAt(layer, x, y, tileType, TilePlacementReason.AUTOMATA_SPREAD);
     }
 
     /**
      * @return whether or not the block was successfully set
      */
-    public boolean setTileTypeAt(int layer, int x, int y, TileType tileType, TileAlterCause tileAlterCause) {
+    public boolean setTileTypeAt(int layer, int x, int y, TileType tileType, TilePlacementReason tileAlterCause) {
         ChunkCoord chunkCoordinate = ChunkCoord.forWorldCoords(this, x, y);
 
         if((layer == 0 || layer == 1)) {
@@ -157,11 +153,11 @@ public final class World implements Pulsable {
 
         Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
         chunk.flashWithNewType(layer, chunkCoordinate.localifyX(coord.x),
-                chunkCoordinate.localifyY(coord.y), tileType, TileAlterCause.AUTOMATA_SPREAD);
+                chunkCoordinate.localifyY(coord.y), tileType, TilePlacementReason.AUTOMATA_SPREAD);
         return true;
     }
 
-    public boolean setTileTypeAt(int layer, TileCoord coord, TileType tileType, TileAlterCause tileAlterCause) {
+    public boolean setTileTypeAt(int layer, TileCoord coord, TileType tileType, TilePlacementReason tileAlterCause) {
         ChunkCoord chunkCoordinate = ChunkCoord.forWorldCoords(this, coord.x, coord.y);
 
         Chunk chunk = getChunkManager().getChunk(chunkCoordinate);

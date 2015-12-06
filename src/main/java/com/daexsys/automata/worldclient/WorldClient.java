@@ -1,14 +1,13 @@
 package com.daexsys.automata.worldclient;
 
 import com.daexsys.automata.Game;
-import com.daexsys.automata.event.chat.ChatMessageEvent;
 import com.daexsys.automata.event.chat.ChatMessageListener;
-import com.daexsys.automata.event.tile.TileAlterCause;
-import com.daexsys.automata.event.tile.TileAlterEvent;
+import com.daexsys.automata.event.tile.TilePlacementReason;
 import com.daexsys.automata.event.tile.TileAlterListener;
 import com.daexsys.automata.gui.GUI;
 import com.daexsys.automata.gui.chat.ChatMessage;
 import com.daexsys.automata.world.Chunk;
+import com.daexsys.automata.world.structures.Structure;
 import com.daexsys.automata.world.tiletypes.TileType;
 
 import java.awt.*;
@@ -31,8 +30,8 @@ public class WorldClient {
      */
     public static void main(String[] args) {
         if(args.length == 0) {
-            new WorldClient(NameGenerator.getName(), "104.196.35.63");
-//            new WorldClient(NameGenerator.getName(), "127.0.0.1");
+//            new WorldClient(NameGenerator.getName(), "104.196.35.63");
+            new WorldClient(NameGenerator.getName(), "127.0.0.1");
         } else {
             new WorldClient(args[0], args[1]);
         }
@@ -61,7 +60,7 @@ public class WorldClient {
                     toSend.add(byteBuffer);
 
                     game.addListener((TileAlterListener) tileAlterEvent -> {
-                        if(tileAlterEvent.getTileAlterCause() == TileAlterCause.PLAYER_EDIT) {
+                        if(tileAlterEvent.getTileAlterCause() == TilePlacementReason.PLAYER_EDIT) {
                             ByteBuffer packetBuffer = ByteBuffer.allocate(10);
                             packetBuffer.put((byte) 0x04);
                             packetBuffer.putInt(tileAlterEvent.getTile().getCoordinate().x);
@@ -150,7 +149,7 @@ public class WorldClient {
                                 for (int j = 0; j < 16; j++) {
                                     byte tileID = (byte) inputStream.read();
                                     TileType tileType = TileType.getTileFromId(tileID);
-                                    chunk.flashWithNewType(0, i, j, tileType, TileAlterCause.GENERATION);
+                                    chunk.flashWithNewType(0, i, j, tileType, TilePlacementReason.GENERATION);
                                 }
                             }
 
@@ -170,9 +169,37 @@ public class WorldClient {
                         }
 
                         if(packetID == 0x07) {
-                            byte range = dataInputStream.readByte();
+                            byte length = dataInputStream.readByte();
 
+                            byte[] str = new byte[length];
+                            for (int i = 0; i < length; i++) {
+                                str[i] = dataInputStream.readByte();
+                            }
+                            String structureName = new String(str);
 
+                            Structure theStructure = game.getStructures().getStructureByName(structureName);
+
+                            int x = dataInputStream.readInt();
+                            int y = dataInputStream.readInt();
+
+                            byte argLength = dataInputStream.readByte();
+
+                            int[] args = new int[argLength];
+                            if(argLength > 0) {
+                                for (int i = 0; i < argLength; i++) {
+                                    args[i] = dataInputStream.readByte();
+                                }
+                            }
+
+                            theStructure.placeInWorldAt(game.getWorld(), x, y, args);
+                        }
+
+                        if(packetID == 0x08) {
+                            int x = dataInputStream.readShort();
+                            int y = dataInputStream.readShort();
+                            byte b = (byte) inputStream.read();
+
+                            game.getWorld().setTileTypeAt(1, x, y, TileType.getTileFromId(b));
                         }
                     }
                 } catch (IOException e) {

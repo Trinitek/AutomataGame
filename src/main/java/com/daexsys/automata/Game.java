@@ -6,6 +6,8 @@ import com.daexsys.automata.event.chat.ChatMessageEvent;
 import com.daexsys.automata.event.chat.ChatMessageListener;
 import com.daexsys.automata.event.game.TickEvent;
 import com.daexsys.automata.event.game.TickListener;
+import com.daexsys.automata.event.tile.StructurePlacementEvent;
+import com.daexsys.automata.event.tile.StructurePlacementListener;
 import com.daexsys.automata.event.tile.TileAlterEvent;
 import com.daexsys.automata.event.tile.TileAlterListener;
 import com.daexsys.automata.world.structures.StructureRegistry;
@@ -20,6 +22,8 @@ public class Game {
     private boolean isPaused = false;
     private World world;
 
+    private GameSide gameSide;
+
     private TileRegistry tileRegistry;
     private StructureRegistry structures;
 
@@ -32,7 +36,8 @@ public class Game {
     private long lastTPSTime = System.currentTimeMillis();
     private int tps = 0;
 
-    public Game() {
+    public Game(GameSide gameSide) {
+        this.gameSide = gameSide;
         world = new World(this);
 
         tileRegistry = new TileRegistry();
@@ -76,10 +81,16 @@ public class Game {
     public Game(boolean t) {
         world = new World(this);
 
+        gameSide = GameSide.CLIENT;
+
         tileRegistry = new TileRegistry();
         structures = new StructureRegistry();
         chatManager = new ChatManager(this);
         playerState = new PlayerState(this);
+    }
+
+    public GameSide getGameSide() {
+        return gameSide;
     }
 
     public int getTPS() {
@@ -123,6 +134,7 @@ public class Game {
     private List<TileAlterListener> tileAlterListenerList = new ArrayList<>();
     private List<ChatMessageListener> chatMessageListenerList = new ArrayList<>();
     private List<TickListener> tickListeners = new ArrayList<>();
+    private List<StructurePlacementListener> structurePlacementListeners = new ArrayList<>();
     public void fireEvent(Event event) {
         if(event instanceof TileAlterEvent) {
             for(TileAlterListener tileAlterListener : tileAlterListenerList) {
@@ -136,6 +148,10 @@ public class Game {
             for(TickListener tickListener : tickListeners) {
                 tickListener.tickOccur((TickEvent) event);
             }
+        } else if(event instanceof StructurePlacementEvent) {
+            for(StructurePlacementListener structurePlacementListener : structurePlacementListeners) {
+                structurePlacementListener.structurePlace((StructurePlacementEvent) event);
+            }
         }
     }
 
@@ -146,6 +162,8 @@ public class Game {
             chatMessageListenerList.add((ChatMessageListener) listener);
         } else if(listener instanceof TickListener) {
             tickListeners.add((TickListener) listener);
+        } else if(listener instanceof StructurePlacementListener) {
+            structurePlacementListeners.add((StructurePlacementListener) listener);
         }
     }
 

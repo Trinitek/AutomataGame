@@ -1,6 +1,7 @@
 package com.daexsys.automata;
 
 public enum GameSide {
-    CLIENT,
-    SERVER
+    CLIENT, // multiplayer client
+    SERVER, // multiplayer server
+    BOTH // singleplayer
 }

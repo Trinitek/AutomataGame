@@ -12,7 +12,7 @@ public class Main {
 
 //        TileType.getTileFromID((byte) 0);
 
-        Game game = new Game();
+        Game game = new Game(GameSide.BOTH);
         game.getWorld().getChunkManager();
 
         for (int i = 0; i < 15; i++) {

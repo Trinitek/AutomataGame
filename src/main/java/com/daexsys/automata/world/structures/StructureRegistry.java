@@ -11,43 +11,42 @@ public class StructureRegistry {
 
     public StructureRegistry() {
         /* Add default structures */
+        registerStructure(new ExplosionStructure());
 
-        structureMap.put("vanilla:explosion", new ExplosionStructure());
-
-        structureMap.put("cgol_glider", new Structure(3, new int[] {
+        registerStructure(new Structure("cgol_glider", 3, new int[] {
                 0, 1, 0,
                 0, 0, 1,
                 1, 1, 1
         }, TileType.CGOL));
 
-        structureMap.put("cgol_lwss", new Structure(5, new int[] {
+        registerStructure(new Structure("cgol_glider", 5, new int[]{
                 1, 0, 0, 1, 0,
                 0, 0, 0, 0, 1,
                 1, 0, 0, 0, 1,
                 0, 1, 1, 1, 1,
         }, TileType.CGOL));
 
-        structureMap.put("cgol_r-pentomino", new Structure(3, new int[] {
+        registerStructure(new Structure("cgol_r-pentomino", 3, new int[]{
                 0, 1, 1,
                 1, 1, 0,
                 0, 1, 0
         }, TileType.CGOL));
 
-        structureMap.put("vanilla:stone-pointer", new Structure(7, new int[] {
+        registerStructure(new Structure("vanilla:stone-pointer", 7, new int[] {
                 0, 1, 1, 0, 0, 0, 0,
                 1, 1, 1, 1, 1, 1, 1,
                 1, 1, 1, 1, 0, 0, 0,
                 0, 1, 1, 0, 0, 0, 0
         }, TileType.STONE));
 
-        structureMap.put("vanilla:bush", new Structure(4, new int[] {
+        registerStructure(new Structure("vanilla:bush", 4, new int[] {
                 0, 1, 1, 0,
                 1, 1, 1, 1,
                 0, 1, 1, 0,
                 0, 2, 2, 0
         }, TileType.LEAVES, TileType.WOOD));
 
-        structureMap.put("vanilla:pine_tree", new Structure(5, new int[] {
+        registerStructure(new Structure("vanilla:pine_tree", 5, new int[]{
                 0, 0, 1, 0, 0,
                 0, 1, 1, 1, 0,
                 0, 1, 1, 1, 0,
@@ -76,9 +75,9 @@ public class StructureRegistry {
      * @return whether or not the structure was successfully registered.
      * If it wasn't, it was because something was already there of the same name.
      */
-    public boolean registerStructure(String structureName, Structure structure) {
-        if(!structureMap.containsKey(structureName)) {
-            this.structureMap.put(structureName, structure);
+    public boolean registerStructure(Structure structure) {
+        if(!structureMap.containsKey(structure.getName())) {
+            this.structureMap.put(structure.getName(), structure);
             return true;
         }
 
