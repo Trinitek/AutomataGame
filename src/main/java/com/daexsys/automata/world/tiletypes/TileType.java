@@ -172,7 +172,7 @@ public final class TileType {
         stayAliveRules.add(8);
 
         CORAL = new TileType.Builder()
-                .setID((byte) 20)
+                .setID((byte) 21)
                 .setName("highlife")
                 .setImageLocation("images/cottencandy.png")
                 .setEnergy(10)
@@ -181,6 +181,10 @@ public final class TileType {
                 .setPulser(new CGoLTilePulser(birthRules, stayAliveRules))
                 .build();
     }
+
+    public static final TileType ENERGY_TOWER =
+            new TileType.Builder().setID((byte) 22).setName("energytower").setImageLocation("images/energytower.png")
+                    .setEnergy(150000).setDecayRate(1).setPulser(new FertileTilePulser()).build();
 
     private byte id;
     private String blockName;

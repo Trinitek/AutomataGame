@@ -21,11 +21,11 @@ public class PlayerInventory {
 
     public TileType getInHand() {
         if(selectedSlot == 1)
-            return TileType.HIGH_LIFE;
+            return TileType.CGOL;
         if(selectedSlot == 2)
             return TileType.GREEDY_VIRUS;
         if(selectedSlot == 3)
-            return TileType.HIGH_LIFE;
+            return TileType.ENERGY_TOWER;
         if(selectedSlot == 4)
             return TileType.AMOEBA;
         if(selectedSlot == 5)
