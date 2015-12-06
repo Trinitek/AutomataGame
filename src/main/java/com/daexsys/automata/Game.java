@@ -1,5 +1,6 @@
 package com.daexsys.automata;
 
+import com.daexsys.automata.energy.EmissionManager;
 import com.daexsys.automata.event.Event;
 import com.daexsys.automata.event.Listener;
 import com.daexsys.automata.event.chat.ChatMessageEvent;
@@ -15,7 +16,9 @@ import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.tiletypes.TileRegistry;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Game {
 
@@ -29,8 +32,10 @@ public class Game {
 
     private ChatManager chatManager;
 
+    private EmissionManager emissionManager;
+
     private PlayerState playerState;
-    private volatile int tickDelayRate = 100; // 500 default
+    private volatile int tickDelayRate = 250; // 500 default
 
     private int lastTPS = 0;
     private long lastTPSTime = System.currentTimeMillis();
@@ -42,6 +47,7 @@ public class Game {
 
         tileRegistry = new TileRegistry();
         structures = new StructureRegistry();
+        emissionManager = new EmissionManager();
 
         chatManager = new ChatManager(this);
 
@@ -169,5 +175,9 @@ public class Game {
 
     public ChatManager getChatManager() {
         return chatManager;
+    }
+
+    public EmissionManager getEmissionManager() {
+        return emissionManager;
     }
 }

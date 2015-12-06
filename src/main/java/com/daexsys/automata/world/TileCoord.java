@@ -56,6 +56,10 @@ public final class TileCoord {
         return Optional.absent();
     }
 
+    public double distance(TileCoord tileCoord) {
+        return 0;
+    }
+
     public void setTileType(TileType tileType) {
         world.setTileTypeAt(layer, x, y, tileType);
     }

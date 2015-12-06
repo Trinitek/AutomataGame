@@ -4,7 +4,6 @@ import com.daexsys.automata.vm.TileVM;
 import com.daexsys.automata.vm.VM;
 import com.daexsys.automata.world.*;
 import com.daexsys.automata.world.tiletypes.TileType;
-import com.flowpowered.noise.Noise;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,20 +26,28 @@ public class Tile implements Pulsable {
         this.tileData = type.getProgram();
     }
 
+    @Override
     public void pulse() {
+        /* Don't tick this tile if it is air, air is boring */
         if(getType() == TileType.AIR)
             return;
 
-        tileType.pulse(this);
+        /* Do type-specific logic */
+        getType().pulse(this);
 
-        /* Randomly lose energy to entropy. */
+        /* Allow the tile the opportunity to collect energy from an emission.
+         * e.g. an energy tower, the sun, geothermal */
+        getWorld().getGame().getEmissionManager().collectFor(this);
+
+        /* If energy is below or equal to 0, this tile will be destroyed. */
+        if(getEnergy() <= 0)
+            getType().destruct(this);
+
+        /* 1/2 chance to lose energy to heat. */
+        // TODO: this should be changed. Should the second law be so kind?
+        // TODO: Potentially change put this in an 'EntropyManager'.
         if(getWorld().getRandom().nextBoolean())
-            energy -= tileType.getDefaultDecayRate();
-
-        /* If energy is below or equal to 0, this tile will be destroyed */
-        if(energy <= 0) {
-            tileType.destruct(this);
-        }
+            energy -= getType().getDefaultDecayRate();
     }
 
     private List<Tile> neighbors = new ArrayList<>();

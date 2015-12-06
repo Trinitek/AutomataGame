@@ -41,6 +41,7 @@ public final class TileType {
                 .setName("CGoL")
                 .setImageLocation("images/automata.png")
                 .setEnergy(10)
+                .setEnergyCap(5)
                 .setDecayRate(0)
                 .setBehavior(TypeBehavior.DETERMINISTIC)
                 .setPulser(new CGoLTilePulser(birthRules, stayAliveRules))
@@ -49,7 +50,7 @@ public final class TileType {
 
     public static final TileType GRASS =
             new TileType.Builder().setID((byte) 3).setName("grass").setImageLocation("images/grass.png")
-                    .setEnergy(25).setDecayRate(0).setPulser(new FertileTilePulser()).build();
+                    .setEnergy(25).setDecayRate(0).setEnergyCap(500).setPulser(new FertileTilePulser()).build();
 
     public static final TileType DIRT =
             new TileType.Builder().setID((byte) 4).setName("dirt").setImageLocation("images/dirt.png")
@@ -187,8 +188,10 @@ public final class TileType {
     private TilePulser tilePulser;
     private int defaultDecayRate = 1;
     private int defaultEnergy = 10;
+    private int energyCap = 20;
     private TypeBehavior typeBehavior = TypeBehavior.NON_DETERMINISTIC;
     private BufferedImage image;
+    private boolean areTilesPulsable = true;
 
     public void pulse(Tile tile) {
         if(tilePulser != null) {
@@ -234,6 +237,10 @@ public final class TileType {
         return typeBehavior;
     }
 
+    public boolean areTilesPulsable() {
+        return areTilesPulsable;
+    }
+
     public static class Builder {
         private TileRegistry tileRegistry;
         private TileType tileType = new TileType();
@@ -277,8 +284,18 @@ public final class TileType {
             return this;
         }
 
+        public Builder setEnergyCap(int energyCap) {
+            tileType.energyCap = energyCap;
+            return this;
+        }
+
         public Builder setDecayRate(int rate) {
             tileType.defaultDecayRate = rate;
+            return this;
+        }
+
+        public Builder setAreTilesPulsable(boolean bool) {
+            tileType.areTilesPulsable = bool;
             return this;
         }
 

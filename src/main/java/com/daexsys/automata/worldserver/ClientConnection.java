@@ -34,17 +34,15 @@ public class ClientConnection {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         DataInputStream dataInputStream = new DataInputStream(inputStream);
 
-        for(ClientConnection clientConnection : worldServer.getClientConnectionList()) {
-            if(clientConnection != this) {
-                String theirUsername = clientConnection.getUsername();
+        worldServer.getClientConnectionList().stream().filter(clientConnection -> clientConnection != this).forEach(clientConnection -> {
+            String theirUsername = clientConnection.getUsername();
 
-                ByteBuffer byteBuffer = ByteBuffer.allocate(theirUsername.length() + 2);
-                byteBuffer.put((byte) 0x02);
-                byteBuffer.put((byte) theirUsername.length());
-                byteBuffer.put(theirUsername.getBytes());
-                worldServer.broadcastPacket(byteBuffer);
-            }
-        }
+            ByteBuffer byteBuffer = ByteBuffer.allocate(theirUsername.length() + 2);
+            byteBuffer.put((byte) 0x02);
+            byteBuffer.put((byte) theirUsername.length());
+            byteBuffer.put(theirUsername.getBytes());
+            worldServer.broadcastPacket(byteBuffer);
+        });
 
         Thread theThread = new Thread(() -> {
             try {
@@ -66,7 +64,7 @@ public class ClientConnection {
                         byteBuffer.put((byte) 0x02);
                         byteBuffer.put(length);
                         byteBuffer.put(b);
-                        worldServer.broadcastPacket(byteBuffer);
+                        worldServer.broadcastUrgentPacket(byteBuffer);
                     }
 
                     if(packetID == 0x04) {
@@ -87,8 +85,6 @@ public class ClientConnection {
                         String chat = new String(b);
 
                         if(chat.charAt(0) == '/') {
-                            System.out.println("command!");
-
                             String command = chat.substring(1, chat.length());
                             String commandName = command.split("\\s+")[0];
                             System.out.println(commandName);
@@ -170,12 +166,13 @@ public class ClientConnection {
                         }
 
                     }
-
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+//
+                    Thread.yield();
+//                    try {
+//                        Thread.sleep(1);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
                 } catch (Exception e) {}
             }
         });
