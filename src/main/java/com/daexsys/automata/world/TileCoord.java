@@ -14,21 +14,11 @@ public final class TileCoord {
     public final int x;
     public final int y;
 
-    private Chunk chunk;
-
     public TileCoord(int layer, World world, int x, int y) {
         this.layer = layer;
         this.world = world;
         this.x = x;
         this.y = y;
-    }
-
-    private TileCoord(int layer, World world, int x, int y, Chunk chunk) {
-        this.layer = layer;
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.chunk = chunk;
     }
 
     /**
@@ -39,20 +29,6 @@ public final class TileCoord {
     }
 
     public TileCoord add(int x, int y) {
-        if(chunk != null) {
-            if (x > 0 && y > 0) {
-                int tcx = this.x / Chunk.DEFAULT_CHUNK_SIZE;
-                int tcy = this.y / Chunk.DEFAULT_CHUNK_SIZE;
-
-                int ncx = (this.x + x) / Chunk.DEFAULT_CHUNK_SIZE;
-                int ncy = (this.y + x) / Chunk.DEFAULT_CHUNK_SIZE;
-
-                if (tcx == ncx && tcy == ncy) {
-                    return new TileCoord(layer, this.world, this.x + x, this.y + y, chunk);
-                }
-            }
-        }
-
         return new TileCoord(layer, this.world, this.x + x, this.y + y);
     }
 
@@ -61,16 +37,20 @@ public final class TileCoord {
     }
 
     public Chunk getChunk() {
-        if(chunk == null) {
-            chunk = ChunkCoord.forWorldCoords(this).getChunk();
-        }
-
-        return chunk;
+        return ChunkCoord.forWorldCoords(this).getChunk();
     }
 
     public Optional<Tile> getTile() {
+        Chunk chunk = getChunk();
+
         if(chunk != null) {
-            getChunk().getTile(layer, x / Chunk.DEFAULT_CHUNK_SIZE, y / Chunk.DEFAULT_CHUNK_SIZE);
+            return Optional.of(
+                    chunk.getTile(
+                            layer,
+                            chunk.getChunkCoordinate().localifyX(x),
+                            chunk.getChunkCoordinate().localifyY(y)
+                    )
+            );
         }
 
         return Optional.absent();
@@ -90,6 +70,6 @@ public final class TileCoord {
 
     @Override
     public String toString() {
-        return "{x=" + x + ", y=" + y + "}";
+        return "{tilecoord: x=" + x + ", y=" + y + "}";
     }
 }

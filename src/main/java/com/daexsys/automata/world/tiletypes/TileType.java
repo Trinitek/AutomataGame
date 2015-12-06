@@ -42,6 +42,7 @@ public final class TileType {
                 .setImageLocation("images/automata.png")
                 .setEnergy(10)
                 .setDecayRate(0)
+                .setBehavior(TypeBehavior.DETERMINISTIC)
                 .setPulser(new CGoLTilePulser(birthRules, stayAliveRules))
                 .build();
     }
@@ -100,7 +101,7 @@ public final class TileType {
 
     public static final TileType SMOKE =
             new TileType.Builder().setID((byte) 16).setName("smoke").setImageLocation("images/steam.png")
-                    .setEnergy(50).setDecayRate(5).setPulser(new SmokeTilePulser()).build();
+                    .setEnergy(50).setDecayRate(5).setBehavior(TypeBehavior.DETERMINISTIC).setPulser(new SmokeTilePulser()).build();
 
     public static final TileType BOT =
             new TileType.Builder().setID((byte) 17).setName("bot").setImageLocation("images/bot.png")
@@ -127,6 +128,7 @@ public final class TileType {
                 .setImageLocation("images/amoeba.png")
                 .setEnergy(10)
                 .setDecayRate(0)
+                .setBehavior(TypeBehavior.DETERMINISTIC)
                 .setPulser(new CGoLTilePulser(birthRules, stayAliveRules))
                 .build();
     }
@@ -144,9 +146,10 @@ public final class TileType {
         HIGH_LIFE = new TileType.Builder()
                 .setID((byte) 19)
                 .setName("highlife")
-                .setImageLocation("images/cottencandy.png")
+                .setImageLocation("images/highlife.png")
                 .setEnergy(10)
                 .setDecayRate(0)
+                .setBehavior(TypeBehavior.DETERMINISTIC)
                 .setPulser(new CGoLTilePulser(birthRules, stayAliveRules))
                 .build();
     }
@@ -154,12 +157,37 @@ public final class TileType {
     public static final TileType SMART_DIRT =
             new TileType.Builder().setID((byte) 20).setName("smart dirt").setImageLocation("images/dirt.png")
                     .setVMProgram("vmexec/dirt.vme").setEnergy(45).setDecayRate(1).setPulser(new FertileTilePulser()).build();
+
+    public static final TileType CORAL;
+    static {
+        List<Integer> birthRules = new ArrayList<>();
+        birthRules.add(3);
+
+        List<Integer> stayAliveRules = new ArrayList<>();
+        stayAliveRules.add(4);
+        stayAliveRules.add(5);
+        stayAliveRules.add(6);
+        stayAliveRules.add(7);
+        stayAliveRules.add(8);
+
+        CORAL = new TileType.Builder()
+                .setID((byte) 20)
+                .setName("highlife")
+                .setImageLocation("images/cottencandy.png")
+                .setEnergy(10)
+                .setDecayRate(0)
+                .setBehavior(TypeBehavior.DETERMINISTIC)
+                .setPulser(new CGoLTilePulser(birthRules, stayAliveRules))
+                .build();
+    }
+
     private byte id;
     private String blockName;
     private byte[] defaultProgram;
     private TilePulser tilePulser;
     private int defaultDecayRate = 1;
     private int defaultEnergy = 10;
+    private TypeBehavior typeBehavior = TypeBehavior.NON_DETERMINISTIC;
     private BufferedImage image;
 
     public void pulse(Tile tile) {
@@ -200,6 +228,10 @@ public final class TileType {
 
     public byte[] getProgram() {
         return defaultProgram;
+    }
+
+    public TypeBehavior getTypeBehavior() {
+        return typeBehavior;
     }
 
     public static class Builder {
@@ -257,6 +289,11 @@ public final class TileType {
 
         public Builder setPulser(TilePulser tilePulser) {
             tileType.tilePulser = tilePulser;
+            return this;
+        }
+
+        public Builder setBehavior(TypeBehavior typeBehavior) {
+            tileType.typeBehavior = typeBehavior;
             return this;
         }
 

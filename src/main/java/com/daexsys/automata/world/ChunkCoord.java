@@ -2,15 +2,12 @@ package com.daexsys.automata.world;
 
 /**
  * Represents the location of a chunk.
- *
- * Very close to TileCoordinate in structure, but separate for two reasons:
- * 1. they have very different meanings
- * 2. they will likely diverge in the future
  */
 public final class ChunkCoord {
 
     public static ChunkCoord of(World world, int x, int y) {
-        return new ChunkCoord(world, x, y);
+        ChunkCoord theCoord = new ChunkCoord(world, x, y);
+        return theCoord;
     }
 
     public static ChunkCoord forWorldCoords(TileCoord tileCoord) {
@@ -21,7 +18,8 @@ public final class ChunkCoord {
         int rx = x / Chunk.DEFAULT_CHUNK_SIZE;
         int ry = y / Chunk.DEFAULT_CHUNK_SIZE;
 
-        return new ChunkCoord(world, rx, ry);
+        ChunkCoord theCoord = new ChunkCoord(world, rx, ry);
+        return theCoord;
     }
 
     public final World world;
@@ -54,10 +52,8 @@ public final class ChunkCoord {
         return y + (this.y * Chunk.DEFAULT_CHUNK_SIZE);
     }
 
-    public TileCoord localifyCoordinates(int x, int y) {
-        return TileCoord.of(WorldLayer.GROUND, world,
-                localifyX(x),
-                localifyY(y));
+    public TileCoord localifyCoordinates(int layer, int x, int y) {
+        return TileCoord.of(layer, world, localifyX(x), localifyY(y));
     }
 
     public ChunkCoord add(int x, int y) {
@@ -66,6 +62,42 @@ public final class ChunkCoord {
 
     public boolean is(int x, int y) {
         return this.x == x && this.y == y;
+    }
+
+    private ChunkCoord above;
+    public ChunkCoord upOne() {
+        if(above == null) {
+            above = getWorld().getChunkManager().getChunk(x, y - 1).getChunkCoordinate();
+        }
+
+        return above;
+    }
+
+    private ChunkCoord below;
+    public ChunkCoord downOne() {
+        if(below == null) {
+            below = getWorld().getChunkManager().getChunk(x, y + 1).getChunkCoordinate();
+        }
+
+        return below;
+    }
+
+    private ChunkCoord left;
+    public ChunkCoord leftOne() {
+        if(left == null) {
+            left = getWorld().getChunkManager().getChunk(x - 1, y).getChunkCoordinate();
+        }
+
+        return left;
+    }
+
+    private ChunkCoord right;
+    public ChunkCoord rightOne() {
+        if(right == null) {
+            right = getWorld().getChunkManager().getChunk(x + 1, y).getChunkCoordinate();
+        }
+
+        return right;
     }
 
     @Override
@@ -78,6 +110,10 @@ public final class ChunkCoord {
         }
 
         return false;
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     public boolean chunkExists() {

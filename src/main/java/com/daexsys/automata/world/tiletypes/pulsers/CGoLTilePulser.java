@@ -1,7 +1,6 @@
 package com.daexsys.automata.world.tiletypes.pulsers;
 
 import com.daexsys.automata.Tile;
-import com.daexsys.automata.world.WorldLayer;
 import com.daexsys.automata.world.tiletypes.TilePulser;
 import com.daexsys.automata.world.tiletypes.TileType;
 
@@ -28,7 +27,7 @@ public class CGoLTilePulser implements TilePulser {
                 number++;
             } else {
                 int amount = iteratedTile.getMooreNeighborhoodEqualTo(tile.getCoordinate().layer, tile.getType());
-//
+
                 for(Integer i : birthNums) {
                     if(i == amount) {
                         iteratedTile.getCoordinate().queueChange(tile.getType());

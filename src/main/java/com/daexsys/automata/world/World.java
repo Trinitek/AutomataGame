@@ -2,9 +2,11 @@ package com.daexsys.automata.world;
 
 import com.daexsys.automata.Game;
 import com.daexsys.automata.Pulsable;
+import com.daexsys.automata.RangedRandom;
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.event.tile.TileAlterCause;
 import com.daexsys.automata.world.terrain.DesertTerrain;
+import com.daexsys.automata.world.terrain.GenerationContext;
 import com.daexsys.automata.world.terrain.TemperateTerrain;
 import com.daexsys.automata.world.terrain.TerrainGenerator;
 import com.daexsys.automata.world.tiletypes.TileType;
@@ -14,7 +16,7 @@ import java.util.Random;
 public final class World implements Pulsable {
 
     private long seed;
-    private Random random;
+    private RangedRandom random;
 
     private int ticksPulsed = 0;
 
@@ -25,10 +27,11 @@ public final class World implements Pulsable {
     public World(Game game) {
         this.game = game;
         seed = System.currentTimeMillis();
-        random = new Random(seed);
+        random = new RangedRandom(seed);
 
-        terrainGenerator = random.nextBoolean() ? new TemperateTerrain(this) : new DesertTerrain(this);
+//        terrainGenerator = random.nextBoolean() ? new TemperateTerrain(this) : new DesertTerrain(this);
 
+        terrainGenerator = new GenerationContext(this, 0);
         chunkManager = new ChunkManager(this);
 
         // pre-generate world sections
@@ -113,7 +116,8 @@ public final class World implements Pulsable {
         }
         lastSampledChunk = chunk;
 
-        if(chunk == null) return null;
+        if(chunk == null)
+            return null;
 
         return chunk.getTile(
                 layer,
@@ -136,7 +140,8 @@ public final class World implements Pulsable {
             Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
 
             if(chunk != null) {
-                chunk.flashWithNewType(layer, chunkCoordinate.localifyX(x), chunkCoordinate.localifyY(y), tileType, tileAlterCause);
+                chunk.flashWithNewType(layer, chunkCoordinate.localifyX(x),
+                        chunkCoordinate.localifyY(y), tileType, tileAlterCause);
             } else {
                 return false;
             }
@@ -151,7 +156,8 @@ public final class World implements Pulsable {
         ChunkCoord chunkCoordinate = ChunkCoord.forWorldCoords(this, coord.x, coord.y);
 
         Chunk chunk = getChunkManager().getChunk(chunkCoordinate);
-        chunk.flashWithNewType(layer, chunkCoordinate.localifyX(coord.x), chunkCoordinate.localifyY(coord.y), tileType, TileAlterCause.AUTOMATA_SPREAD);
+        chunk.flashWithNewType(layer, chunkCoordinate.localifyX(coord.x),
+                chunkCoordinate.localifyY(coord.y), tileType, TileAlterCause.AUTOMATA_SPREAD);
         return true;
     }
 
@@ -202,7 +208,7 @@ public final class World implements Pulsable {
         );
     }
 
-    public Random getRandom() {
+    public RangedRandom getRandom() {
         return random;
     }
 

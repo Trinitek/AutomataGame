@@ -23,9 +23,17 @@ public final class Chunk implements Pulsable {
     private Stack<QueuedTileChange> queuedTileChangeStack;
     public boolean homogenous = false;
 
+    public Chunk(ChunkCoord chunkCoord) {
+        this.chunkCoordinate = chunkCoord;
+        init();
+    }
+
     public Chunk(World world, int x, int y) {
         this.chunkCoordinate = ChunkCoord.of(world, x, y);
+        init();
+    }
 
+    private void init() {
         contents = new Tile[2][DEFAULT_CHUNK_SIZE][DEFAULT_CHUNK_SIZE];
         queuedTileChangeStack = new Stack<>();
 
@@ -52,10 +60,19 @@ public final class Chunk implements Pulsable {
     }
 
     public Tile getTile(int layer, int x, int y) {
-        if(x >= 0 && y >= 0)
+        if(x < 0 || y < 0 || x > 15 || y > 15) {
+            return null;
+//            int nX = getChunkCoordinate().amplifyLocalX(x);
+//            int yX = getChunkCoordinate().amplifyLocalX(y);
+//
+//            Chunk correctChunk = getChunkCoordinate().getWorld().getChunkManager()
+//                    .getChunk(ChunkCoord.forWorldCoords(getChunkCoordinate().getWorld(), nX, yX));
+//
+//            ChunkCoord correctCoord = correctChunk.getChunkCoordinate();
+//            return correctChunk.getTile(layer, correctCoord.localifyX(nX), correctCoord.localifyY(yX));
+        } else {
             return contents[layer][x][y];
-
-        return null;
+        }
     }
 
     public void setTile(int layer, int x, int y, Tile tile, TileAlterCause tileAlterCause) {

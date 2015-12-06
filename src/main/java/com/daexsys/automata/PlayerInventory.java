@@ -21,7 +21,7 @@ public class PlayerInventory {
 
     public TileType getInHand() {
         if(selectedSlot == 1)
-            return TileType.CGOL;
+            return TileType.HIGH_LIFE;
         if(selectedSlot == 2)
             return TileType.GREEDY_VIRUS;
         if(selectedSlot == 3)

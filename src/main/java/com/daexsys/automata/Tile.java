@@ -4,6 +4,7 @@ import com.daexsys.automata.vm.TileVM;
 import com.daexsys.automata.vm.VM;
 import com.daexsys.automata.world.*;
 import com.daexsys.automata.world.tiletypes.TileType;
+import com.flowpowered.noise.Noise;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,12 +110,11 @@ public class Tile implements Pulsable {
     }
 
     public World getWorld() {
-        return coordinate.world;
+        return getCoordinate().world;
     }
 
     public Chunk getChunk() {
-        return getWorld().getChunkManager()
-                .getChunk(getCoordinate().x / Chunk.DEFAULT_CHUNK_SIZE, getCoordinate().y / Chunk.DEFAULT_CHUNK_SIZE);
+        return getCoordinate().getChunk();
     }
 
     public VM getTileVM() {
