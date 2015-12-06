@@ -8,16 +8,44 @@ import com.daexsys.automata.world.tiletypes.TileType;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Tile instances represent the state of a single 1x1 automaton cell in the world.
+ */
 public class Tile implements Pulsable {
 
-    private static final int RAM_AMOUNT = 256; // 256 bytes
+    private static final int RAM_AMOUNT = 256;
 
+    /*
+        The location of this tile in a world.
+     */
     private final TileCoord coordinate;
+
+    /*
+        The type of tile this tile is. Used to store information
+        common to all tiles of a specific kind.
+     */
     private TileType tileType;
 
-    private VM tileVM = new TileVM(this);
+    /*
+        The amount of usable energy stored in this tile.
+        It is assumed to be of the type 'WIRED'.
+     */
     private int energy;
+
+    /*  The amount of heat stored in this tile.
+        Heat energy is unusable, and will be radiated off.
+        However, sufficient heat buildup will lead to machine breakage,
+        and potentially fire.
+
+        Current unused.
+     */
+    private double heat;
+
+    /*
+        The memory of the tile's VM.
+     */
     private byte[] tileData;
+    private VM tileVM = new TileVM(this);
 
     public Tile(TileCoord tileCoordinate, TileType type) {
         this.coordinate = tileCoordinate;
@@ -48,52 +76,6 @@ public class Tile implements Pulsable {
         // TODO: Potentially change put this in an 'EntropyManager'.
         if(getWorld().getRandom().nextBoolean())
             energy -= getType().getDefaultDecayRate();
-    }
-
-    private List<Tile> neighbors = new ArrayList<>();
-    public List<Tile> getMooreNeighborhood(int layer) {
-        neighbors.clear();
-
-        World world = getWorld();
-        int x = coordinate.x;
-        int y = coordinate.y;
-//
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if(!(i == 0 && j == 0)) {
-                    Tile current = world.sampleTileAt(layer, x + i, y + j);
-
-                    if (current != null) {
-                        neighbors.add(current);
-                    }
-                }
-            }
-        }
-
-        return neighbors;
-    }
-
-    public int getMooreNeighborhoodEqualTo(int layer, TileType type) {
-        World world = getWorld();
-        int x = coordinate.x;
-        int y = coordinate.y;
-        int amount = 0;
-
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if(!(i == 0 && j == 0)) {
-                    Tile current = world.sampleTileAt(layer, x + i, y + j);
-
-                    if (current != null) {
-                        if(current.getType() == type) {
-                            amount++;
-                        }
-                    }
-                }
-            }
-        }
-
-        return amount;
     }
 
     public int getEnergy() {
@@ -135,5 +117,51 @@ public class Tile implements Pulsable {
     @Override
     public String toString() {
         return "{tile " + getType() + " " + getCoordinate() + "}";
+    }
+
+    private static List<Tile> neighbors = new ArrayList<>();
+    public static List<Tile> getMooreNeighborhood(Tile tile) {
+        neighbors.clear();
+
+        World world = tile.getWorld();
+        int x = tile.getCoordinate().x;
+        int y = tile.getCoordinate().y;
+
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if(!(i == 0 && j == 0)) {
+                    Tile current = world.sampleTileAt(tile.getCoordinate().layer, x + i, y + j);
+
+                    if (current != null) {
+                        neighbors.add(current);
+                    }
+                }
+            }
+        }
+
+        return neighbors;
+    }
+
+    public static int getMooreNeighborhoodEqualTo(Tile tile, TileType tileType) {
+        World world = tile.getWorld();
+        int x = tile.getCoordinate().x;
+        int y = tile.getCoordinate().y;
+        int amount = 0;
+
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if(!(i == 0 && j == 0)) {
+                    Tile current = world.sampleTileAt(tile.getCoordinate().layer, x + i, y + j);
+
+                    if (current != null) {
+                        if(current.getType() == tileType) {
+                            amount++;
+                        }
+                    }
+                }
+            }
+        }
+
+        return amount;
     }
 }

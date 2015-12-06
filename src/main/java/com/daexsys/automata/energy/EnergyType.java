@@ -16,4 +16,7 @@ public enum EnergyType {
 
     /* Emitted by energy towers. Has a specific frequency per-player. */
     RADIO,
+
+    /* Destructive excessive heat released by cells. */
+    FREE_HEAT
 }
