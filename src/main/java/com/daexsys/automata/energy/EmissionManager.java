@@ -9,6 +9,9 @@ import java.util.List;
 public class EmissionManager {
 
     private List<Emission> activeEmissions = new ArrayList<>();
+    { // Default emissions
+        activeEmissions.add(new SolarEmission());
+    }
 
     public void addEmission(Emission emmission) {
         activeEmissions.add(emmission);
@@ -19,12 +22,9 @@ public class EmissionManager {
     }
 
     public void collectFor(Tile tile) {
-        TileCoord tileCoord = tile.getCoordinate();
-
         for(Emission emission : activeEmissions) {
-            if(emission.isInRange(tileCoord)) {
-                EnergyTransfer energyTransfer = emission.getEnergyTransfer();
-                tile.setEnergy(tile.getEnergy() + energyTransfer.getAmount());
+            if(emission.isApplicableFor(tile)) {
+                emission.apply(tile);
             }
         }
     }

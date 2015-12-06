@@ -54,9 +54,14 @@ public class RadialEmission implements Emission {
     }
 
     @Override
-    public boolean isInRange(TileCoord tileCoord) {
-        if(tileCoord.distance(getOrigin()) < getRange()) {
-            Tile tile = tileCoord.getTile().get();
+    public void apply(Tile tile) {
+
+    }
+
+    @Override
+    public boolean isApplicableFor(Tile tile) {
+        if(tile.getCoordinate().distance(getOrigin()) < getRange()) {
+            return true;
         }
         return false;
     }

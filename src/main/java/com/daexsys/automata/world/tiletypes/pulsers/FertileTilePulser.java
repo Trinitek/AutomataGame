@@ -8,8 +8,6 @@ public class FertileTilePulser implements TilePulser {
 
     @Override
     public void pulse(Tile tile) {
-        /* Get energy from the sun to grow */
-        tile.setEnergy(tile.getEnergy() + 2);
 
         if (tile.getEnergy() > 1) {
             tile.getTileVM().step();

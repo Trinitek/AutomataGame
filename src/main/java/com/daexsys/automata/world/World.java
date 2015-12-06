@@ -20,6 +20,8 @@ public final class World implements Pulsable {
     private ChunkManager chunkManager;
     private TerrainGenerator terrainGenerator;
 
+    private int time;
+
     public World(Game game) {
         this.game = game;
         seed = System.currentTimeMillis();

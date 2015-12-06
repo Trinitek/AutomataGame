@@ -1,5 +1,6 @@
 package com.daexsys.automata;
 
+import com.daexsys.automata.energy.EnergyTransfer;
 import com.daexsys.automata.vm.TileVM;
 import com.daexsys.automata.vm.VM;
 import com.daexsys.automata.world.*;
@@ -112,6 +113,10 @@ public class Tile implements Pulsable {
 
     public void setEnergy(int energy) {
         this.energy = energy;
+    }
+
+    public void giveEnergy(EnergyTransfer energyTransfer) {
+        setEnergy(getEnergy() + energyTransfer.getAmount());
     }
 
     @Override

@@ -1,12 +1,12 @@
 package com.daexsys.automata.energy;
 
-import com.daexsys.automata.world.TileCoord;
+import com.daexsys.automata.Tile;
 
 public interface Emission {
 
-    void emit();
+    void apply(Tile tile);
 
-    boolean isInRange(TileCoord tileCoord);
+    boolean isApplicableFor(Tile tileCoord);
 
     EnergyTransfer getEnergyTransfer();
 }

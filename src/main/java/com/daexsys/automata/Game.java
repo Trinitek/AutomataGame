@@ -41,6 +41,8 @@ public class Game {
     private long lastTPSTime = System.currentTimeMillis();
     private int tps = 0;
 
+    private int time = 0;
+
     public Game(GameSide gameSide) {
         this.gameSide = gameSide;
         world = new World(this);
@@ -171,6 +173,10 @@ public class Game {
         } else if(listener instanceof StructurePlacementListener) {
             structurePlacementListeners.add((StructurePlacementListener) listener);
         }
+    }
+
+    public int getTime() {
+        return time;
     }
 
     public ChatManager getChatManager() {

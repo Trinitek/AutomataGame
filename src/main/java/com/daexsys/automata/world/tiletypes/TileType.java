@@ -241,6 +241,10 @@ public final class TileType {
         return areTilesPulsable;
     }
 
+    public int getEnergyCap() {
+        return energyCap;
+    }
+
     public static class Builder {
         private TileRegistry tileRegistry;
         private TileType tileType = new TileType();
