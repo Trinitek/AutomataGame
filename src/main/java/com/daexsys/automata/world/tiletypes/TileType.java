@@ -74,7 +74,7 @@ public final class TileType {
 
     public static final TileType AIR =
             new TileType.Builder().setID((byte) 9).setName("air").setImageLocation("images/stone.png")
-                    .setEnergy(50).setDecayRate(0).build();
+                    .setEnergy(50).setDecayRate(0).setAreTilesPulsable(false).build();
 
     public static final TileType MINER =
             new TileType.Builder().setID((byte) 10).setName("miner test").setImageLocation("images/miner.png")

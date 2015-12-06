@@ -29,7 +29,7 @@ public class Tile implements Pulsable {
     @Override
     public void pulse() {
         /* Don't tick this tile if it is air, air is boring */
-        if(getType() == TileType.AIR)
+        if(!getType().areTilesPulsable())
             return;
 
         /* Do type-specific logic */
