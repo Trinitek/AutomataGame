@@ -1,9 +1,11 @@
 package com.daexsys.automata.world.tiletypes.pulsers;
 
+import com.daexsys.automata.Game;
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.gui.chat.ChatMessage;
 import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.WorldLayer;
+import com.daexsys.automata.world.structures.Structure;
 import com.daexsys.automata.world.tiletypes.TilePulser;
 import com.daexsys.automata.world.tiletypes.TileType;
 
@@ -27,19 +29,9 @@ public class BombTilePulser implements TilePulser {
             int lakeY = world.getRandom().nextInt(size) + tile.getCoordinate().y;
             int lakeSize = world.getRandom().nextInt(15) + 3;
 
-            for (int fx = lakeX - lakeSize; fx < lakeX + lakeSize; fx++) {
-                for (int fy = lakeY - lakeSize; fy < lakeY + lakeSize; fy++) {
-                    int x = fx - lakeX;
-                    int y = fy - lakeY;
-
-                    if((x * x + y * y) < lakeSize * lakeSize) {
-                        world.setTileTypeAt(WorldLayer.GROUND, fx, fy, TileType.DIRT);
-                        world.setTileTypeAt(WorldLayer.ABOVE_GROUND, fx, fy, TileType.SMOKE);
-                    }
-                }
-            }
+            Game theGame = tile.getWorld().getGame();
+            Structure structure = theGame.getStructures().getStructureByName("vanilla:explosion");
+            structure.placeInWorldAt(tile.getWorld(), lakeX, lakeY, lakeSize);
         }
-
-        tile.getWorld().getGame().getChatManager().addChatMessage(new ChatMessage("Pop goes the weasel @ " + tile.getCoordinate(), Color.RED));
     }
 }

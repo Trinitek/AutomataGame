@@ -12,6 +12,8 @@ public class StructureRegistry {
     public StructureRegistry() {
         /* Add default structures */
 
+        structureMap.put("vanilla:explosion", new ExplosionStructure());
+
         structureMap.put("cgol_glider", new Structure(3, new int[] {
                 0, 1, 0,
                 0, 0, 1,

@@ -34,7 +34,7 @@ public class Structure {
         return structureElements;
     }
 
-    public void placeInWorldAt(World world, int x, int y) {
+    public void placeInWorldAt(World world, int x, int y, int... args) {
         for(StructureElement structureElement : structureElements) {
             world.setTileTypeAt(WorldLayer.GROUND,
                     x + structureElement.getX(),
