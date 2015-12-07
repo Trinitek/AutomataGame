@@ -18,7 +18,8 @@ public class SolarEmission implements Emission {
     public boolean isApplicableFor(Tile tile) {
         return tile.getType() == TileType.GRASS
                 || tile.getType() == TileType.DIRT
-                || tile.getType() == TileType.TALL_GRASS;
+                || tile.getType() == TileType.TALL_GRASS
+                || tile.getType() == TileType.SOLAR_PANEL;
     }
 
     @Override

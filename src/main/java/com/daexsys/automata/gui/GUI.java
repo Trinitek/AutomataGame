@@ -92,6 +92,11 @@ public class GUI {
 
                 worldRenderer.render(graphics2D);
 
+                int time = getGame().getTime();
+
+                graphics2D.setColor(new Color(0, 0, 0, time));
+                graphics2D.fillRect(0, 0, (int) getWindowSize().getWidth(), (int) getWindowSize().getHeight());
+
                 graphics2D.drawImage (game.getPlayerState().getInHand().getImage(),
                         mouseMotionHandler.getX(), mouseMotionHandler.getY(), 20, 20, null);
 

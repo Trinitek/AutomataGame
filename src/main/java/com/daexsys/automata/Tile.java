@@ -37,8 +37,6 @@ public class Tile implements Pulsable {
         Heat energy is unusable, and will be radiated off.
         However, sufficient heat buildup will lead to machine breakage,
         and potentially fire.
-
-        Current unused.
      */
     private double heat;
 
@@ -75,8 +73,12 @@ public class Tile implements Pulsable {
         /* 1/2 chance to lose energy to heat. */
         // TODO: this should be changed. Should the second law be so kind?
         // TODO: Potentially change put this in an 'EntropyManager'.
-        if(getWorld().getRandom().nextBoolean())
-            energy -= getType().getDefaultDecayRate();
+        if(getWorld().getRandom().nextBoolean()) {
+            int energyLoss = getType().getDefaultDecayRate();
+
+            energy -= energyLoss;
+            heat += energyLoss;
+        }
     }
 
     public int getEnergy() {
@@ -85,6 +87,10 @@ public class Tile implements Pulsable {
 
     public TileType getType() {
         return tileType;
+    }
+
+    public double getHeat() {
+        return heat;
     }
 
     public byte[] getTileData() {
@@ -112,7 +118,11 @@ public class Tile implements Pulsable {
     }
 
     public void setEnergy(int energy) {
-        this.energy = energy;
+        if(energy <= getType().getEnergyCap()) {
+            this.energy = energy;
+        } else {
+            this.energy = getType().getEnergyCap();
+        }
     }
 
     public void giveEnergy(EnergyTransfer energyTransfer) {

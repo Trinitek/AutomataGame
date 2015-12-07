@@ -11,11 +11,14 @@ public enum EnergyType {
     /* Produced by coal power planets */
     CHEMICAL,
 
+    /* Produced by lights */
+    LIGHT,
+
     /* Sent through player energy hardware */
     WIRED,
 
     /* Emitted by energy towers. Has a specific frequency per-player. */
-    RADIO,
+    TOWER,
 
     /* Destructive excessive heat released by cells. */
     FREE_HEAT

@@ -2,17 +2,19 @@ package com.daexsys.automata.world;
 
 import com.daexsys.automata.Game;
 import com.daexsys.automata.Pulsable;
-import com.daexsys.automata.RangedRandom;
+import com.daexsys.automata.GameRandom;
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.event.tile.TilePlacementReason;
 import com.daexsys.automata.world.terrain.GenerationContext;
 import com.daexsys.automata.world.terrain.TerrainGenerator;
 import com.daexsys.automata.world.tiletypes.TileType;
 
+import java.util.List;
+
 public final class World implements Pulsable {
 
     private long seed;
-    private RangedRandom random;
+    private GameRandom random;
 
     private int ticksPulsed = 0;
 
@@ -25,7 +27,7 @@ public final class World implements Pulsable {
     public World(Game game) {
         this.game = game;
         seed = System.currentTimeMillis();
-        random = new RangedRandom(seed);
+        random = new GameRandom(seed);
 
 //        terrainGenerator = random.nextBoolean() ? new TemperateTerrain(this) : new DesertTerrain(this);
 
@@ -206,7 +208,11 @@ public final class World implements Pulsable {
         );
     }
 
-    public RangedRandom getRandom() {
+    public List<Tile> getTilesInRange(TileCoord tileCoord, double range) {
+        return null;
+    }
+
+    public GameRandom getRandom() {
         return random;
     }
 

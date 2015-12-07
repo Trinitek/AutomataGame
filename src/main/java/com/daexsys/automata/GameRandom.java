@@ -2,9 +2,9 @@ package com.daexsys.automata;
 
 import java.util.Random;
 
-public class RangedRandom extends Random {
+public class GameRandom extends Random {
 
-    public RangedRandom(long seed) {
+    public GameRandom(long seed) {
         super(seed);
     }
 
@@ -12,8 +12,12 @@ public class RangedRandom extends Random {
         return nextInt(range * 2 + 1) - range;
     }
 
+    public double getEntropyFor(Tile tile) {
+        return 0;
+    }
+
     public static void main(String[] args) {
-        RangedRandom rangedRandom = new RangedRandom(3);
+        GameRandom rangedRandom = new GameRandom(3);
 
         while(true) {
             System.out.println(rangedRandom.getIntInRange(3));

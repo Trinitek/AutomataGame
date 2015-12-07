@@ -1,6 +1,7 @@
 package com.daexsys.automata.gui;
 
 import com.daexsys.automata.Tile;
+import com.daexsys.automata.gui.util.ImageUtil;
 import com.daexsys.automata.world.Chunk;
 import com.daexsys.automata.world.ChunkCoord;
 import com.daexsys.automata.world.ChunkManager;
@@ -19,6 +20,7 @@ public class WorldRenderer implements Renderable {
 
     private GUI gui;
     private World world;
+    private BufferedImage chargedSolarPanel = ImageUtil.loadImage("images/chargedsolarpanel.png");
 
     public WorldRenderer(GUI gui) {
         this.gui = gui;
@@ -43,7 +45,12 @@ public class WorldRenderer implements Renderable {
                         Tile tile = chunk.getTile(layer, x, y);
 
                         if (tile.getType() != TileType.AIR) {
-                            BufferedImage imageToRender = tile.getType().getImage();
+                            BufferedImage imageToRender = tile.getType().getImage();;
+
+                            if(tile.getType() == TileType.SOLAR_PANEL) {
+                                if(tile.getEnergy() > 0)
+                                    imageToRender = chargedSolarPanel;
+                            }
 
                             // If it's small enough, we don't have to render the whole image
                             if (getGUI().getZoomLevel() <= 4) {

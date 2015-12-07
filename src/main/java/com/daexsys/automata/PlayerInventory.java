@@ -27,7 +27,7 @@ public class PlayerInventory {
         if(selectedSlot == 3)
             return TileType.ENERGY_TOWER;
         if(selectedSlot == 4)
-            return TileType.AMOEBA;
+            return TileType.SOLAR_PANEL;
         if(selectedSlot == 5)
             return TileType.SHOCKWAVE_VIRUS;
         if(selectedSlot == 6)

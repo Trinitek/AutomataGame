@@ -68,6 +68,8 @@ public class Game {
                 if(!isPaused) {
                     world.pulse();
 
+                    time++;
+
                     TickEvent tickEvent = new TickEvent(thisGame);
                     fireEvent(tickEvent);
                     tps++;

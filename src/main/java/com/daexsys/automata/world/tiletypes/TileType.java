@@ -184,7 +184,11 @@ public final class TileType {
 
     public static final TileType ENERGY_TOWER =
             new TileType.Builder().setID((byte) 22).setName("energytower").setImageLocation("images/energytower.png")
-                    .setEnergy(150000).setDecayRate(1).setPulser(new FertileTilePulser()).build();
+                    .setEnergy(150000).setDecayRate(1).setEnergyCap(150000).setPulser(new EnergyTowerPulser()).build();
+
+    public static final TileType SOLAR_PANEL =
+            new TileType.Builder().setID((byte) 23).setName("solar panel").setImageLocation("images/solarpanel.png")
+                    .setEnergy(0).setEnergyCap(5).setDecayRate(1).build();
 
     private byte id;
     private String blockName;
