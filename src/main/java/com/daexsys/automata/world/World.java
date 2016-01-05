@@ -5,7 +5,9 @@ import com.daexsys.automata.Pulsable;
 import com.daexsys.automata.GameRandom;
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.event.tile.TilePlacementReason;
-import com.daexsys.automata.world.terrain.GenerationContext;
+//import com.daexsys.automata.world.terrain.GenerationContext;
+import com.daexsys.automata.world.terrain.DesertTerrain;
+import com.daexsys.automata.world.terrain.TemperateTerrain;
 import com.daexsys.automata.world.terrain.TerrainGenerator;
 import com.daexsys.automata.world.tiletypes.TileType;
 
@@ -29,9 +31,9 @@ public final class World implements Pulsable {
         seed = System.currentTimeMillis();
         random = new GameRandom(seed);
 
-//        terrainGenerator = random.nextBoolean() ? new TemperateTerrain(this) : new DesertTerrain(this);
+        terrainGenerator = random.nextBoolean() ? new TemperateTerrain(this) : new DesertTerrain(this);
 
-        terrainGenerator = new GenerationContext(this, 0);
+//        terrainGenerator = new GenerationContext(this, 0);
         chunkManager = new ChunkManager(this);
 
         // pre-generate world sections
