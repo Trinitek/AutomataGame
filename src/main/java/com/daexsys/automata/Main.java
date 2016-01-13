@@ -23,6 +23,7 @@ public class Main {
             }
         }
 
+        System.setProperty("org.lwjgl.librarypath", "native");
         GUI gameGUI = new GUI(game);
         gameGUI.spawnWindow();
     }

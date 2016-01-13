@@ -11,6 +11,8 @@ import com.daexsys.automata.gui.util.ImageUtil;
 import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.WorldLayer;
 import com.daexsys.automata.world.structures.Structure;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWErrorCallback;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,7 +54,25 @@ public class GUI {
 
     private JFrame jFrame;
 
+    /////
+    private GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
+    /////
+
     public void spawnWindow() {
+
+        /////
+        GLFW.glfwSetErrorCallback(errorCallback);
+        if (GLFW.glfwInit() != GLFW.GLFW_TRUE) {
+            throw new IllegalStateException("Unable to initialize GLFW");
+        }
+
+        long window = GLFW.glfwCreateWindow(640, 480, "OpenGL Test", 0, 0);
+        if (window == 0) {
+            GLFW.glfwTerminate();
+            throw new RuntimeException("Unable to create GLFW window");
+        }
+        /////
+
         jFrame = new JFrame(System.getProperty("game-name"));
         windowSize = new Dimension(1600, 900);
         jFrame.setSize(windowSize);
