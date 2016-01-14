@@ -8,7 +8,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        System.setProperty("game-name", "IDK");
+        System.setProperty("game-name", "Automata");
+        System.setProperty("org.lwjgl.librarypath", "native");
+
+        System.out.println("Using LWJGL version " + org.lwjgl.Version.getVersion());
 
 //        TileType.getTileFromID((byte) 0);
 
@@ -23,7 +26,6 @@ public class Main {
             }
         }
 
-        System.setProperty("org.lwjgl.librarypath", "native");
         GUI gameGUI = new GUI(game);
         gameGUI.spawnWindow();
     }

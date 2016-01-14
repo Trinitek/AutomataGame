@@ -11,8 +11,11 @@ import com.daexsys.automata.gui.util.ImageUtil;
 import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.WorldLayer;
 import com.daexsys.automata.world.structures.Structure;
+
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.opengl.GL;
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,25 +59,78 @@ public class GUI {
 
     /////
     private GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
+    private long window;
     /////
 
-    public void spawnWindow() {
+    public static void main(String args[]) {
+        System.setProperty("game-name", "Automata");
+        System.setProperty("org.lwjgl.librarypath", "native");
 
-        /////
+        // Initialize GLFW
+        GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
+        long window;
         GLFW.glfwSetErrorCallback(errorCallback);
         if (GLFW.glfwInit() != GLFW.GLFW_TRUE) {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
 
-        long window = GLFW.glfwCreateWindow(640, 480, "OpenGL Test", 0, 0);
+        // Build window
+        window = GLFW.glfwCreateWindow(640, 480, System.getProperty("game-name"), 0, 0);
         if (window == 0) {
             GLFW.glfwTerminate();
             throw new RuntimeException("Unable to create GLFW window");
         }
+
+        GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);                // request OpenGL version 3.x
+        GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);   // for MacOS
+
+        // Create OpenGL context
+        GLFW.glfwMakeContextCurrent(window);
+        GL.createCapabilities();
+
+        while (GLFW.glfwWindowShouldClose(window) == GLFW.GLFW_FALSE) {
+            GLFW.glfwSwapBuffers(window);
+            GLFW.glfwPollEvents();
+        }
+    }
+
+    public void spawnWindow() {
+
+        /////
+        // Initialize GLFW
+        GLFW.glfwSetErrorCallback(errorCallback);
+        if (GLFW.glfwInit() != GLFW.GLFW_TRUE) {
+            throw new IllegalStateException("Unable to initialize GLFW");
+        }
+
+        // Build window
+        this.window = GLFW.glfwCreateWindow(640, 480, System.getProperty("game-name"), 0, 0);
+        if (this.window == 0) {
+            GLFW.glfwTerminate();
+            throw new RuntimeException("Unable to create GLFW window");
+        }
+
+        GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);                // request OpenGL version 3.x
+        GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);   // for MacOS
+
+        // Create OpenGL context
+        GLFW.glfwMakeContextCurrent(this.window);
+        GL.createCapabilities();
+
+        // Create and set key controls
+        /*GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
+            @Override
+            public void invoke(long window, int key, int scancode, int action, int mods) {
+                if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS)
+                    GLFW.glfwSetWindowShouldClose(window, GLFW.GLFW_TRUE);
+            }
+        };*/
+
+        //GLFW.glfwSetKeyCallback(this.window, keyCallback);
         /////
 
         jFrame = new JFrame(System.getProperty("game-name"));
-        windowSize = new Dimension(1600, 900);
+        windowSize = new Dimension(640, 480);
         jFrame.setSize(windowSize);
         jFrame.setLocationRelativeTo(null);
         jFrame.setVisible(true);
@@ -96,7 +152,10 @@ public class GUI {
 
             Font theFont = new Font("Tahoma", Font.BOLD, 24);
 
-            while(true) {
+            while(GLFW.glfwWindowShouldClose(this.window) != GLFW.GLFW_TRUE) {
+
+                renderGL();
+
                 long frameStartTime = System.currentTimeMillis();
 
                 Graphics2D graphics2D = (Graphics2D) jFrame.getBufferStrategy().getDrawGraphics();
@@ -112,9 +171,11 @@ public class GUI {
 
                 worldRenderer.render(graphics2D);
 
-                int time = getGame().getTime();
+                //int time = getGame().getTime();
+                //graphics2D.setColor(new Color(0, 0, 0, time));
 
-                graphics2D.setColor(new Color(0, 0, 0, time));
+                graphics2D.setColor(new Color(0, 0, 0, 0));
+
                 graphics2D.fillRect(0, 0, (int) getWindowSize().getWidth(), (int) getWindowSize().getHeight());
 
                 graphics2D.drawImage (game.getPlayerState().getInHand().getImage(),
@@ -210,6 +271,11 @@ public class GUI {
             }
         });
         renderThread.start();
+    }
+
+    private void renderGL() {
+        GLFW.glfwSwapBuffers(this.window);
+        GLFW.glfwPollEvents();
     }
 
     public KeyboardHandler getKeyboardHandler() {
