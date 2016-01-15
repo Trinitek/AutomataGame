@@ -12,19 +12,10 @@ import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.WorldLayer;
 import com.daexsys.automata.world.structures.Structure;
 
-import static org.lwjgl.glfw.GLFW.*;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.opengl.GL;
-import static org.lwjgl.opengl.GL11.*;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -61,156 +52,11 @@ public class GUI {
 
     private JFrame jFrame;
 
-    /////
-    private GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
-    private long window;
-    /////
-
     public static void main(String args[]) {
-        System.setProperty("game-name", "Automata");
-        System.setProperty("org.lwjgl.librarypath", "native");
-
-        // Initialize GLFW
-        GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
-        long window;
-        glfwSetErrorCallback(errorCallback);
-        if (glfwInit() != GLFW_TRUE) {
-            throw new IllegalStateException("Unable to initialize GLFW");
-        }
-
-        // Build window
-        window = glfwCreateWindow(640, 480, System.getProperty("game-name"), 0, 0);
-        if (window == 0) {
-            glfwTerminate();
-            throw new RuntimeException("Unable to create GLFW window");
-        }
-
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);   // for MacOS
-
-        // Create OpenGL context
-        glfwMakeContextCurrent(window);
-        GL.createCapabilities();
-
-        // Setup projection matrix
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity(); // reset previous projection matrices
-        glOrtho(0, 640, 480, 0, 1, -1);
-
-        // Random number generator
-        //Random random = new Random();
-
-        final int tid = 1; // texture ID
-        glBindTexture(GL_TEXTURE_2D, tid); // create new texture with ID <tid>
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // how is the pixel data stored in the image file?
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // texture parameters idk
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); // disable color/lighting effects
-        BufferedImage bi = new BufferedImage(64, 64, BufferedImage.TYPE_INT_RGB);
-        try {
-            Graphics2D gb = bi.createGraphics();
-            //noinspection ConstantConditions
-            gb.drawImage(ImageUtil.loadImage("images/energy_ore.png").getScaledInstance(64, 64, Image.SCALE_SMOOTH), 0, 0, null);
-            gb.dispose();
-        } catch (NullPointerException e) {
-            e.printStackTrace(System.err);
-            bi.createGraphics().setColor(Color.BLUE);
-        }
-        ByteBuffer bb;
         //
-        bi.createGraphics().setColor(Color.BLUE);
-        //
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
-            ImageIO.write(bi, "png", out);
-            bb = ByteBuffer.wrap(out.toByteArray());
-        } catch (IOException e) {
-            e.printStackTrace(System.err);
-            return;
-        }
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 64, 64, 0, GL_RGB, GL_UNSIGNED_BYTE, bb); // load the texture into OpenGL
-        glEnable(GL_TEXTURE_2D); // enable textures
-        glBindTexture(GL_TEXTURE_2D, tid);
-
-        while (glfwWindowShouldClose(window) == GLFW_FALSE) {
-            glClear(GL_COLOR_BUFFER_BIT);
-
-            /*glBegin(GL_TRIANGLES); // start rendering triangles
-            glColor3ub((byte) 0, (byte) 0, (byte) 255);
-            glVertex2i(50, 50);
-            glColor3ub((byte) 0, (byte) 255, (byte) 0);
-            glVertex2i(50, 50+64);
-            glColor3ub((byte) 255, (byte) 0, (byte) 0);
-            glVertex2i(50+64, 50);*/
-
-            glBegin(GL_TRIANGLES);
-
-            //glTexCoord2f(0, 1); // top left
-            //glVertex2i(50, 50);
-            //glTexCoord2f(0, 0); // bottom left
-            //glVertex2i(50, 50+64);
-            //glTexCoord2f(1, 1); // top right
-            //glVertex2i(50+64, 50);
-
-            //glTexCoord2f(1, 1); // top right
-
-            glTexCoord2f(1, 0);
-            glVertex2i(450, 10);
-            glTexCoord2f(0, 0);
-            glVertex2i(10, 10);
-            glTexCoord2f(0, 1);
-            glVertex2i(10, 450);
-
-            glTexCoord2f(0, 1);
-            glVertex2i(10, 450);
-            glTexCoord2f(1, 1);
-            glVertex2i(450, 450);
-            glTexCoord2f(1, 0);
-            glVertex2i(450, 10);
-
-            glEnd();
-
-            glfwSwapBuffers(window);
-            glfwPollEvents();
-        }
     }
 
     public void spawnWindow() {
-
-        /////
-        // Initialize GLFW
-        glfwSetErrorCallback(errorCallback);
-        if (glfwInit() != GLFW_TRUE) {
-            throw new IllegalStateException("Unable to initialize GLFW");
-        }
-
-        // Build window
-        this.window = glfwCreateWindow(640, 480, System.getProperty("game-name"), 0, 0);
-        if (this.window == 0) {
-            glfwTerminate();
-            throw new RuntimeException("Unable to create GLFW window");
-        }
-
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);              // request OpenGL version 3.x
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);      // for MacOS
-
-        // Create OpenGL context
-        glfwMakeContextCurrent(this.window);
-        GL.createCapabilities();
-
-        // Create and set key controls
-        /*GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
-            @Override
-            public void invoke(long window, int key, int scancode, int action, int mods) {
-                if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS)
-                    GLFW.glfwSetWindowShouldClose(window, GLFW.GLFW_TRUE);
-            }
-        };*/
-
-        //GLFW.glfwSetKeyCallback(this.window, keyCallback);
-        /////
-
         jFrame = new JFrame(System.getProperty("game-name"));
         windowSize = new Dimension(640, 480);
         jFrame.setSize(windowSize);
@@ -234,7 +80,7 @@ public class GUI {
 
             Font theFont = new Font("Tahoma", Font.BOLD, 24);
 
-            while(glfwWindowShouldClose(this.window) != GLFW_TRUE) {
+            while(true) {
 
                 //renderGL();
 
