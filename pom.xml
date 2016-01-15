@@ -28,9 +28,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl</artifactId>
-            <version>3.0.0b</version>
+            <groupId>org.slick2d</groupId>
+            <artifactId>slick2d-core</artifactId>
+            <version>1.0.1</version>
         </dependency>
     </dependencies>
 </project>

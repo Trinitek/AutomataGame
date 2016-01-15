@@ -17,12 +17,15 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import static org.lwjgl.opengl.GL11.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 public class GUI {
@@ -91,20 +94,81 @@ public class GUI {
         // Setup projection matrix
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity(); // reset previous projection matrices
-        glOrtho(0, 500, 500, 0, 1, -1);
+        glOrtho(0, 640, 480, 0, 1, -1);
 
         // Random number generator
-        Random random = new Random();
+        //Random random = new Random();
+
+        final int tid = 1; // texture ID
+        glBindTexture(GL_TEXTURE_2D, tid); // create new texture with ID <tid>
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // how is the pixel data stored in the image file?
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // texture parameters idk
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); // disable color/lighting effects
+        BufferedImage bi = new BufferedImage(64, 64, BufferedImage.TYPE_INT_RGB);
+        try {
+            Graphics2D gb = bi.createGraphics();
+            //noinspection ConstantConditions
+            gb.drawImage(ImageUtil.loadImage("images/energy_ore.png").getScaledInstance(64, 64, Image.SCALE_SMOOTH), 0, 0, null);
+            gb.dispose();
+        } catch (NullPointerException e) {
+            e.printStackTrace(System.err);
+            bi.createGraphics().setColor(Color.BLUE);
+        }
+        ByteBuffer bb;
+        //
+        bi.createGraphics().setColor(Color.BLUE);
+        //
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(bi, "png", out);
+            bb = ByteBuffer.wrap(out.toByteArray());
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+            return;
+        }
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 64, 64, 0, GL_RGB, GL_UNSIGNED_BYTE, bb); // load the texture into OpenGL
+        glEnable(GL_TEXTURE_2D); // enable textures
+        glBindTexture(GL_TEXTURE_2D, tid);
 
         while (glfwWindowShouldClose(window) == GLFW_FALSE) {
             glClear(GL_COLOR_BUFFER_BIT);
-            glBegin(GL_TRIANGLES); // start rendering triangles
+
+            /*glBegin(GL_TRIANGLES); // start rendering triangles
             glColor3ub((byte) 0, (byte) 0, (byte) 255);
-            glVertex2i(random.nextInt(500), random.nextInt(500));
+            glVertex2i(50, 50);
             glColor3ub((byte) 0, (byte) 255, (byte) 0);
-            glVertex2i(random.nextInt(500), random.nextInt(500));
+            glVertex2i(50, 50+64);
             glColor3ub((byte) 255, (byte) 0, (byte) 0);
-            glVertex2i(random.nextInt(500), random.nextInt(500));
+            glVertex2i(50+64, 50);*/
+
+            glBegin(GL_TRIANGLES);
+
+            //glTexCoord2f(0, 1); // top left
+            //glVertex2i(50, 50);
+            //glTexCoord2f(0, 0); // bottom left
+            //glVertex2i(50, 50+64);
+            //glTexCoord2f(1, 1); // top right
+            //glVertex2i(50+64, 50);
+
+            //glTexCoord2f(1, 1); // top right
+
+            glTexCoord2f(1, 0);
+            glVertex2i(450, 10);
+            glTexCoord2f(0, 0);
+            glVertex2i(10, 10);
+            glTexCoord2f(0, 1);
+            glVertex2i(10, 450);
+
+            glTexCoord2f(0, 1);
+            glVertex2i(10, 450);
+            glTexCoord2f(1, 1);
+            glVertex2i(450, 450);
+            glTexCoord2f(1, 0);
+            glVertex2i(450, 10);
+
             glEnd();
 
             glfwSwapBuffers(window);
