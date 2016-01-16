@@ -12,11 +12,17 @@ import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.WorldLayer;
 import com.daexsys.automata.world.structures.Structure;
 
+import static org.lwjgl.glfw.GLFW.*;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.opengl.GL;
+import static org.lwjgl.opengl.GL11.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 public class GUI {
@@ -52,11 +58,95 @@ public class GUI {
 
     private JFrame jFrame;
 
+    /////
+    private GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
+    private long window;
+    /////
+
     public static void main(String args[]) {
-        //
+        System.setProperty("game-name", "Automata");
+        System.setProperty("org.lwjgl.librarypath", "native");
+
+        // Initialize GLFW
+        GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
+        long window;
+        glfwSetErrorCallback(errorCallback);
+        if (glfwInit() != GLFW_TRUE) {
+            throw new IllegalStateException("Unable to initialize GLFW");
+        }
+
+        // Build window
+        window = glfwCreateWindow(640, 480, System.getProperty("game-name"), 0, 0);
+        if (window == 0) {
+            glfwTerminate();
+            throw new RuntimeException("Unable to create GLFW window");
+        }
+
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);   // for MacOS
+
+        // Create OpenGL context
+        glfwMakeContextCurrent(window);
+        GL.createCapabilities();
+
+        // Setup projection matrix
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity(); // reset previous projection matrices
+        glOrtho(0, 500, 500, 0, 1, -1);
+
+        // Random number generator
+        Random random = new Random();
+
+        while (glfwWindowShouldClose(window) == GLFW_FALSE) {
+            glClear(GL_COLOR_BUFFER_BIT);
+            glBegin(GL_TRIANGLES); // start rendering triangles
+            glColor3ub((byte) 0, (byte) 0, (byte) 255);
+            glVertex2i(random.nextInt(500), random.nextInt(500));
+            glColor3ub((byte) 0, (byte) 255, (byte) 0);
+            glVertex2i(random.nextInt(500), random.nextInt(500));
+            glColor3ub((byte) 255, (byte) 0, (byte) 0);
+            glVertex2i(random.nextInt(500), random.nextInt(500));
+            glEnd();
+
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
     }
 
     public void spawnWindow() {
+
+        /////
+        // Initialize GLFW
+        glfwSetErrorCallback(errorCallback);
+        if (glfwInit() != GLFW_TRUE) {
+            throw new IllegalStateException("Unable to initialize GLFW");
+        }
+
+        // Build window
+        this.window = glfwCreateWindow(640, 480, System.getProperty("game-name"), 0, 0);
+        if (this.window == 0) {
+            glfwTerminate();
+            throw new RuntimeException("Unable to create GLFW window");
+        }
+
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);              // request OpenGL version 3.x
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);      // for MacOS
+
+        // Create OpenGL context
+        glfwMakeContextCurrent(this.window);
+        GL.createCapabilities();
+
+        // Create and set key controls
+        /*GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
+            @Override
+            public void invoke(long window, int key, int scancode, int action, int mods) {
+                if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS)
+                    GLFW.glfwSetWindowShouldClose(window, GLFW.GLFW_TRUE);
+            }
+        };*/
+
+        //GLFW.glfwSetKeyCallback(this.window, keyCallback);
+        /////
+
         jFrame = new JFrame(System.getProperty("game-name"));
         windowSize = new Dimension(640, 480);
         jFrame.setSize(windowSize);
@@ -80,7 +170,7 @@ public class GUI {
 
             Font theFont = new Font("Tahoma", Font.BOLD, 24);
 
-            while(true) {
+            while(glfwWindowShouldClose(this.window) != GLFW_TRUE) {
 
                 //renderGL();
 
