@@ -65,7 +65,7 @@ public class GUI {
 
     public static void main(String args[]) {
         System.setProperty("game-name", "Automata");
-        System.setProperty("org.lwjgl.librarypath", "native");
+        System.setProperty("org.lwjgl.librarypath", "natives");
 
         // Initialize GLFW
         GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
@@ -114,39 +114,6 @@ public class GUI {
 
     public void spawnWindow() {
 
-        /////
-        // Initialize GLFW
-        glfwSetErrorCallback(errorCallback);
-        if (glfwInit() != GLFW_TRUE) {
-            throw new IllegalStateException("Unable to initialize GLFW");
-        }
-
-        // Build window
-        this.window = glfwCreateWindow(640, 480, System.getProperty("game-name"), 0, 0);
-        if (this.window == 0) {
-            glfwTerminate();
-            throw new RuntimeException("Unable to create GLFW window");
-        }
-
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);              // request OpenGL version 3.x
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);      // for MacOS
-
-        // Create OpenGL context
-        glfwMakeContextCurrent(this.window);
-        GL.createCapabilities();
-
-        // Create and set key controls
-        /*GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
-            @Override
-            public void invoke(long window, int key, int scancode, int action, int mods) {
-                if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS)
-                    GLFW.glfwSetWindowShouldClose(window, GLFW.GLFW_TRUE);
-            }
-        };*/
-
-        //GLFW.glfwSetKeyCallback(this.window, keyCallback);
-        /////
-
         jFrame = new JFrame(System.getProperty("game-name"));
         windowSize = new Dimension(640, 480);
         jFrame.setSize(windowSize);
@@ -170,9 +137,7 @@ public class GUI {
 
             Font theFont = new Font("Tahoma", Font.BOLD, 24);
 
-            while(glfwWindowShouldClose(this.window) != GLFW_TRUE) {
-
-                //renderGL();
+            while(true) {
 
                 long frameStartTime = System.currentTimeMillis();
 
@@ -290,11 +255,6 @@ public class GUI {
         });
         renderThread.start();
     }
-
-    //private void renderGL() {
-        //GLFW.glfwSwapBuffers(this.window);
-        //GLFW.glfwPollEvents();
-    //}
 
     public KeyboardHandler getKeyboardHandler() {
         return keyboardHandler;

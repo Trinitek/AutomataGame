@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
 
         System.setProperty("game-name", "Automata");
-        System.setProperty("org.lwjgl.librarypath", "native");
+        System.setProperty("org.lwjgl.librarypath", "natives");
 
         System.out.println("Using LWJGL version " + org.lwjgl.Version.getVersion());
 
