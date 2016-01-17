@@ -1,6 +1,7 @@
 package com.daexsys.automata.gui;
 
 import com.daexsys.automata.Game;
+import com.daexsys.automata.Tile;
 import com.daexsys.automata.event.tile.TilePlacementReason;
 import com.daexsys.automata.gui.chat.ChatRenderer;
 import com.daexsys.automata.gui.listeners.KeyboardHandler;
@@ -13,16 +14,24 @@ import com.daexsys.automata.world.WorldLayer;
 import com.daexsys.automata.world.structures.Structure;
 
 import static org.lwjgl.glfw.GLFW.*;
+
+import com.daexsys.automata.world.tiletypes.TileType;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
+
 import static org.lwjgl.opengl.GL11.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.color.ColorSpace;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.util.HashSet;
-import java.util.Random;
+import java.util.Hashtable;
 import java.util.Set;
 
 public class GUI {
@@ -82,7 +91,7 @@ public class GUI {
             throw new RuntimeException("Unable to create GLFW window");
         }
 
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);   // for MacOS
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 
         // Create OpenGL context
         glfwMakeContextCurrent(window);
@@ -91,20 +100,68 @@ public class GUI {
         // Setup projection matrix
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity(); // reset previous projection matrices
-        glOrtho(0, 500, 500, 0, 1, -1);
+        glOrtho(0, 640, 480, 0, 1, -1);
 
-        // Random number generator
-        Random random = new Random();
+        // Create texture
+        /*BufferedImage image = new BufferedImage(64, 64, BufferedImage.TYPE_INT_RGB);
+        Graphics2D image2d = image.createGraphics();
+        image2d.drawImage(TileType.DIRT.getImage().getScaledInstance(64, 64, Image.SCALE_DEFAULT), 0, 0, null);
+        image2d.dispose();
 
+        ByteBuffer imageBuffer;
+        WritableRaster raster;
+        BufferedImage texImage;
+        raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, 64, 64, 3, null);
+        texImage = new BufferedImage(
+                new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
+                    new int[] {8, 8, 8, 0},
+                    false,
+                    false,
+                    ComponentColorModel.OPAQUE,
+                    DataBuffer.TYPE_BYTE),
+                raster,
+                false,
+                new Hashtable<>()
+        );
+        Graphics g = texImage.getGraphics();
+        g.setColor(new Color(0, 0, 0));
+        g.fillRect(0, 0, 64, 64);
+        g.drawImage(image, 0, 0, null);
+        byte[] textureData = ((DataBufferByte) texImage.getRaster().getDataBuffer()).getData();
+        imageBuffer = ByteBuffer.allocateDirect(textureData.length);
+        imageBuffer.order(ByteOrder.nativeOrder());
+        imageBuffer.put(textureData, 0, textureData.length);
+        imageBuffer.flip();
+
+        IntBuffer textureIDBuffer = BufferUtils.createIntBuffer(1);
+        glGenTextures(textureIDBuffer);
+        int textureID = textureIDBuffer.get(0);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 64, 64, 0, GL_RGB, GL_UNSIGNED_BYTE, imageBuffer);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+*/
+        /////
+        BufferedImage i = TextureLoader.sizeImage(TileType.DIRT.getImage());
+        Texture t = TextureLoader.generateTexture(i);
+        t.load();
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        t.bind();
+        /////
+
+        // Render
         while (glfwWindowShouldClose(window) == GLFW_FALSE) {
             glClear(GL_COLOR_BUFFER_BIT);
             glBegin(GL_TRIANGLES); // start rendering triangles
-            glColor3ub((byte) 0, (byte) 0, (byte) 255);
-            glVertex2i(random.nextInt(500), random.nextInt(500));
-            glColor3ub((byte) 0, (byte) 255, (byte) 0);
-            glVertex2i(random.nextInt(500), random.nextInt(500));
-            glColor3ub((byte) 255, (byte) 0, (byte) 0);
-            glVertex2i(random.nextInt(500), random.nextInt(500));
+            glTexCoord2f(0, 1); // top left of texture
+            glVertex2i(0, 0);   // top left of triangle
+            glTexCoord2f(0, 0); // bottom left of texture
+            glVertex2i(64, 0);  // bottom left of triangle
+            glTexCoord2f(1, 1); // top right of texture
+            glVertex2i(0, 64);  // top right of triangle
             glEnd();
 
             glfwSwapBuffers(window);
