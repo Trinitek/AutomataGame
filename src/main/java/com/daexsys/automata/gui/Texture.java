@@ -1,4 +1,4 @@
-package com.daexsys.automata.gui.util;
+package com.daexsys.automata.gui;
 
 import static org.lwjgl.opengl.GL11.*;
 
