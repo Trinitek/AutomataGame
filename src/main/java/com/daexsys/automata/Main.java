@@ -10,6 +10,8 @@ public class Main {
 
         System.setProperty("game-name", "IDK");
 
+        //testsdf
+
 //        TileType.getTileFromID((byte) 0);
 
         Game game = new Game(GameSide.BOTH);
