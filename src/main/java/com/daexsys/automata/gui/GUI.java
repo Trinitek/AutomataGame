@@ -141,7 +141,7 @@ public class GUI {
         glBindTexture(GL_TEXTURE_2D, textureID);
 */
         /////
-        BufferedImage i = TextureLoader.sizeImage(TileType.DIRT.getImage());
+        /*BufferedImage i = TextureLoader.sizeImage(TileType.DIRT.getImage());
         Texture t = TextureLoader.generateTexture(i);
         t.load();
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -149,8 +149,28 @@ public class GUI {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        t.bind();
+        t.bind();*/
         /////
+
+        glEnable(GL_TEXTURE_2D);
+        int id = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, id);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        byte[] data = {
+                (byte) 255, 0, 0,
+                (byte) 255, 0, 0,
+                (byte) 255, 0, 0,
+                (byte) 255, 0, 0
+        };
+        ByteBuffer buffer = ByteBuffer.allocateDirect(data.length);
+        buffer.order(ByteOrder.nativeOrder());
+        buffer.put(data, 0, data.length);
+        buffer.flip();
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 4, 4, 0, GL_RGB, GL_UNSIGNED_BYTE, buffer);
 
         // Render
         while (glfwWindowShouldClose(window) == GLFW_FALSE) {
