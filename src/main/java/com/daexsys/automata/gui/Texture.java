@@ -48,7 +48,6 @@ public class Texture {
             // If there is a problem reading from the file, then use a placeholder instead.
             System.err.println("Error loading texture '" + imageURL + "'; using default placeholder instead.");
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            //ImageIO.write(getTexturePlaceholder(), "png", outputStream);
             ImageIO.write(defaultImage, "png", outputStream);
 
             // Instead of writing the PNG stream to a file, use a byte array.
