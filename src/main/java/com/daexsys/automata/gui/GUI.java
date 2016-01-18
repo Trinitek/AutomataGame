@@ -209,7 +209,8 @@ public class GUI {
 
         Texture texture;
         try {
-            texture = new Texture("images/red_cgol.png");
+            //texture = new Texture("images/red_cgol.png");
+            texture = new Texture("");
         } catch (IOException e) {
             e.printStackTrace(System.err);
             return;
