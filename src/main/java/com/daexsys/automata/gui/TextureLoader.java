@@ -1,15 +1,17 @@
 package com.daexsys.automata.gui;
 
+import de.matthiasmann.twl.utils.PNGDecoder;
 import org.lwjgl.BufferUtils;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.image.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.IntBuffer;
-import java.util.Hashtable;
 
 public class TextureLoader {
     private static ColorModel glColorModel =
@@ -48,34 +50,38 @@ public class TextureLoader {
     /**
      * Generates a new texture from the given image for use in OpenGL.
      * The resolution must be a multiple of 2 in each dimension.
-     * @param sourceImage image from which to generate a new texture
+     * @param imageURL image from which to generate a new texture
      * @return the new texture
      */
-    public static Texture generateTexture(BufferedImage sourceImage) {
-        ByteBuffer buffer;
-        WritableRaster raster;
-        BufferedImage image;
+    public static Texture generateTexture(String imageURL) {
+        try {
+            return generateTexture(new FileInputStream(imageURL));
+        } catch (IOException e) {
+            System.err.println("IOException when trying to load '" + imageURL + "' when creating texture!");
+        }
+        return null;
+    }
 
-        raster = Raster.createInterleavedRaster(
-                DataBuffer.TYPE_BYTE,
-                sourceImage.getWidth(),
-                sourceImage.getHeight(),
-                3,
-                null
-        );
-
-        image = new BufferedImage(glColorModel, raster, false, new Hashtable<>());
-
-        Graphics g = image.getGraphics();
-        g.drawImage(sourceImage, 0, 0, null);
-
-        byte[] data = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-
-        buffer = ByteBuffer.allocateDirect(data.length);
-        buffer.order(ByteOrder.nativeOrder());
-        buffer.put(data, 0, data.length);
-        buffer.flip();
-
-        return new Texture(newID(), image, buffer);
+    /**
+     * Generates a new texture from the given image for use in OpenGL.
+     * The resolution must be a multiple of 2 in each dimension.
+     * @param image image from which to generate a new texture
+     * @return the new texture
+     */
+    public static Texture generateTexture(InputStream image) throws IOException {
+        PNGDecoder decoder = new PNGDecoder(image);
+        ByteBuffer buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
+        try {
+            decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
+            buffer.flip();
+            image.close();
+        } catch (IOException | IllegalArgumentException e) {
+            e.printStackTrace(System.err);
+            return null;
+        } catch (UnsupportedOperationException e) {
+            System.err.println("The image '" + image.toString() + "' can't be decoded into RGBA for use as a texture!");
+            return null;
+        }
+        return new Texture(decoder.getWidth(), decoder.getHeight(), buffer);
     }
 }

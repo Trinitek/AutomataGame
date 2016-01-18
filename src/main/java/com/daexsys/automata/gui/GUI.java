@@ -178,6 +178,8 @@ public class GUI {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 4, 4, 0, GL_RGB, GL_UNSIGNED_BYTE, buffer);*/
 
         glEnable(GL_TEXTURE_2D);
+
+        /*
         PNGDecoder decoder;
         ByteBuffer buffer;
         try {
@@ -203,6 +205,17 @@ public class GUI {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+        */
+
+        Texture texture;
+        try {
+            texture = new Texture("images/red_cgol.png");
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+            return;
+        }
+        texture.initialize();
+        texture.bind();
 
         // Render
         while (glfwWindowShouldClose(window) == GLFW_FALSE) {
