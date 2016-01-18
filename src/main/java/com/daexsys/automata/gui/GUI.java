@@ -16,6 +16,7 @@ import com.daexsys.automata.world.structures.Structure;
 import static org.lwjgl.glfw.GLFW.*;
 
 import com.daexsys.automata.world.tiletypes.TileType;
+import de.matthiasmann.twl.utils.PNGDecoder;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
@@ -27,6 +28,9 @@ import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.event.KeyEvent;
 import java.awt.image.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
@@ -141,18 +145,19 @@ public class GUI {
         glBindTexture(GL_TEXTURE_2D, textureID);
 */
         /////
-        /*BufferedImage i = TextureLoader.sizeImage(TileType.DIRT.getImage());
+        /*glEnable(GL_TEXTURE_2D);
+        BufferedImage i = TextureLoader.sizeImage(TileType.DIRT.getImage());
         Texture t = TextureLoader.generateTexture(i);
+        t.bind();
         t.load();
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        t.bind();*/
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);*/
         /////
 
-        glEnable(GL_TEXTURE_2D);
+        /*glEnable(GL_TEXTURE_2D);
         int id = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, id);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -170,18 +175,54 @@ public class GUI {
         buffer.order(ByteOrder.nativeOrder());
         buffer.put(data, 0, data.length);
         buffer.flip();
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 4, 4, 0, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 4, 4, 0, GL_RGB, GL_UNSIGNED_BYTE, buffer);*/
+
+        glEnable(GL_TEXTURE_2D);
+        PNGDecoder decoder;
+        ByteBuffer buffer;
+        try {
+            //String url = TileType.DIRT.getImageURL();
+            String url = "images/red_cgol.png";
+            System.out.println("Using " + url);
+            InputStream in = new FileInputStream(url);
+            decoder = new PNGDecoder(in);
+            buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
+            decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
+            buffer.flip();
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+            return;
+        }
+
+        int id = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, id);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
         // Render
         while (glfwWindowShouldClose(window) == GLFW_FALSE) {
             glClear(GL_COLOR_BUFFER_BIT);
             glBegin(GL_TRIANGLES); // start rendering triangles
+
             glTexCoord2f(0, 1); // top left of texture
             glVertex2i(0, 0);   // top left of triangle
             glTexCoord2f(0, 0); // bottom left of texture
-            glVertex2i(64, 0);  // bottom left of triangle
+            glVertex2i(128, 0); // bottom left of triangle
             glTexCoord2f(1, 1); // top right of texture
-            glVertex2i(0, 64);  // top right of triangle
+            glVertex2i(0, 128); // top right of triangle
+
+            glTexCoord2f(1, 1); // top right of texture
+            glVertex2i(0, 128); // top right of triangle
+            glTexCoord2f(0, 0); // bottom left of texture
+            glVertex2i(128, 0); // bottom left of triangle
+            glTexCoord2f(1, 0); // bottom right of texture
+            glVertex2i(128, 128); // bottom right of triangle
+
             glEnd();
 
             glfwSwapBuffers(window);
