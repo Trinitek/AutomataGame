@@ -177,7 +177,7 @@ public class GUI {
         buffer.flip();
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 4, 4, 0, GL_RGB, GL_UNSIGNED_BYTE, buffer);*/
 
-        glEnable(GL_TEXTURE_2D);
+        //glEnable(GL_TEXTURE_2D);
 
         /*
         PNGDecoder decoder;
@@ -207,6 +207,7 @@ public class GUI {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
         */
 
+        /*
         Texture texture;
         try {
             //texture = new Texture("images/red_cgol.png");
@@ -217,6 +218,12 @@ public class GUI {
         }
         texture.initialize();
         texture.bind();
+        */
+
+        glEnable(GL_TEXTURE_2D);
+
+        TileType.ENERGY_TOWER.getTexture().initialize();
+        TileType.ENERGY_TOWER.getTexture().bind();
 
         // Render
         while (glfwWindowShouldClose(window) == GLFW_FALSE) {

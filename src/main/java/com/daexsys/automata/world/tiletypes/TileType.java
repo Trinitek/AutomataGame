@@ -1,6 +1,7 @@
 package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.Tile;
+import com.daexsys.automata.gui.Texture;
 import com.daexsys.automata.gui.TextureLoader;
 import com.daexsys.automata.gui.util.ImageUtil;
 import com.daexsys.automata.world.tiletypes.pulsers.*;
@@ -201,6 +202,7 @@ public final class TileType {
     private TypeBehavior typeBehavior = TypeBehavior.NON_DETERMINISTIC;
     private BufferedImage image;
     private String imageURL;
+    private Texture texture;
     private boolean areTilesPulsable = true;
 
     public void pulse(Tile tile) {
@@ -232,6 +234,8 @@ public final class TileType {
     }
 
     public String getImageURL () { return imageURL; }
+
+    public Texture getTexture() { return this.texture; }
 
     public int getDefaultEnergy() {
         return defaultEnergy;
@@ -293,6 +297,11 @@ public final class TileType {
         public Builder setImageLocation(String location) {
             tileType.image = ImageUtil.loadImage(location);
             tileType.imageURL = location;
+            try {
+                tileType.texture = new Texture(location);
+            } catch (IOException e) {
+                e.printStackTrace(System.out);
+            }
             return this;
         }
 
