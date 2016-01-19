@@ -253,9 +253,75 @@ public class GUI {
 
     public void spawnWindow() {
 
-        // Initialize textures
-        this.initializeTextures();
-        System.out.println("Textures initialized.");
+        // OpenGL initialization must take place entirely in the rendering thread.
+        Thread renderThread = new Thread(() -> {
+
+            // Initialize GLFW
+            GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
+            long window;
+            glfwSetErrorCallback(errorCallback);
+            if (glfwInit() != GLFW_TRUE) {
+                throw new IllegalStateException("Unable to initialize GLFW!");
+            }
+
+            // Set some window hints
+            //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+
+            // Build window
+            window = glfwCreateWindow(640, 480, System.getProperty("game-name"), 0, 0);
+            if (window == 0) {
+                glfwTerminate();
+                throw new RuntimeException("Unable to create GLFW window!");
+            }
+
+            // Create OpenGL context
+            glfwMakeContextCurrent(window);
+            GL.createCapabilities();
+
+            // Setup projection matrix
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity(); // reset previous projection matrices
+            glOrtho(0, 640, 480, 0, 1, -1);
+
+            // Initialize textures
+            glEnable(GL_TEXTURE_2D);
+            this.initializeTextures();
+            System.out.println("Textures initialized.");
+
+            TileType.ENERGY_TOWER.getTexture().bind();
+
+            // Main rendering loop
+            while (glfwWindowShouldClose(window) == GLFW_FALSE) {
+                glClear(GL_COLOR_BUFFER_BIT);
+                glBegin(GL_TRIANGLES); // start rendering triangles
+
+                glTexCoord2f(0, 1); // top left of texture
+                glVertex2i(0, 0);   // top left of triangle
+                glTexCoord2f(0, 0); // bottom left of texture
+                glVertex2i(128, 0); // bottom left of triangle
+                glTexCoord2f(1, 1); // top right of texture
+                glVertex2i(0, 128); // top right of triangle
+
+                glTexCoord2f(1, 1); // top right of texture
+                glVertex2i(0, 128); // top right of triangle
+                glTexCoord2f(0, 0); // bottom left of texture
+                glVertex2i(128, 0); // bottom left of triangle
+                glTexCoord2f(1, 0); // bottom right of texture
+                glVertex2i(128, 128); // bottom right of triangle
+
+                glEnd();
+
+                glfwSwapBuffers(window);
+                glfwPollEvents();
+            }
+
+            // If the rendering thread is exited, begin destructing objects and closing the program.
+            glfwDestroyWindow(window);
+            System.exit(0);
+        });
+
+        // Start the rendering thread
+        renderThread.start();
 
         /*
         jFrame = new JFrame(System.getProperty("game-name"));

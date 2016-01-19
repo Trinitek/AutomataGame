@@ -2,7 +2,6 @@ package com.daexsys.automata.world.tiletypes;
 
 import com.daexsys.automata.Tile;
 import com.daexsys.automata.gui.Texture;
-import com.daexsys.automata.gui.TextureLoader;
 import com.daexsys.automata.gui.util.ImageUtil;
 import com.daexsys.automata.world.tiletypes.pulsers.*;
 
