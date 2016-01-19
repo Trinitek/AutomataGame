@@ -253,6 +253,11 @@ public class GUI {
 
     public void spawnWindow() {
 
+        // Initialize textures
+        this.initializeTextures();
+        System.out.println("Textures initialized.");
+
+        /*
         jFrame = new JFrame(System.getProperty("game-name"));
         windowSize = new Dimension(640, 480);
         jFrame.setSize(windowSize);
@@ -393,6 +398,13 @@ public class GUI {
             }
         });
         renderThread.start();
+        */
+    }
+
+    private void initializeTextures() {
+        for (TileType tileType : this.game.getTileRegistry().getTilesAsArray()) {
+            tileType.getTexture().initialize();
+        }
     }
 
     public KeyboardHandler getKeyboardHandler() {

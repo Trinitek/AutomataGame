@@ -29,4 +29,8 @@ public final class TileRegistry {
     public int getTilesRegistered() {
         return tileNameMap.size();
     }
+
+    public TileType[] getTilesAsArray() {
+        return this.tileIDMap.values().toArray(new TileType[this.tileIDMap.size()]);
+    }
 }
