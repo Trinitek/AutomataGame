@@ -14,6 +14,7 @@ import com.daexsys.automata.event.tile.TileAlterListener;
 import com.daexsys.automata.world.structures.StructureRegistry;
 import com.daexsys.automata.world.World;
 import com.daexsys.automata.world.tiletypes.TileRegistry;
+import com.daexsys.automata.world.tiletypes.TileType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,10 +51,10 @@ public class Game {
         tileRegistry = new TileRegistry();
         structures = new StructureRegistry();
         emissionManager = new EmissionManager();
-
         chatManager = new ChatManager(this);
-
         playerState = new PlayerState(this);
+
+        TileType.createTiles(tileRegistry);
 
         final Game thisGame = this;
 

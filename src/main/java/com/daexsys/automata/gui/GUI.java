@@ -288,7 +288,7 @@ public class GUI {
             this.initializeTextures();
             System.out.println("Textures initialized.");
 
-            TileType.ENERGY_TOWER.getTexture().bind();
+            TileType.DIRT.getTexture().bind();
 
             // Main rendering loop
             while (glfwWindowShouldClose(window) == GLFW_FALSE) {
